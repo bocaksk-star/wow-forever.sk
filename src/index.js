@@ -88,6 +88,52 @@ ${[[90,60,.9],[180,110,.6],[260,50,.7],[340,140,.5],[420,80,.8],[520,40,.6],[610
 
 const DIVIDER = svg(`<path d="M2 12 L9 12" ${S}/><path d="M23 12 L16 12" ${S}/><path d="M12 7 L15 12 12 17 9 12Z" fill="currentColor" stroke="none"/>`, 24, 'class="ornament"');
 
+// Samostatná ilustrácia pre fixné pozadie: veža na útese, polár. žiara, drak na oblohe.
+function worldArt() {
+  return `<svg viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+<defs>
+  <linearGradient id="wsky" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#090A18"/><stop offset="38%" stop-color="#121433"/><stop offset="70%" stop-color="#1B2048"/><stop offset="100%" stop-color="#232A52"/></linearGradient>
+  <linearGradient id="auroraA" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#7FE3C0" stop-opacity="0"/><stop offset="45%" stop-color="#7FE3C0" stop-opacity=".30"/><stop offset="100%" stop-color="#E2AE4C" stop-opacity="0"/></linearGradient>
+  <linearGradient id="auroraB" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#6A9BEB" stop-opacity="0"/><stop offset="55%" stop-color="#B98CE6" stop-opacity=".22"/><stop offset="100%" stop-color="#6A9BEB" stop-opacity="0"/></linearGradient>
+  <radialGradient id="wmoon" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#F0CB82" stop-opacity=".6"/><stop offset="100%" stop-color="#F0CB82" stop-opacity="0"/></radialGradient>
+  <linearGradient id="far3" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1B2142"/><stop offset="100%" stop-color="#141A36"/></linearGradient>
+  <linearGradient id="far2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#141A36"/><stop offset="100%" stop-color="#0E1329"/></linearGradient>
+  <linearGradient id="far1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#0C0F22"/><stop offset="100%" stop-color="#080A18"/></linearGradient>
+  <radialGradient id="wfog" cx="50%" cy="100%" r="85%"><stop offset="0%" stop-color="#090A18" stop-opacity=".92"/><stop offset="100%" stop-color="#090A18" stop-opacity="0"/></radialGradient>
+</defs>
+<rect width="1600" height="900" fill="url(#wsky)"/>
+<path d="M-50 150 C 250 60, 500 220, 850 110 S 1400 60, 1650 160" fill="none" stroke="url(#auroraA)" stroke-width="90" stroke-linecap="round"/>
+<path d="M-50 230 C 300 150, 550 300, 900 190 S 1450 140, 1650 240" fill="none" stroke="url(#auroraB)" stroke-width="70" stroke-linecap="round"/>
+<circle cx="260" cy="150" r="130" fill="url(#wmoon)"/>
+<circle cx="260" cy="150" r="52" fill="#F3E6C4"/>
+<circle cx="242" cy="134" r="9" fill="#DCC697" opacity=".55"/><circle cx="278" cy="166" r="6" fill="#DCC697" opacity=".45"/><circle cx="276" cy="130" r="4" fill="#DCC697" opacity=".4"/>
+${[[420,90,.8],[520,180,.5],[610,60,.7],[700,220,.4],[790,100,.9],[900,50,.6],[990,190,.5],[1080,80,.8],[1180,140,.4],[1260,60,.7],[1350,200,.5],[1440,100,.8],[1520,50,.6],[90,250,.5],[150,80,.6],[70,320,.4],[1550,280,.5]].map(([x,y,o])=>`<circle cx="${x}" cy="${y}" r="${1+o*1.2}" fill="#fff" opacity="${o*.85}"/>`).join('')}
+<line x1="1020" y1="70" x2="1160" y2="130" stroke="#F0E2BE" stroke-width="2" opacity=".8"/>
+<line x1="1160" y1="130" x2="1150" y2="122" stroke="#F0E2BE" stroke-width="2" opacity=".5"/>
+<g opacity=".55" fill="#0A0D1E">
+  <path d="M980 230 Q1020 205 1060 230 Q1095 212 1130 234 Q1150 224 1170 236 L1170 260 Q1100 244 1040 258 Q1005 248 980 258 Z"/>
+  <path d="M250 320 Q290 300 330 320 Q360 305 390 322 L390 344 Q320 332 260 344 Z"/>
+</g>
+<g transform="translate(1180 170) scale(1.15)" opacity=".8" fill="#0A0D1E">
+  <path d="M0 10 C 40 -16, 90 -14, 140 14 C 110 8, 90 20, 70 16 C 50 24, 26 10, 0 10 Z"/>
+</g>
+<path d="M0 430 L120 360 240 420 360 330 480 410 600 350 720 430 840 360 960 420 1080 340 1200 420 1320 360 1440 410 1600 370 1600 900 0 900 Z" fill="url(#far3)"/>
+<path d="M0 500 L140 440 260 495 400 420 540 490 660 430 800 500 940 430 1080 495 1220 430 1360 490 1500 440 1600 480 1600 900 0 900 Z" fill="url(#far2)" opacity=".92"/>
+<g>
+  <path d="M1080 500 L1130 300 1165 420 1190 360 1230 500 Z" fill="url(#far1)"/>
+  <path d="M1130 300 L1142 335 1165 325 1150 352 1165 420 Z" fill="#8A6A3E" opacity=".55"/>
+  <rect x="1118" y="330" width="26" height="100" fill="#07091A"/>
+  <rect x="1122" y="350" width="18" height="60" fill="#0A0D1E" stroke="#5B4030" stroke-width="1" opacity=".6"/>
+  <rect x="1126" y="362" width="4" height="7" fill="#E2AE4C" opacity=".85"/>
+  <rect x="1134" y="380" width="4" height="7" fill="#E2AE4C" opacity=".6"/>
+  <path d="M1112 330 L1131 296 1150 330 Z" fill="#07091A"/>
+  <rect x="1129" y="280" width="4" height="20" fill="#07091A"/>
+</g>
+<path d="M0 560 L150 505 280 555 420 495 560 550 700 500 840 555 980 495 1120 550 1260 500 1400 545 1600 520 1600 900 0 900 Z" fill="url(#far1)"/>
+<rect width="1600" height="900" fill="url(#wfog)"/>
+</svg>`;
+}
+
 const CREST = svg(`<path d="M16 2 28 7v9c0 9-5 14.5-12 17-7-2.5-12-8-12-17V7z" ${S}/><path d="M16 9v16M10 14l12 6M22 14l-12 6" stroke="currentColor" stroke-width="1.1" opacity=".55" fill="none"/><circle cx="16" cy="14" r="3" fill="currentColor"/>`, 30, 'class="crest"');
 
 const NAV = [['/novinky', 'Novinky', 'novinky'], ['/navody', 'Návody', 'navody'], ['/triedy', 'Classy', 'triedy'], ['/rasy', 'Rasy', 'rasy'], ['/guildy', 'Guildy CZ/SK', 'guildy'], ['/o-nas', 'O webe', 'o-nas']];
@@ -104,7 +150,7 @@ ${noindex ? '<meta name="robots" content="noindex">' : ''}
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Alegreya+Sans:ital,wght@0,400;0,500;0,700;1,400&family=Marcellus&display=swap&subset=latin-ext" rel="stylesheet">
 <style>${CSS}</style></head><body>
-<div class="world-bg" aria-hidden="true">${heroArt()}</div>
+<div class="world-bg" aria-hidden="true">${worldArt()}</div>
 <div class="embers" aria-hidden="true">${[8,22,37,52,67,81,94].map((l,i)=>`<i style="left:${l}%;animation-duration:${14+i*3}s;animation-delay:${i*-2.3}s;--dx:${(i%2?1:-1)*(10+i*4)}px"></i>`).join('')}</div>
 <a class="skip" href="#obsah">Preskočiť na obsah</a>
 <header class="top"><div class="wrap">
