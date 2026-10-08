@@ -30,7 +30,7 @@ img{max-width:100%}
 /* Hlavička */
 .ic{display:inline-flex;flex:none}
 .ic svg{display:block}
-.top{border-bottom:1px solid var(--line);background:#0C1022;position:sticky;top:0;z-index:5}
+.top{background:#0C1022;position:sticky;top:0;z-index:5}
 .top .wrap{max-width:none;display:flex;align-items:center;gap:24px;min-height:64px;flex-wrap:wrap;padding:0 24px}
 .brand{font-family:var(--display);font-size:1.45rem;color:var(--text);text-decoration:none;letter-spacing:.01em;display:flex;align-items:center;gap:10px;transition:color .15s}
 .brand:hover{color:var(--gold-soft)}
@@ -71,10 +71,14 @@ main{padding:40px 0 80px}
 .back{display:inline-block;margin-bottom:18px;font-size:1rem}
 
 /* Hero: questlog, full-bleed */
-.hero{position:relative;overflow:hidden;border-bottom:1px solid var(--line);width:100vw;margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw);margin-top:0;margin-bottom:56px;padding:76px 0 68px}
+.hero{position:relative;overflow:hidden;width:100vw;margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw);margin-top:0;margin-bottom:56px;padding:76px 0 68px}
 .hero-bg{position:absolute;inset:0;z-index:0}
 .hero-bg svg{width:100%;height:100%;display:block}
-.hero-fade{position:absolute;inset:0;z-index:1;background:linear-gradient(100deg, rgba(8,11,22,.88) 0%, rgba(8,11,22,.6) 32%, rgba(8,11,22,.18) 58%, rgba(8,11,22,.1) 100%)}
+.hero-fade{position:absolute;inset:0;z-index:1;
+  background:
+    linear-gradient(180deg, #0C1022 0, rgba(12,16,34,0) 110px),
+    linear-gradient(0deg, var(--night) 0, rgba(15,21,40,0) 130px),
+    linear-gradient(100deg, rgba(8,11,22,.88) 0%, rgba(8,11,22,.6) 32%, rgba(8,11,22,.18) 58%, rgba(8,11,22,.1) 100%)}
 .hero-grid{position:relative;z-index:2;max-width:1400px;margin:0 auto;padding:0 32px;display:grid;grid-template-columns:1.15fr .85fr;gap:64px;align-items:center}
 @media (max-width:900px){.hero{padding:48px 0}.hero-grid{grid-template-columns:1fr;gap:28px;padding:0 18px}}
 .hero h1{font-size:clamp(2.6rem,6vw,4.4rem);line-height:1.04;margin-bottom:.35em;text-shadow:0 2px 24px rgba(0,0,0,.5)}
@@ -91,11 +95,18 @@ main{padding:40px 0 80px}
   background-image:radial-gradient(ellipse at 20% 0%,rgba(255,255,255,.45),transparent 50%),radial-gradient(ellipse at 100% 100%,rgba(140,100,50,.18),transparent 55%)}
 .quest h2{font-family:var(--display);color:#5A3A12;font-size:1.55rem;margin:0 0 .5em}
 .quest p{margin:0 0 1em;font-size:1.05rem;line-height:1.5}
-.quest h3{font-family:var(--display);color:#5A3A12;font-size:1.1rem;margin:1em 0 .5em}
-.quest .obj{list-style:none;margin:0;padding:0;display:grid;gap:4px}
-.quest .obj li{display:flex;justify-content:space-between;border-bottom:1px dashed rgba(90,58,18,.25);padding:4px 0;font-size:1.05rem}
-.quest .obj b{font-variant-numeric:tabular-nums;font-size:1.35rem;font-family:var(--display);color:#3A240A}
-.quest .reward{display:flex;gap:12px;align-items:center;margin-top:14px;padding-top:12px;border-top:1px solid rgba(90,58,18,.3);font-size:1rem}
+.quest h3{font-family:var(--display);color:#5A3A12;font-size:1.05rem;margin:1.1em 0 .6em;display:flex;align-items:center;gap:7px}
+.sparkle{display:inline-block;color:var(--gold);animation:sparkle 2.4s ease-in-out infinite}
+@keyframes sparkle{0%,100%{opacity:.5;transform:scale(.85) rotate(0deg)}50%{opacity:1;transform:scale(1.15) rotate(15deg)}}
+.countdown{display:flex;align-items:center;gap:8px}
+.cd{flex:1;text-align:center;background:linear-gradient(180deg,#FFFBF0,#F1DFB4);border:2px solid #9C7A44;border-radius:12px;padding:10px 6px 9px;box-shadow:inset 0 1px 0 rgba(255,255,255,.7),0 3px 8px rgba(58,36,10,.18);transition:transform .2s}
+.cd .ic{color:#8A6A2E;opacity:.8;margin-bottom:2px}
+.cd b{display:block;font-family:var(--display);font-size:1.9rem;line-height:1;color:#2E1D08;font-variant-numeric:tabular-nums}
+.cd b.tick{animation:tickbump .4s ease}
+@keyframes tickbump{0%{transform:scale(1)}35%{transform:scale(1.22);color:#8E5A12}100%{transform:scale(1)}}
+.cd small{display:block;margin-top:3px;font-size:.68rem;letter-spacing:.07em;text-transform:uppercase;color:#6B5338}
+.sep{font-family:var(--display);font-size:1.6rem;color:#9C7A44;opacity:.6;margin-top:-16px}
+.quest .reward{display:flex;gap:12px;align-items:center;margin-top:16px;padding-top:12px;border-top:1px solid rgba(90,58,18,.3);font-size:1rem}
 .quest .reward .slot{width:44px;height:44px;border-radius:6px;background:#2A2216;border:2px solid #A88540;display:grid;place-items:center;flex:none}
 .quest .done{font-family:var(--display);font-size:1.3rem;color:#3A240A}
 

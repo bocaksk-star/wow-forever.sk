@@ -189,15 +189,20 @@ function questCard(now) {
   const text = launchPassed
     ? 'Azeroth je otvorený. Prvé raidy Barrow Deeps a Hyjal Summit sa otvárajú 9. decembra. Dovtedy treba dosiahnuť level 60 a zohnať partiu.'
     : 'Brány sa otvárajú o polnoci zo 4. na 5. novembra. Priprav si meno postavy, vyber triedu a nájdi guildu, aby si nešiel do Azerothu sám.';
+  const CD_ICON = {
+    d: svg(`<rect x="3" y="4.5" width="18" height="16" rx="2.5" ${S}/><line x1="3" y1="9.5" x2="21" y2="9.5" ${S}/><line x1="7" y1="2.5" x2="7" y2="6.5" ${S}/><line x1="17" y1="2.5" x2="17" y2="6.5" ${S}/>`, 18),
+    h: svg(`<circle cx="12" cy="12.5" r="8.5" ${S}/><path d="M12 7.5v5.3l3.6 2.2" ${S}/>`, 18),
+    m: svg(`<path d="M6 3h12M6 21h12" ${S}/><path d="M7 3c0 4.5 3 6 5 7.5C10 12 7 13.5 7 18v3M17 3c0 4.5-3 6-5 7.5 2 1.5 5 3 5 7.5v3" ${S}/>`, 18),
+  };
+  const cd = (u, n, label) => `<div class="cd"><span class="ic">${CD_ICON[u]}</span><b data-u="${u}">${n}</b><small>${label}</small></div>`;
   const objectives = done
     ? '<p class="done">Úloha splnená. Raidy sú otvorené.</p>'
-    : `<h3>Zostáva</h3><ul class="obj" data-target="${target}">
-<li><span>Dni</span><b data-u="d">${d}</b></li><li><span>Hodiny</span><b data-u="h">${h}</b></li><li><span>Minúty</span><b data-u="m">${m}</b></li></ul>`;
+    : `<h3><span class="sparkle">✦</span> Zostáva</h3><div class="countdown" data-target="${target}">${cd('d', d, 'dní')}<span class="sep">:</span>${cd('h', h, 'hod')}<span class="sep">:</span>${cd('m', m, 'min')}</div>`;
   return `<aside class="quest" aria-label="Odpočet do spustenia">
 <h2>${title}</h2><p>${text}</p>${objectives}
 <div class="reward"><div class="slot" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 26 26"><path d="M13 2 L16 10 L24 10 L17.5 15 L20 23 L13 18 L6 23 L8.5 15 L2 10 L10 10 Z" fill="#E2AE4C"/></svg></div>
 <div><b>Odmena:</b> level 60, navždy.</div></div>
-<script>(()=>{const u=document.querySelector('.quest .obj');if(!u)return;const t=Date.parse(u.dataset.target);const f=()=>{let s=Math.max(0,t-Date.now());const d=Math.floor(s/864e5);s-=d*864e5;const h=Math.floor(s/36e5);s-=h*36e5;const m=Math.floor(s/6e4);u.querySelector('[data-u=d]').textContent=d;u.querySelector('[data-u=h]').textContent=h;u.querySelector('[data-u=m]').textContent=m;};f();setInterval(f,15000);})();</script>
+<script>(()=>{const u=document.querySelector('.quest .countdown');if(!u)return;const t=Date.parse(u.dataset.target);const bump=el=>{el.classList.remove('tick');void el.offsetWidth;el.classList.add('tick');};const f=()=>{let s=Math.max(0,t-Date.now());const d=Math.floor(s/864e5);s-=d*864e5;const h=Math.floor(s/36e5);s-=h*36e5;const m=Math.floor(s/6e4);[['d',d],['h',h],['m',m]].forEach(([k,v])=>{const el=u.querySelector('[data-u='+k+']');if(el.textContent!=String(v)){el.textContent=v;bump(el);}});};f();setInterval(f,15000);})();</script>
 </aside>`;
 }
 
