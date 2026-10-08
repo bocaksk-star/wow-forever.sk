@@ -285,6 +285,45 @@ td.roles{padding-top:12px}
 .matrix td.no{color:var(--line)}
 .matrix th:first-child,.matrix td:first-child{white-space:nowrap}
 
+/* Kalkulačka talentov */
+.btn.sm{padding:7px 14px;font-size:.92rem;border-radius:5px}
+.tcal{margin-top:20px}
+.tcal-tabs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:18px;border-bottom:1px solid var(--line);padding-bottom:14px}
+.tcal-tab{display:inline-flex;align-items:center;gap:7px;padding:8px 13px;border-radius:7px;border:1px solid var(--line);background:var(--surface);color:var(--muted);font:inherit;font-size:.92rem;cursor:pointer;transition:background .15s,color .15s,border-color .15s}
+.tcal-tab .ic{color:var(--c,var(--gold))}
+.tcal-tab:hover{border-color:var(--c,var(--gold))}
+.tcal-tab.on{background:color-mix(in srgb, var(--c,var(--gold)) 18%, var(--surface));color:var(--text);border-color:var(--c,var(--gold))}
+.tcal-summary{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:12px 16px;margin-bottom:16px;font-size:1rem}
+.tcal-summary b{color:var(--gold-soft)}
+.tcal-actions{display:flex;gap:8px}
+.tcal-trees{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+@media (max-width:900px){.tcal-trees{grid-template-columns:1fr}}
+.ttree{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 14px 18px}
+.ttree-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--line)}
+.ttree-head h3{margin:0;font-size:1.08rem;color:var(--gold-soft)}
+.ttree-head span{color:var(--muted);font-size:.92rem}
+.ttier-wrap{display:grid;gap:8px}
+.ttier{display:flex;flex-wrap:wrap;gap:8px}
+.tnode{flex:1 1 130px;min-width:120px;display:grid;gap:3px;text-align:left;background:var(--surface-2);border:1px solid var(--line);border-radius:7px;padding:8px 10px;color:var(--text);font:inherit;cursor:pointer;transition:border-color .15s,background .15s,opacity .15s}
+.tnode:hover:not(.locked){border-color:var(--gold-soft)}
+.tnode .tn-name{font-size:.86rem;font-weight:600;line-height:1.25}
+.tnode .tn-pips{color:var(--gold);letter-spacing:1px;font-size:.78rem}
+.tnode .tn-rank{color:var(--muted);font-size:.78rem}
+.tnode.filled{border-color:var(--gold);background:color-mix(in srgb, var(--gold) 12%, var(--surface-2))}
+.tnode.locked{opacity:.4;cursor:not-allowed}
+.tnode.locked .tn-pips{color:var(--line)}
+
+/* Odporúčané buildy */
+.build-card{margin-top:34px;padding-top:28px;border-top:1px solid var(--line)}
+.build-card:first-of-type{margin-top:20px;padding-top:0;border-top:none}
+.build-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:14px}
+@media (max-width:720px){.build-grid{grid-template-columns:1fr}}
+.build-block{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px 18px}
+.build-block h4{margin:0 0 .3em;font-size:1.1rem}
+.build-block p{margin:0 0 .7em;color:var(--muted);font-size:.96rem}
+.build-picks{margin:0 0 14px;padding-left:1.1em;font-size:.92rem;color:var(--text)}
+.build-picks li{margin:.25em 0}
+
 /* Guildy */
 .filters{display:flex;flex-wrap:wrap;gap:10px;margin:16px 0 8px;align-items:end}
 .filters label{display:grid;gap:4px;font-size:.9rem;color:var(--muted)}

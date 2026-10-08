@@ -1,10 +1,12 @@
 import { CSS } from './style.js';
 import { news, guides, classes, races, polls, LAUNCH_UTC, RAIDS_DATE } from './content.js';
+import { TALENT_TREES, greedyAllocate, BUILD_PLAN } from './talents.js';
 
 // ---------- pomocné ----------
 const MES = ['januára','februára','marca','apríla','mája','júna','júla','augusta','septembra','októbra','novembra','decembra'];
 const skDate = (iso) => { const [y, m, d] = iso.slice(0, 10).split('-').map(Number); return `${d}. ${MES[m - 1]} ${y}`; };
 const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const truncate = (s, n) => (s.length <= n ? s : s.slice(0, s.lastIndexOf(' ', n)).trimEnd() + '…');
 const classBySlug = Object.fromEntries(classes.map((c) => [c.slug, c]));
 
 const FACTIONS = { A: 'Aliancia', H: 'Horda' };
@@ -30,6 +32,8 @@ const NAV_ICON = {
   faq: svg(`<circle cx="12" cy="12" r="9" ${S}/><path d="M9.3 9.3a2.7 2.7 0 1 1 3.9 2.4c-.8.4-1.2.9-1.2 1.8" ${S}/><circle cx="12" cy="17" r="1" fill="currentColor" stroke="none"/>`, 21),
   guilda: svg(`<path d="M12 2.5 14 8l5.8.5-4.4 3.8L16.8 18 12 14.8 7.2 18l1.4-5.7L4.2 8.5 10 8z" ${S}/>`, 21),
   ankety: svg(`<path d="M5 19V10M12 19V5M19 19v-7" ${S}/><path d="M3 19h18" ${S}/>`, 21),
+  talenty: svg(`<path d="M12 3v18M12 3 7 8M12 3l5 5" ${S}/><circle cx="12" cy="15" r="4" ${S}/>`, 21),
+  buildy: svg(`<path d="M4 19h16" ${S}/><rect x="5" y="12" width="4" height="7" ${S}/><rect x="10" y="7" width="4" height="12" ${S}/><rect x="15" y="10" width="4" height="9" ${S}/>`, 21),
 };
 
 const GUIDE_ICON = {
@@ -280,6 +284,8 @@ const NAV = [
     ['/navody', 'Všetky návody', 'navody'],
     ['/triedy', 'Class', 'triedy'],
     ['/rasy', 'Rasy', 'rasy'],
+    ['/navody/talenty', 'Kalkulačka talentov', 'talenty'],
+    ['/navody/buildy', 'Odporúčané buildy', 'buildy'],
     ['/navody/edicie-a-ceny', 'Edície', 'edicie'],
     ['/navody/faq', 'FAQ', 'faq'],
   ] },
@@ -483,8 +489,8 @@ function newsDetail(n, origin) {
 }
 
 function guideList(origin) {
-  const body = `<h1>Návody</h1><p class="lead">Všetko, čo potrebujete vedieť pred štartom a v prvých týždňoch.</p><ul class="linklist">${guides.map((x) => `<li><a href="/navody/${x.slug}">${esc(x.title)}</a><p>${esc(x.perex)}</p></li>`).join('')}<li><a href="/triedy">Class</a><p>Deväť class-ov, ich úlohy v skupine a ktoré rasy ich môžu hrať.</p></li><li><a href="/rasy">Rasy</a><p>Osem pôvodných rás, nová Skyborne a všetky nové kombinácie.</p></li></ul>`;
-  return page({ title: 'Návody', desc: 'Slovenské návody k World of Warcraft: Forever.', path: '/navody', body, origin });
+  const body = `<h1>Návody</h1><p class="lead">Všetko, čo potrebujete vedieť pred štartom a v prvých týždňoch.</p><ul class="linklist"><li><a href="/triedy">Class</a><p>Deväť class-ov, ich úlohy v skupine a ktoré rasy ich môžu hrať.</p></li><li><a href="/rasy">Rasy</a><p>Osem pôvodných rás, nová Skyborne a všetky nové kombinácie.</p></li><li><a href="/navody/talenty">Kalkulačka talentov</a><p>Vlastná kalkulačka — rozdeľ 51 bodov a zdieľaj build odkazom.</p></li><li><a href="/navody/buildy">Odporúčané buildy</a><p>Levelovacie a raidové buildy pre každý class, rovno v kalkulačke.</p></li>${guides.map((x) => `<li><a href="/navody/${x.slug}">${esc(x.title)}</a><p>${esc(x.perex)}</p></li>`).join('')}</ul>`;
+  return page({ title: 'Návody', desc: 'Slovenské návody k World of Warcraft: Forever — talenty, kalkulačka, buildy, class a rasy.', path: '/navody', body, origin });
 }
 
 function guideDetail(g, origin) {
@@ -524,8 +530,9 @@ function classDetail(c, origin) {
 <p class="lead">${esc(c.desc)}</p>
 <div class="tablewrap"><table><tbody><tr><th>Úloha v skupine</th><td class="roles">${roleIcons(c.roles)}</td></tr><tr><th>Brnenie</th><td>${c.armor}</td></tr></tbody></table></div>
 <h2>Rasy, ktoré môžu hrať ${c.name}</h2><ul>${rs}</ul>
-<p class="meta">Podrobný návod k talentom a rotácii doplníme po štarte, keď budú talenty z bety finálne.</p></article>`;
-  return page({ title: `${c.name} (${c.sk})`, desc: `${c.name} (${c.sk}) vo World of Warcraft: Forever. ${c.desc}`, path: `/triedy/${c.slug}`, body, origin });
+<p class="btns"><a class="btn ghost" href="/navody/talenty#${c.slug}"><span class="ic">${NAV_ICON.talenty}</span>Kalkulačka talentov</a><a class="btn ghost" href="/navody/buildy#${c.slug}"><span class="ic">${NAV_ICON.buildy}</span>Odporúčané buildy</a></p>
+<p class="meta">Presná rotácia sa doladí po štarte, keď budú talenty z bety finálne. Build body vyššie sú orientačné.</p></article>`;
+  return page({ title: `${c.name} (${c.sk})`, desc: `${c.name} (${c.sk}) vo World of Warcraft: Forever. ${truncate(c.desc, 135)}`, path: `/triedy/${c.slug}`, body, origin });
 }
 
 function raceList(origin) {
@@ -538,6 +545,155 @@ function raceList(origin) {
   }).join('');
   const body = `<h1>Rasy</h1><p class="lead">Osem pôvodných rás a nová rasa Skyborne, ktorá si frakciu vyberá sama. Zlatou sú označené nové kombinácie rasy a class-u.</p><div class="grid">${tiles}</div><p class="meta" style="margin-top:20px">Podľa Warcraft Wiki k 8. 10. 2026, počas bety sa ešte môže zmeniť. Viac o Skyborne v <a href="/novinky/skyborne-nova-rasa">článku</a>.</p>`;
   return page({ title: 'Rasy', desc: 'Všetkých 9 rás vo World of Warcraft: Forever — Human, Dwarf, Night Elf, Gnome, Orc, Undead, Tauren, Troll a nová rasa Skyborne. Nové kombinácie rasy a class-u.', path: '/rasy', body, origin, jsonLd: itemListJsonLd(races.map((r) => ({ slug: r.slug, name: r.name })), origin, '/rasy#') });
+}
+
+// ---------- kalkulačka talentov ----------
+function talentCalc(origin) {
+  const tabs = classes.map((c) => `<button type="button" class="tcal-tab" data-class="${c.slug}" style="--c:${c.color}"><span class="ic">${CLASS_ICON[c.slug] || ''}</span>${c.name}</button>`).join('');
+  const panels = classes.map((c, ci) => {
+    const data = TALENT_TREES[c.slug];
+    const trees = data.trees.map((tree, ti) => {
+      const maxTier = Math.max(...tree.talents.map((t) => t.t));
+      const tiers = Array.from({ length: maxTier + 1 }, (_, tier) => {
+        const nodes = tree.talents.map((tal, idx) => (tal.t !== tier ? '' : `<button type="button" class="tnode" data-tree="${ti}" data-idx="${idx}" data-max="${tal.max}" data-tier="${tier}" data-rank="0" title="${esc(tal.d)}"><span class="tn-name">${esc(tal.name)}</span><span class="tn-pips">${'○'.repeat(tal.max)}</span><span class="tn-rank">0/${tal.max}</span></button>`)).join('');
+        return `<div class="ttier">${nodes}</div>`;
+      }).join('');
+      return `<div class="ttree" data-tree-panel="${ti}"><div class="ttree-head"><h3>${esc(tree.name)}</h3><span data-tree-points="${ti}">0</span></div><div class="ttier-wrap">${tiers}</div></div>`;
+    }).join('');
+    return `<div class="tcal-panel" data-class-panel="${c.slug}"${ci === 0 ? '' : ' hidden'}>
+<div class="tcal-summary"><div><b data-total-points>0</b> / 51 bodov · odporúčaný level <b data-total-level>10</b></div><div class="tcal-actions"><button type="button" class="btn ghost sm" data-reset-all>Reset</button><button type="button" class="btn ghost sm" data-copy-link>Kopírovať odkaz</button></div></div>
+<div class="tcal-trees">${trees}</div>
+</div>`;
+  }).join('');
+  const body = `<h1>Kalkulačka talentov</h1><p class="lead">Vlastná kalkulačka talentov pre World of Warcraft: Forever — rozdeľ 51 bodov naprieč tromi vetvami pre každý class a zdieľaj svoj build odkazom. Klik pridá bod, Shift+klik alebo pravý klik bod odoberie.</p>
+<div class="tcal"><div class="tcal-tabs" role="tablist">${tabs}</div>${panels}</div>
+<p class="meta" style="margin-top:20px">Dáta sú naše vlastné zhrnutie klasických talentových mechaník, nie sú prevzaté z Blizzardu. Pozri aj <a href="/navody/buildy">odporúčané buildy</a>.</p>
+<script>(()=>{
+const root=document.querySelector('.tcal');
+if(!root) return;
+const tabs=[...root.querySelectorAll('.tcal-tab')];
+const panels=[...root.querySelectorAll('.tcal-panel')];
+function showClass(slug){
+  tabs.forEach(t=>t.classList.toggle('on', t.dataset.class===slug));
+  panels.forEach(p=>{ p.hidden = p.dataset.classPanel!==slug; });
+}
+function treePoints(tree){ return [...tree.querySelectorAll('.tnode')].reduce((s,n)=>s+ +n.dataset.rank,0); }
+function totalPoints(panel){ return [...panel.querySelectorAll('.tnode')].reduce((s,n)=>s+ +n.dataset.rank,0); }
+function setRank(node, rank){
+  rank=Math.max(0,Math.min(+node.dataset.max, rank));
+  node.dataset.rank=rank;
+  node.querySelector('.tn-rank').textContent=rank+'/'+node.dataset.max;
+  node.querySelector('.tn-pips').textContent='●'.repeat(rank)+'○'.repeat(node.dataset.max-rank);
+  node.classList.toggle('filled', rank>0);
+}
+function validateTree(tree){
+  let changed=true;
+  while(changed){
+    changed=false;
+    const pts=treePoints(tree);
+    tree.querySelectorAll('.tnode').forEach(n=>{
+      const tier=+n.dataset.tier;
+      if(+n.dataset.rank>0 && pts<tier*5){ setRank(n,0); changed=true; }
+    });
+  }
+}
+function update(panel){
+  let total=0;
+  panel.querySelectorAll('.ttree').forEach(tree=>{
+    const pts=treePoints(tree);
+    total+=pts;
+    tree.querySelector('[data-tree-points]').textContent=pts;
+    tree.querySelectorAll('.tnode').forEach(n=>{
+      const tier=+n.dataset.tier;
+      n.classList.toggle('locked', tier>0 && pts<tier*5 && +n.dataset.rank===0);
+    });
+  });
+  panel.querySelector('[data-total-points]').textContent=total;
+  panel.querySelector('[data-total-level]').textContent= total===0?10:Math.min(60,total+9);
+}
+function syncHash(panel){
+  const slug=panel.dataset.classPanel;
+  const parts=[...panel.querySelectorAll('.ttree')].map(tree=>[...tree.querySelectorAll('.tnode')].map(n=>n.dataset.rank).join(''));
+  history.replaceState(null,'','#'+slug+':'+parts.join('-'));
+}
+function applyHash(){
+  const h=location.hash.slice(1);
+  if(!h) return;
+  const i=h.indexOf(':');
+  const slug=i===-1?h:h.slice(0,i);
+  const data=i===-1?'':h.slice(i+1);
+  const panel=root.querySelector('.tcal-panel[data-class-panel="'+slug+'"]');
+  if(!panel) return;
+  showClass(slug);
+  if(data){
+    const parts=data.split('-');
+    [...panel.querySelectorAll('.ttree')].forEach((tree,ti)=>{
+      const digits=parts[ti]||'';
+      [...tree.querySelectorAll('.tnode')].forEach((n,idx)=>setRank(n, +(digits[idx]||0)));
+    });
+  }
+  update(panel);
+}
+function handleDelta(e, delta){
+  const node=e.target.closest('.tnode');
+  if(!node) return;
+  e.preventDefault();
+  const panel=node.closest('.tcal-panel');
+  const tree=node.closest('.ttree');
+  const tier=+node.dataset.tier;
+  const pts=treePoints(tree);
+  const rank=+node.dataset.rank;
+  if(delta>0){
+    if(pts<tier*5 || rank>=+node.dataset.max || totalPoints(panel)>=51) return;
+    setRank(node, rank+1);
+  } else {
+    if(rank<=0) return;
+    setRank(node, rank-1);
+    validateTree(tree);
+  }
+  update(panel);
+  syncHash(panel);
+}
+root.addEventListener('click', e=>{ if(e.target.closest('.tcal-tab')) return; handleDelta(e, e.shiftKey?-1:1); });
+root.addEventListener('contextmenu', e=>{ if(e.target.closest('.tnode')) handleDelta(e,-1); });
+tabs.forEach(t=>t.addEventListener('click', ()=>{ showClass(t.dataset.class); history.replaceState(null,'',location.pathname); }));
+document.querySelectorAll('[data-reset-all]').forEach(btn=>btn.addEventListener('click', ()=>{
+  const panel=btn.closest('.tcal-panel');
+  panel.querySelectorAll('.tnode').forEach(n=>setRank(n,0));
+  update(panel); syncHash(panel);
+}));
+document.querySelectorAll('[data-copy-link]').forEach(btn=>btn.addEventListener('click', async ()=>{
+  syncHash(btn.closest('.tcal-panel'));
+  try{ await navigator.clipboard.writeText(location.href); btn.textContent='Skopírované!'; setTimeout(()=>btn.textContent='Kopírovať odkaz',1500); }catch(err){}
+}));
+panels.forEach(p=>{ p.querySelectorAll('.tnode').forEach(n=>setRank(n,0)); update(p); });
+if(location.hash) applyHash(); else showClass('${classes[0].slug}');
+})();</script>`;
+  return page({ title: 'Kalkulačka talentov', desc: 'Originálna kalkulačka talentov pre World of Warcraft: Forever. Rozdeľ 51 bodov, over si buildy pre každý class a zdieľaj ich odkazom.', path: '/navody/talenty', body, origin });
+}
+
+// ---------- odporúčané buildy ----------
+function buildsGuide(origin) {
+  const rows = BUILD_PLAN.map((b) => {
+    const c = classBySlug[b.slug];
+    return `<tr><td><span class="ic">${CLASS_ICON[b.slug] || ''}</span>${c.name}</td><td><a href="/navody/talenty#${b.slug}:${greedyAllocate(b.slug, b.level.order).hash}">${esc(b.level.label)}</a></td><td><a href="/navody/talenty#${b.slug}:${greedyAllocate(b.slug, b.raid.order).hash}">${esc(b.raid.label)}</a></td></tr>`;
+  }).join('');
+  const sections = BUILD_PLAN.map((b) => {
+    const c = classBySlug[b.slug];
+    const block = (role, info) => {
+      const a = greedyAllocate(b.slug, info.order);
+      const treeNames = TALENT_TREES[b.slug].trees.map((t) => t.name);
+      const picksHtml = a.picks.map((treePicks, ti) => treePicks.length ? `<li><b>${esc(treeNames[ti])}:</b> ${treePicks.map((p) => `${esc(p.name)} (${p.rank}/${p.max})`).join(', ')}</li>` : '').join('');
+      return `<div class="build-block"><h4 style="color:${c.color}">${esc(role)} — ${esc(info.label)}</h4><p>${esc(info.note)}</p><ul class="build-picks">${picksHtml}</ul><a class="btn ghost sm" href="/navody/talenty#${b.slug}:${a.hash}">Otvoriť v kalkulačke →</a></div>`;
+    };
+    return `<article class="prose build-card" id="${b.slug}"><div class="detail-head"><span class="badge xl" style="--c:${c.color}">${CLASS_ICON[b.slug] || ''}</span><h2 style="color:${c.color};margin:0">${c.name}</h2></div><div class="build-grid">${block('Levelovanie', b.level)}${block('Raid', b.raid)}</div></article>`;
+  }).join('');
+  const body = `<h1>Odporúčané buildy</h1><p class="lead">Orientačné talentové buildy pre levelovanie a raid, inšpirované komunitnými špecializáciami (napr. Wowhead Classic, Icy Veins). Presné čísla sa od zdrojov líšia — naša <a href="/navody/talenty">kalkulačka talentov</a> má vlastný, zjednodušený strom. Každý build si môžeš otvoriť priamo v kalkulačke a doladiť podľa seba.</p>
+<h2>Stručný prehľad</h2>
+<div class="tablewrap"><table class="table"><thead><tr><th>Class</th><th>Levelovanie</th><th>Raid</th></tr></thead><tbody>${rows}</tbody></table></div>
+<h2>Podrobnejšie</h2>
+${sections}`;
+  return page({ title: 'Odporúčané buildy', desc: 'Odporúčané talentové buildy pre levelovanie a raid pre všetkých 9 class vo World of Warcraft: Forever, s odkazom priamo do kalkulačky talentov.', path: '/navody/buildy', body, origin });
 }
 
 function about(origin) {
@@ -800,6 +956,8 @@ function sitemap(origin) {
     { p: '/navody', prio: '0.8' },
     { p: '/triedy', prio: '0.8' },
     { p: '/rasy', prio: '0.8' },
+    { p: '/navody/talenty', prio: '0.8' },
+    { p: '/navody/buildy', prio: '0.8' },
     { p: '/guildy', prio: '0.7' },
     { p: '/guildy/pridat', prio: '0.5' },
     { p: '/guilda', prio: '0.6' },
@@ -860,6 +1018,8 @@ export default {
     if (path === '/navody') return html(guideList(origin));
     if (path === '/triedy') return html(classList(origin));
     if (path === '/rasy') return html(raceList(origin));
+    if (path === '/navody/talenty') return html(talentCalc(origin));
+    if (path === '/navody/buildy') return html(buildsGuide(origin));
     if (path === '/o-nas') return html(about(origin));
     if (path === '/cz') return czStub(origin);
     if (path === '/guildy') return html(await guildList(env, url, origin), 200, { 'cache-control': 'public, max-age=60' });
