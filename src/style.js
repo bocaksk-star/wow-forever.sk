@@ -14,10 +14,14 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;
              radial-gradient(ellipse 60% 40% at 0% 0%, rgba(226,174,76,.07), transparent 60%)}
 
 /* Fixná krajina na pozadí — mesiac a hory ostávajú pri scrollovaní */
-.world-bg{position:fixed;inset:0;z-index:-2;opacity:.6;filter:saturate(.85)}
+.world-bg{position:fixed;inset:0;z-index:-2;opacity:.6;filter:saturate(.85);transition:opacity 1.3s ease}
 .world-bg svg{width:100%;height:100%;display:block}
 .world-bg::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg, rgba(10,14,28,.15) 0%, rgba(10,14,28,.55) 55%, var(--night) 100%)}
 @media (max-width:720px){.world-bg{opacity:.4}}
+/* Na hlavnej stránke sa mesiac/krajina ukáže až po scrollnutí */
+body.home .world-bg{opacity:0}
+body.home.scrolled .world-bg{opacity:.6}
+@media (max-width:720px){body.home.scrolled .world-bg{opacity:.4}}
 a{color:var(--gold-soft);text-underline-offset:3px;text-decoration-thickness:1px}
 a:hover{color:var(--gold)}
 :focus-visible{outline:2px solid var(--gold);outline-offset:3px;border-radius:2px}
@@ -43,6 +47,11 @@ img{max-width:100%}
 .nav a .ic{opacity:.75;transition:opacity .15s}
 .nav a:hover,.nav a[aria-current="page"]{color:var(--text);border-bottom-color:var(--gold)}
 .nav a:hover .ic,.nav a[aria-current="page"] .ic{opacity:1;color:var(--gold-soft)}
+.lang{display:flex;align-items:center;gap:6px;font-family:var(--display);font-size:.85rem;letter-spacing:.04em;margin-left:14px;padding-left:14px;border-left:1px solid var(--line)}
+.lang a{color:var(--muted);text-decoration:none;padding:3px 5px;border-radius:5px;transition:color .15s,background .15s}
+.lang a:hover{color:var(--text)}
+.lang a.on{color:var(--night);background:var(--gold-soft)}
+.lang span{color:var(--line)}
 @media (max-width:860px){
   .top{position:static}
   .navtoggle{display:inline-flex}
@@ -50,6 +59,7 @@ img{max-width:100%}
   .nav.open{max-height:360px;padding-bottom:10px}
   .nav a{width:100%;padding:10px 4px;border-bottom:1px solid var(--line)}
   .nav a[aria-current="page"],.nav a:hover{border-bottom-color:var(--line);background:var(--surface)}
+  .lang{margin-left:auto;padding-left:0;border-left:none}
 }
 
 /* Typografia */

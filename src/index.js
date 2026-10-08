@@ -20,12 +20,14 @@ const svg = (inner, size = 18, extra = '') => `<svg width="${size}" height="${si
 const S = 'fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"';
 
 const NAV_ICON = {
-  novinky: svg(`<rect x="3" y="5" width="14" height="16" rx="1" ${S}/><line x1="7" y1="9" x2="13" y2="9" ${S}/><line x1="7" y1="13" x2="13" y2="13" ${S}/><line x1="7" y1="17" x2="11" y2="17" ${S}/><path d="M17 8h3a1 1 0 0 1 1 1v10a2 2 0 0 1-2 2h-2" ${S}/>`),
-  navody: svg(`<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" ${S}/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" ${S}/>`),
-  triedy: svg(`<path d="M12 2 20 5v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V5z" ${S}/>`),
-  rasy: svg(`<circle cx="9" cy="8" r="3.2" ${S}/><path d="M3 20c0-3.5 2.7-6 6-6s6 2.5 6 6" ${S}/><circle cx="17" cy="9" r="2.6" ${S}/><path d="M15.5 14.3c2.6.3 4.5 2.6 4.5 5.7" ${S}/>`),
-  guildy: svg(`<path d="M5 21V4" ${S}/><path d="M5 4l13 3-13 3" ${S}/>`),
-  'o-nas': svg(`<circle cx="12" cy="12" r="9" ${S}/><line x1="12" y1="11" x2="12" y2="16" ${S}/><circle cx="12" cy="7.6" r="1" fill="currentColor" stroke="none"/>`),
+  novinky: svg(`<rect x="3" y="5" width="14" height="16" rx="1" ${S}/><line x1="7" y1="9" x2="13" y2="9" ${S}/><line x1="7" y1="13" x2="13" y2="13" ${S}/><line x1="7" y1="17" x2="11" y2="17" ${S}/><path d="M17 8h3a1 1 0 0 1 1 1v10a2 2 0 0 1-2 2h-2" ${S}/>`, 21),
+  navody: svg(`<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" ${S}/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" ${S}/>`, 21),
+  triedy: svg(`<path d="M12 2 20 5v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V5z" ${S}/>`, 21),
+  rasy: svg(`<circle cx="9" cy="8" r="3.2" ${S}/><path d="M3 20c0-3.5 2.7-6 6-6s6 2.5 6 6" ${S}/><circle cx="17" cy="9" r="2.6" ${S}/><path d="M15.5 14.3c2.6.3 4.5 2.6 4.5 5.7" ${S}/>`, 21),
+  guildy: svg(`<path d="M5 21V4" ${S}/><path d="M5 4l13 3-13 3" ${S}/>`, 21),
+  'o-nas': svg(`<circle cx="12" cy="12" r="9" ${S}/><line x1="12" y1="11" x2="12" y2="16" ${S}/><circle cx="12" cy="7.6" r="1" fill="currentColor" stroke="none"/>`, 21),
+  edicie: svg(`<path d="M12 2 21 11l-9.5 9.5a1.5 1.5 0 0 1-2.1 0L3 14.1a1.5 1.5 0 0 1 0-2.1z" ${S}/><circle cx="16" cy="7" r="1.6" fill="currentColor"/>`, 21),
+  faq: svg(`<circle cx="12" cy="12" r="9" ${S}/><path d="M9.3 9.3a2.7 2.7 0 1 1 3.9 2.4c-.8.4-1.2.9-1.2 1.8" ${S}/><circle cx="12" cy="17" r="1" fill="currentColor" stroke="none"/>`, 21),
 };
 
 const CLASS_ICON = {
@@ -140,12 +142,16 @@ ${[[90,70,.8],[180,150,.5],[280,90,.7],[380,200,.4],[480,60,.6],[600,220,.5],[68
 
 const CREST = svg(`<path d="M16 2 28 7v9c0 9-5 14.5-12 17-7-2.5-12-8-12-17V7z" ${S}/><path d="M16 9v16M10 14l12 6M22 14l-12 6" stroke="currentColor" stroke-width="1.1" opacity=".55" fill="none"/><circle cx="16" cy="14" r="3" fill="currentColor"/>`, 30, 'class="crest"');
 
-const NAV = [['/novinky', 'Novinky', 'novinky'], ['/navody', 'Návody', 'navody'], ['/triedy', 'Classy', 'triedy'], ['/rasy', 'Rasy', 'rasy'], ['/guildy', 'Guildy CZ/SK', 'guildy'], ['/o-nas', 'O webe', 'o-nas']];
+const NAV = [['/novinky', 'Novinky', 'novinky'], ['/navody', 'Návody', 'navody'], ['/triedy', 'Classy', 'triedy'], ['/rasy', 'Rasy', 'rasy'], ['/navody/edicie-a-ceny', 'Edície', 'edicie'], ['/guildy', 'Guildy CZ/SK', 'guildy'], ['/navody/faq', 'FAQ', 'faq'], ['/o-nas', 'O webe', 'o-nas']];
 
 function page({ title, desc, path, body, origin, noindex }) {
   const full = title ? `${title} | WoW Forever SK` : 'WoW Forever SK – novinky, návody a guildy po slovensky';
   const d = desc || 'Slovenský fan web o World of Warcraft: Forever. Novinky, návody, triedy, rasy a adresár CZ/SK guild.';
   const nav = NAV.map(([href, label, ic]) => `<a href="${href}"${path === href || path.startsWith(href + '/') ? ' aria-current="page"' : ''}><span class="ic">${NAV_ICON[ic]}</span>${label}</a>`).join('');
+  const isHome = path === '/';
+  const lang = `<div class="lang" aria-label="Jazyk verzie">
+    <a href="/" class="on" title="Slovenská verzia">SK</a><span>/</span><a href="/cz" title="Česká verzia (pripravujeme)">CZ</a>
+  </div>`;
   return `<!doctype html><html lang="sk"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>${esc(full)}</title><meta name="description" content="${esc(d)}">
 <link rel="canonical" href="${origin}${path}"><meta property="og:title" content="${esc(full)}"><meta property="og:description" content="${esc(d)}"><meta property="og:type" content="website"><meta property="og:locale" content="sk_SK">
@@ -153,7 +159,7 @@ ${noindex ? '<meta name="robots" content="noindex">' : ''}
 <link rel="icon" href="${FAVICON}"><meta name="theme-color" content="#0F1528">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Alegreya+Sans:ital,wght@0,400;0,500;0,700;1,400&family=Marcellus&display=swap&subset=latin-ext" rel="stylesheet">
-<style>${CSS}</style></head><body>
+<style>${CSS}</style></head><body${isHome ? ' class="home"' : ''}>
 <div class="world-bg" aria-hidden="true">${worldArt()}</div>
 <div class="embers" aria-hidden="true">${[8,22,37,52,67,81,94].map((l,i)=>`<i style="left:${l}%;animation-duration:${14+i*3}s;animation-delay:${i*-2.3}s;--dx:${(i%2?1:-1)*(10+i*4)}px"></i>`).join('')}</div>
 <a class="skip" href="#obsah">Preskočiť na obsah</a>
@@ -161,10 +167,12 @@ ${noindex ? '<meta name="robots" content="noindex">' : ''}
   <a class="brand" href="/">${LOGO}WoW <span>Forever</span> SK</a>
   <button class="navtoggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Menu">${MENU}</button>
   <nav class="nav" id="site-nav" aria-label="Hlavná navigácia">${nav}</nav>
+  ${lang}
 </div></header>
 <main id="obsah"><div class="wrap">${body}</div></main>
 <footer><div class="wrap"><div class="footer-top"><span class="ic">${CREST}</span><span class="brand-sm">WoW <span>Forever</span> SK</span></div><div>WoW Forever SK je neoficiálny fanúšikovský web. Nie je spojený so spoločnosťou Blizzard Entertainment.</div><div>World of Warcraft a Blizzard Entertainment sú ochranné známky spoločnosti Blizzard Entertainment, Inc.</div></div></footer>
 <script>(()=>{const b=document.querySelector('.navtoggle'),n=document.getElementById('site-nav');if(!b||!n)return;b.addEventListener('click',()=>{const open=n.classList.toggle('open');b.setAttribute('aria-expanded',open?'true':'false');});n.addEventListener('click',e=>{if(e.target.tagName==='A')n.classList.remove('open');});})();</script>
+${isHome ? `<script>(()=>{const f=()=>{document.body.classList.toggle('scrolled', window.scrollY>160);};f();addEventListener('scroll',f,{passive:true});})();</script>` : ''}
 </body></html>`;
 }
 
@@ -333,6 +341,10 @@ function notFound(origin) {
   return html(page({ title: 'Stránka sa nenašla', path: '/404', origin, noindex: true, body: `<article class="prose"><h1>Táto cesta nikam nevedie</h1><p class="lead">Stránka neexistuje alebo bola presunutá.</p><p><a class="btn ghost" href="/">Na úvod</a></p></article>` }), 404);
 }
 
+function czStub(origin) {
+  return html(page({ title: 'Česká verzia', path: '/cz', origin, noindex: true, body: `<article class="prose"><h1>Česká verzia sa pripravuje</h1><p class="lead">Pracujeme na českom preklade webu. Zatiaľ si pozrite slovenskú verziu.</p><p><a class="btn ghost" href="/">Na slovenskú verziu</a></p></article>` }));
+}
+
 // ---------- guildy ----------
 const opt = (list, sel, labels) => list.map((v) => `<option value="${esc(v)}"${v === sel ? ' selected' : ''}>${esc(labels ? labels[v] : v)}</option>`).join('');
 
@@ -478,6 +490,7 @@ export default {
     if (path === '/triedy') return html(classList(origin));
     if (path === '/rasy') return html(raceList(origin));
     if (path === '/o-nas') return html(about(origin));
+    if (path === '/cz') return czStub(origin);
     if (path === '/guildy') return html(await guildList(env, url, origin), 200, { 'cache-control': 'public, max-age=60' });
     let r;
     if ((r = m(/^\/novinky\/([a-z0-9-]+)$/))) { const n = news.find((x) => x.slug === r[1]); if (n) return html(newsDetail(n, origin)); }
