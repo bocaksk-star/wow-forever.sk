@@ -643,7 +643,7 @@ ${changesHtml}
   const body = `<h1>Talent Calculator</h1><p class="lead">Our own talent calculator for World of Warcraft: Forever — spend 51 points across three trees for any class and share your build with a link. Click to add a point, Shift+click or right-click to remove one.</p>
 <div class="tcal-changes" style="margin-bottom:18px"><h4>Forever zmeny — ${esc(generalChanges.label)} <span class="meta">(${esc(generalChanges.source)})</span></h4><ul>${generalChanges.points.map((p) => `<li>${esc(p)}</li>`).join('')}</ul></div>
 <div class="tcal"><div class="tcal-tabs" role="tablist">${tabs}</div>${panels}</div>
-<p class="meta" style="margin-top:20px">Talent trees below are vanilla WoW's own trees, which Forever hasn't changed. Each class tab also lists the real Forever-specific changes we found on <a href="https://wowforever.sk" target="_blank" rel="noopener">wowforever.sk</a> itself — some classes have a detailed write-up, others only a short beta overview so far. See also the <a href="/navody/buildy">recommended builds</a> (in Slovak).</p>
+<p class="meta" style="margin-top:20px">Talent names, trees and point thresholds are the real WoW Forever beta data, not vanilla WoW's. Effect descriptions are our own short wording, not copied tooltips. Each class tab also lists other Forever-specific mechanic changes we found on <a href="https://wowforever.sk" target="_blank" rel="noopener">wowforever.sk</a> itself. See also the <a href="/navody/buildy">recommended builds</a> (in Slovak).</p>
 <script>(()=>{
 const root=document.querySelector('.tcal');
 if(!root) return;
