@@ -132,6 +132,18 @@ const ROLE_ICON = {
 };
 const roleIcons = (roles) => roles.map((r) => `<span class="role"><span class="ic">${ROLE_ICON[r] || ''}</span>${r}</span>`).join('');
 
+// ---------- zdieľanie ----------
+const SHARE_ICON = {
+  x: svg(`<path d="M4 4l16 16M20 4L4 20" ${S}/>`, 16),
+  facebook: svg(`<path d="M14.5 21v-7.8h2.7l.4-3.2h-3.1V8c0-.9.3-1.6 1.7-1.6h1.6V3.5c-.3 0-1.3-.1-2.4-.1-2.4 0-4.1 1.5-4.1 4.2v2.4H8.3v3.2h2.9V21h3.3z" fill="currentColor" stroke="none"/>`, 16),
+  discord: svg(`<path d="M5 8.5c0-2.3 3-4 7-4s7 1.7 7 4c0 3-1.5 9.5-2.3 10.5-.6.8-3.2 1.3-4.7.3M5 8.5c0 3 1.5 9.5 2.3 10.5.6.8 3.2 1.3 4.7.3" ${S}/><circle cx="9.3" cy="11.5" r="1.1" fill="currentColor" stroke="none"/><circle cx="14.7" cy="11.5" r="1.1" fill="currentColor" stroke="none"/>`, 16),
+};
+function shareButtons(url, title) {
+  const tw = `https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}&text=${encodeURIComponent(title)}`;
+  const fb = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`;
+  return `<div class="share-row"><span class="share-label">Zdieľať:</span><a class="share-btn" href="${tw}" target="_blank" rel="noopener" aria-label="Zdieľať na X">${SHARE_ICON.x}</a><a class="share-btn" href="${fb}" target="_blank" rel="noopener" aria-label="Zdieľať na Facebooku">${SHARE_ICON.facebook}</a></div>`;
+}
+
 const FACTION_ICON = {
   A: svg(`<path d="M12 2 20 5v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V5z" ${S}/><path d="M9 13c1-3 1-6 0-8M15 13c-1-3-1-6 0-8" ${S}/>`, 14),
   H: svg(`<path d="M5 4l6 8-6 8M19 4l-6 8 6 8" ${S}/>`, 14),
@@ -394,6 +406,7 @@ function page({ title, desc, path, body, origin, noindex, jsonLd }) {
 <meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="${esc(full)}"><meta name="twitter:description" content="${esc(d)}"><meta name="twitter:image" content="${ogImg}">
 ${noindex ? '<meta name="robots" content="noindex">' : ''}
 <link rel="icon" href="${FAVICON}"><meta name="theme-color" content="#0F1528">
+<link rel="alternate" type="application/rss+xml" title="WoW Forever SK — Novinky" href="${origin}/rss.xml">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Alegreya+Sans:ital,wght@0,400;0,500;0,700;1,400&family=Marcellus&display=swap&subset=latin-ext" rel="stylesheet">
 ${structuredData}
@@ -552,7 +565,7 @@ function newsList(origin) {
 
 function newsDetail(n, origin) {
   const src = n.sources?.length ? `<div class="sources"><b>Zdroje</b><ul>${n.sources.map(([t, u]) => `<li><a href="${u}" rel="noopener" target="_blank">${esc(t)}</a></li>`).join('')}</ul></div>` : '';
-  const body = `<a class="back" href="/novinky">Späť na novinky</a><article class="prose"><h1>${esc(n.title)}</h1><p class="meta"><time datetime="${n.date}">${skDate(n.date)}</time></p><p class="lead">${esc(n.perex)}</p>${n.body}${src}</article>`;
+  const body = `<a class="back" href="/novinky">Späť na novinky</a><article class="prose"><h1>${esc(n.title)}</h1><p class="meta"><time datetime="${n.date}">${skDate(n.date)}</time></p><p class="lead">${esc(n.perex)}</p>${n.body}${shareButtons(`${origin}/novinky/${n.slug}`, n.title)}${src}</article>`;
   return page({ title: n.title, desc: n.perex, path: `/novinky/${n.slug}`, body, origin, jsonLd: newsArticleJsonLd(n, origin) });
 }
 
@@ -562,7 +575,7 @@ function guideList(origin) {
 }
 
 function guideDetail(g, origin) {
-  const body = `<a class="back" href="/navody">Späť na návody</a><article class="prose"><h1>${esc(g.title)}</h1><p class="lead">${esc(g.perex)}</p><div class="tablewrap">${g.body}</div></article>`;
+  const body = `<a class="back" href="/navody">Späť na návody</a><article class="prose"><h1>${esc(g.title)}</h1><p class="lead">${esc(g.perex)}</p><div class="tablewrap">${g.body}</div>${shareButtons(`${origin}/navody/${g.slug}`, g.title)}</article>`;
   return page({ title: g.title, desc: g.perex, path: `/navody/${g.slug}`, body, origin, jsonLd: g.slug === 'faq' ? faqJsonLd(g.body) : '' });
 }
 
@@ -634,7 +647,7 @@ function talentCalc(origin) {
     const fc = FOREVER_CHANGES[c.slug];
     const changesHtml = fc ? `<div class="tcal-changes"><h4>Forever zmeny — ${esc(fc.label)} <span class="meta">(${esc(fc.source)})</span></h4><ul>${fc.points.map((p) => `<li>${esc(p)}</li>`).join('')}</ul></div>` : '';
     return `<div class="tcal-panel" data-class-panel="${c.slug}"${ci === 0 ? '' : ' hidden'}>
-<div class="tcal-summary"><div><b data-total-points>0</b> / 51 points · recommended level <b data-total-level>10</b></div><div class="tcal-actions"><button type="button" class="btn ghost sm" data-reset-all><span class="ic">${RESET_ICON}</span>Reset</button><button type="button" class="btn ghost sm" data-copy-link><span class="ic">${LINK_ICON}</span>Copy link</button></div></div>
+<div class="tcal-summary"><div><b data-total-points>0</b> / 51 points · recommended level <b data-total-level>10</b></div><div class="tcal-actions"><button type="button" class="btn ghost sm" data-reset-all><span class="ic">${RESET_ICON}</span>Reset</button><button type="button" class="btn ghost sm" data-copy-link><span class="ic">${LINK_ICON}</span><span class="btn-label">Copy link</span></button><button type="button" class="btn ghost sm" data-discord-share title="Copies a Discord-friendly summary of this build"><span class="ic">${SHARE_ICON.discord}</span><span class="btn-label">Share to Discord</span></button></div></div>
 <div class="tcal-trees">${trees}</div>
 ${changesHtml}
 </div>`;
@@ -740,7 +753,30 @@ document.querySelectorAll('[data-reset-all]').forEach(btn=>btn.addEventListener(
 }));
 document.querySelectorAll('[data-copy-link]').forEach(btn=>btn.addEventListener('click', async ()=>{
   syncHash(btn.closest('.tcal-panel'));
-  try{ await navigator.clipboard.writeText(location.href); btn.textContent='Skopírované!'; setTimeout(()=>btn.textContent='Kopírovať odkaz',1500); }catch(err){}
+  const label=btn.querySelector('.btn-label');
+  try{ await navigator.clipboard.writeText(location.href); label.textContent='Copied!'; setTimeout(()=>label.textContent='Copy link',1500); }catch(err){}
+}));
+function discordText(panel){
+  const slug=panel.dataset.classPanel;
+  const tabBtn=root.querySelector('.tcal-tab[data-class="'+slug+'"]');
+  const className=tabBtn?tabBtn.textContent.trim():slug;
+  const total=panel.querySelector('[data-total-points]').textContent;
+  const level=panel.querySelector('[data-total-level]').textContent;
+  const lines=['**'+className+' build** — '+total+'/51 points (level '+level+')'];
+  panel.querySelectorAll('.ttree').forEach(tree=>{
+    const name=tree.querySelector('h3').textContent.trim();
+    const picks=[...tree.querySelectorAll('.tnode')].filter(n=>+n.dataset.rank>0).map(n=>n.querySelector('.tn-name').textContent.trim()+' ('+n.dataset.rank+'/'+n.dataset.max+')');
+    if(picks.length) lines.push('**'+name+':** '+picks.join(', '));
+  });
+  lines.push(location.href);
+  return lines.join('\\n');
+}
+document.querySelectorAll('[data-discord-share]').forEach(btn=>btn.addEventListener('click', async ()=>{
+  const panel=btn.closest('.tcal-panel');
+  syncHash(panel);
+  const text=discordText(panel);
+  const label=btn.querySelector('.btn-label');
+  try{ await navigator.clipboard.writeText(text); label.textContent='Copied!'; setTimeout(()=>label.textContent='Share to Discord',1500); }catch(err){}
 }));
 panels.forEach(p=>{ p.querySelectorAll('.tnode').forEach(n=>setRank(n,0)); update(p); });
 if(location.hash) applyHash(); else showClass('${classes[0].slug}');
@@ -1047,6 +1083,16 @@ function sitemap(origin) {
   return new Response(xml, { headers: { 'content-type': 'application/xml; charset=utf-8' } });
 }
 
+// ---------- RSS feed ----------
+function rssFeed(origin) {
+  const escXml = (s) => String(s ?? '').replace(/[&<>]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
+  const toRfc822 = (iso) => new Date(`${iso.slice(0, 10)}T12:00:00Z`).toUTCString();
+  const items = news.map((n) => `<item><title>${escXml(n.title)}</title><link>${origin}/novinky/${n.slug}</link><guid isPermaLink="true">${origin}/novinky/${n.slug}</guid><pubDate>${toRfc822(n.date)}</pubDate><description>${escXml(n.perex)}</description></item>`).join('');
+  const lastBuild = news[0] ? toRfc822(news[0].date) : new Date().toUTCString();
+  const xml = `<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"><channel><title>WoW Forever SK — Novinky</title><link>${origin}/novinky</link><description>Správy o World of Warcraft: Forever po slovensky.</description><language>sk</language><lastBuildDate>${lastBuild}</lastBuildDate>${items}</channel></rss>`;
+  return new Response(xml, { headers: { 'content-type': 'application/rss+xml; charset=utf-8' } });
+}
+
 // ---------- router ----------
 export default {
   async fetch(request, env) {
@@ -1059,6 +1105,7 @@ export default {
 
     if (path === '/robots.txt') return new Response(`User-agent: *\nDisallow: /admin\nSitemap: ${origin}/sitemap.xml\n`, { headers: { 'content-type': 'text/plain' } });
     if (path === '/sitemap.xml') return sitemap(origin);
+    if (path === '/rss.xml') return rssFeed(origin);
     if (path === '/og.svg') return new Response(ogImage(), { headers: { 'content-type': 'image/svg+xml; charset=utf-8', 'cache-control': 'public, max-age=86400' } });
     if (path === '/admin') return admin(request, env, url, origin);
     if (path === '/guildy/pridat') {

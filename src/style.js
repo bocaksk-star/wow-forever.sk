@@ -354,6 +354,12 @@ select:focus,input:focus,textarea:focus{border-color:var(--gold);outline:none;bo
 .notice.err{border-color:var(--horde)}
 button.btn{cursor:pointer;font-family:inherit;background:none}
 
+/* Zdieľanie */
+.share-row{display:flex;align-items:center;gap:10px;margin-top:2em}
+.share-label{color:var(--muted);font-size:.9rem}
+.share-btn{display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:8px;color:var(--gold-soft);background:var(--surface-2);border:1px solid var(--line);transition:border-color .15s,color .15s,transform .15s}
+.share-btn:hover{border-color:var(--gold);color:var(--gold);transform:translateY(-1px)}
+
 /* Zdroje a pätička */
 .sources{margin-top:2.5em;padding-top:1em;border-top:1px solid var(--line);font-size:.95rem;color:var(--muted)}
 .sources ul{padding-left:1.1em}
