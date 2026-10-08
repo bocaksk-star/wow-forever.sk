@@ -30,7 +30,7 @@ img{max-width:100%}
 /* Hlavička */
 .ic{display:inline-flex;flex:none}
 .ic svg{display:block}
-.top{border-bottom:1px solid var(--line);background:rgba(15,21,40,.85);backdrop-filter:blur(8px);position:sticky;top:0;z-index:5}
+.top{border-bottom:1px solid var(--line);background:#0C1022;position:sticky;top:0;z-index:5}
 .top .wrap{max-width:none;display:flex;align-items:center;gap:24px;min-height:64px;flex-wrap:wrap;padding:0 24px}
 .brand{font-family:var(--display);font-size:1.45rem;color:var(--text);text-decoration:none;letter-spacing:.01em;display:flex;align-items:center;gap:10px;transition:color .15s}
 .brand:hover{color:var(--gold-soft)}
