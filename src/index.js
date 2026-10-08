@@ -125,6 +125,90 @@ function crestBadge() {
 
 const DIVIDER = svg(`<path d="M2 12 L9 12" ${S}/><path d="M23 12 L16 12" ${S}/><path d="M12 7 L15 12 12 17 9 12Z" fill="currentColor" stroke="none"/>`, 24, 'class="ornament"');
 
+// ---------- SEO: zdieľací obrázok (Open Graph / Twitter), schema.org dáta ----------
+// 1200x630 karta v štýle webu (ten istý medailón ako v hero), žiadne cudzie assety.
+function ogImage() {
+  return `<svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="ogBg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#171E3C"/><stop offset="100%" stop-color="#0B0F1E"/></linearGradient>
+  <radialGradient id="ogGlow" cx="50%" cy="28%" r="55%"><stop offset="0%" stop-color="#E2AE4C" stop-opacity=".3"/><stop offset="100%" stop-color="#E2AE4C" stop-opacity="0"/></radialGradient>
+</defs>
+<rect width="1200" height="630" fill="url(#ogBg)"/>
+<rect width="1200" height="630" fill="url(#ogGlow)"/>
+<circle cx="1010" cy="110" r="90" fill="#F3E6C4" opacity=".92"/><circle cx="1038" cy="96" r="74" fill="#0B0F1E"/>
+<path d="M0 470 L130 410 280 470 420 400 580 470 720 400 880 470 1030 410 1200 450 1200 630 0 630 Z" fill="#171029" opacity=".92"/>
+<g transform="translate(500,46) scale(1.19)">${crestBadge()}</g>
+<text x="600" y="430" text-anchor="middle" font-family="Georgia,'Times New Roman',serif" font-size="72" fill="#F3E6C4">WoW <tspan fill="#E2AE4C">Forever</tspan></text>
+<text x="600" y="480" text-anchor="middle" font-family="Georgia,serif" font-size="27" letter-spacing="2" fill="#9AA3C2">WORLD OF WARCRAFT: FOREVER PO SLOVENSKY</text>
+</svg>`;
+}
+
+// Základná identita webu pre vyhľadávače (zobrazí sa na každej indexovanej stránke).
+function siteJsonLd(origin) {
+  return `<script type="application/ld+json">${JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: 'WoW Forever SK',
+    alternateName: 'WoW Forever SK – World of Warcraft: Forever po slovensky',
+    url: origin,
+    inLanguage: 'sk',
+    description: 'Slovenský fanúšikovský web o World of Warcraft: Forever — novinky, návody, class, rasy a adresár CZ/SK guild.',
+    publisher: { '@type': 'Organization', name: 'WoW Forever SK', url: origin, logo: `${origin}/og.svg` },
+  })}</script>`;
+}
+
+// Breadcrumby sa odvodia z cesty; detailné stránky (novinky/návody/class) dostanú nadradenú sekciu.
+const BREADCRUMB_PARENTS = [
+  ['/novinky/', '/novinky', 'Novinky'],
+  ['/navody/', '/navody', 'Návody'],
+  ['/triedy/', '/triedy', 'Class'],
+];
+function breadcrumbJsonLd(path, title, origin) {
+  if (!title) return '';
+  const crumbs = [{ name: 'Domov', url: `${origin}/` }];
+  const parent = BREADCRUMB_PARENTS.find(([prefix, parentPath]) => path.startsWith(prefix) && path !== parentPath);
+  if (parent) crumbs.push({ name: parent[2], url: `${origin}${parent[1]}` });
+  crumbs.push({ name: title, url: `${origin}${path}` });
+  const itemListElement = crumbs.map((c, i) => ({ '@type': 'ListItem', position: i + 1, name: c.name, item: c.url }));
+  return `<script type="application/ld+json">${JSON.stringify({ '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement })}</script>`;
+}
+
+function newsArticleJsonLd(n, origin) {
+  return `<script type="application/ld+json">${JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'NewsArticle',
+    headline: n.title,
+    description: n.perex,
+    datePublished: n.date,
+    dateModified: n.date,
+    inLanguage: 'sk',
+    image: [`${origin}/og.svg`],
+    author: { '@type': 'Organization', name: 'WoW Forever SK' },
+    publisher: { '@type': 'Organization', name: 'WoW Forever SK', logo: { '@type': 'ImageObject', url: `${origin}/og.svg` } },
+    mainEntityOfPage: { '@type': 'WebPage', '@id': `${origin}/novinky/${n.slug}` },
+  })}</script>`;
+}
+
+// FAQ návod má formát <h2>otázka</h2><p>odpoveď</p> — vytiahne páry na FAQPage schému.
+function faqJsonLd(body) {
+  const qas = [...body.matchAll(/<h2>(.*?)<\/h2>\s*<p>([\s\S]*?)<\/p>/g)].map(([, q, a]) => ({
+    '@type': 'Question',
+    name: q.replace(/<[^>]+>/g, ''),
+    acceptedAnswer: { '@type': 'Answer', text: a.replace(/<[^>]+>/g, '') },
+  }));
+  if (!qas.length) return '';
+  return `<script type="application/ld+json">${JSON.stringify({ '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: qas })}</script>`;
+}
+
+function itemListJsonLd(items, origin, pathPrefix) {
+  const sep = pathPrefix.endsWith('#') ? '' : '/';
+  return `<script type="application/ld+json">${JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    itemListElement: items.map((it, i) => ({ '@type': 'ListItem', position: i + 1, name: it.name, url: `${origin}${pathPrefix}${sep}${it.slug}` })),
+  })}</script>`;
+}
+
 // Samostatná ilustrácia pre fixné pozadie: veža na útese, polár. žiara, drak na oblohe.
 function worldArt() {
   return `<svg viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -210,9 +294,11 @@ const NAV = [
 
 const navActive = (href, path) => path === href || path.startsWith(href + '/');
 
-function page({ title, desc, path, body, origin, noindex }) {
+function page({ title, desc, path, body, origin, noindex, jsonLd }) {
   const full = title ? `${title} | WoW Forever SK` : 'WoW Forever SK – novinky, návody a guildy po slovensky';
   const d = desc || 'Slovenský fan web o World of Warcraft: Forever. Novinky, návody, Class, rasy a adresár CZ/SK guild.';
+  const ogImg = `${origin}/og.svg`;
+  const structuredData = noindex ? '' : `${siteJsonLd(origin)}${breadcrumbJsonLd(path, title, origin)}${jsonLd || ''}`;
   const navItem = (entry) => {
     if (Array.isArray(entry)) {
       const [href, label, ic] = entry;
@@ -229,11 +315,14 @@ function page({ title, desc, path, body, origin, noindex }) {
   </div>`;
   return `<!doctype html><html lang="sk"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>${esc(full)}</title><meta name="description" content="${esc(d)}">
-<link rel="canonical" href="${origin}${path}"><meta property="og:title" content="${esc(full)}"><meta property="og:description" content="${esc(d)}"><meta property="og:type" content="website"><meta property="og:locale" content="sk_SK">
+<link rel="canonical" href="${origin}${path}"><meta property="og:title" content="${esc(full)}"><meta property="og:description" content="${esc(d)}"><meta property="og:type" content="website"><meta property="og:locale" content="sk_SK"><meta property="og:site_name" content="WoW Forever SK"><meta property="og:url" content="${origin}${path}">
+<meta property="og:image" content="${ogImg}"><meta property="og:image:type" content="image/svg+xml"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="WoW Forever SK — World of Warcraft: Forever po slovensky">
+<meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="${esc(full)}"><meta name="twitter:description" content="${esc(d)}"><meta name="twitter:image" content="${ogImg}">
 ${noindex ? '<meta name="robots" content="noindex">' : ''}
 <link rel="icon" href="${FAVICON}"><meta name="theme-color" content="#0F1528">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Alegreya+Sans:ital,wght@0,400;0,500;0,700;1,400&family=Marcellus&display=swap&subset=latin-ext" rel="stylesheet">
+${structuredData}
 <style>${CSS}</style></head><body${isHome ? ' class="home"' : ''}>
 <div class="world-bg" aria-hidden="true">${worldArt()}</div>
 <div class="embers" aria-hidden="true">${[8,22,37,52,67,81,94].map((l,i)=>`<i style="left:${l}%;animation-duration:${14+i*3}s;animation-delay:${i*-2.3}s;--dx:${(i%2?1:-1)*(10+i*4)}px"></i>`).join('')}</div>
@@ -390,7 +479,7 @@ function newsList(origin) {
 function newsDetail(n, origin) {
   const src = n.sources?.length ? `<div class="sources"><b>Zdroje</b><ul>${n.sources.map(([t, u]) => `<li><a href="${u}" rel="noopener" target="_blank">${esc(t)}</a></li>`).join('')}</ul></div>` : '';
   const body = `<a class="back" href="/novinky">Späť na novinky</a><article class="prose"><h1>${esc(n.title)}</h1><p class="meta"><time datetime="${n.date}">${skDate(n.date)}</time></p><p class="lead">${esc(n.perex)}</p>${n.body}${src}</article>`;
-  return page({ title: n.title, desc: n.perex, path: `/novinky/${n.slug}`, body, origin });
+  return page({ title: n.title, desc: n.perex, path: `/novinky/${n.slug}`, body, origin, jsonLd: newsArticleJsonLd(n, origin) });
 }
 
 function guideList(origin) {
@@ -400,7 +489,7 @@ function guideList(origin) {
 
 function guideDetail(g, origin) {
   const body = `<a class="back" href="/navody">Späť na návody</a><article class="prose"><h1>${esc(g.title)}</h1><p class="lead">${esc(g.perex)}</p><div class="tablewrap">${g.body}</div></article>`;
-  return page({ title: g.title, desc: g.perex, path: `/navody/${g.slug}`, body, origin });
+  return page({ title: g.title, desc: g.perex, path: `/navody/${g.slug}`, body, origin, jsonLd: g.slug === 'faq' ? faqJsonLd(g.body) : '' });
 }
 
 function racesForClass(slug) {
@@ -411,7 +500,7 @@ function classList(origin) {
   const tiles = classes.map((c) => `<a class="tile" href="/triedy/${c.slug}" style="--c:${c.color}"><div class="tile-head"><span class="badge" style="--c:${c.color}">${CLASS_ICON[c.slug] || ''}</span><h3>${c.name}</h3></div><p class="sub">${c.sk[0].toUpperCase() + c.sk.slice(1)}</p><p class="roles">${roleIcons(c.roles)}</p></a>`).join('');
   const body = `<h1>Class</h1><p class="lead">Deväť pôvodných class-ov. Vo Forever majú prepracované talenty, aby bola hrateľná každá špecializácia, a niektoré rasy dostali nové kombinácie.</p><div class="grid">${tiles}</div>
 <h2>Ktorá rasa môže hrať ktorý class</h2>${matrix()}`;
-  return page({ title: 'Class', desc: 'Prehľad Class vo WoW Forever: úlohy v skupine a dostupné rasy.', path: '/triedy', body, origin });
+  return page({ title: 'Class', desc: 'Prehľad všetkých 9 class vo World of Warcraft: Forever — warrior, paladin, hunter, rogue, priest, shaman, mage, warlock a druid. Úlohy v skupine a dostupné rasy.', path: '/triedy', body, origin, jsonLd: itemListJsonLd(classes, origin, '/triedy') });
 }
 
 function matrix() {
@@ -436,7 +525,7 @@ function classDetail(c, origin) {
 <div class="tablewrap"><table><tbody><tr><th>Úloha v skupine</th><td class="roles">${roleIcons(c.roles)}</td></tr><tr><th>Brnenie</th><td>${c.armor}</td></tr></tbody></table></div>
 <h2>Rasy, ktoré môžu hrať ${c.name}</h2><ul>${rs}</ul>
 <p class="meta">Podrobný návod k talentom a rotácii doplníme po štarte, keď budú talenty z bety finálne.</p></article>`;
-  return page({ title: `${c.name} (${c.sk})`, desc: `${c.name} vo WoW Forever: úloha v skupine, brnenie a dostupné rasy.`, path: `/triedy/${c.slug}`, body, origin });
+  return page({ title: `${c.name} (${c.sk})`, desc: `${c.name} (${c.sk}) vo World of Warcraft: Forever. ${c.desc}`, path: `/triedy/${c.slug}`, body, origin });
 }
 
 function raceList(origin) {
@@ -448,7 +537,7 @@ function raceList(origin) {
     return `<div class="tile" id="${r.slug}" style="--c:${r.faction === 'A' ? 'var(--alliance)' : r.faction === 'H' ? 'var(--horde)' : 'var(--gold)'}"><h3>${esc(r.name)}</h3><p>Štart: ${esc(r.start)}</p><div>${fac}</div><div>${cls}</div>${r.note ? `<p style="margin-top:8px">${esc(r.note)}</p>` : ''}</div>`;
   }).join('');
   const body = `<h1>Rasy</h1><p class="lead">Osem pôvodných rás a nová rasa Skyborne, ktorá si frakciu vyberá sama. Zlatou sú označené nové kombinácie rasy a class-u.</p><div class="grid">${tiles}</div><p class="meta" style="margin-top:20px">Podľa Warcraft Wiki k 8. 10. 2026, počas bety sa ešte môže zmeniť. Viac o Skyborne v <a href="/novinky/skyborne-nova-rasa">článku</a>.</p>`;
-  return page({ title: 'Rasy', desc: 'Rasy vo WoW Forever vrátane novej rasy Skyborne a nových kombinácií s Class.', path: '/rasy', body, origin });
+  return page({ title: 'Rasy', desc: 'Všetkých 9 rás vo World of Warcraft: Forever — Human, Dwarf, Night Elf, Gnome, Orc, Undead, Tauren, Troll a nová rasa Skyborne. Nové kombinácie rasy a class-u.', path: '/rasy', body, origin, jsonLd: itemListJsonLd(races.map((r) => ({ slug: r.slug, name: r.name })), origin, '/rasy#') });
 }
 
 function about(origin) {
@@ -704,9 +793,23 @@ async function admin(request, env, url, origin) {
 
 // ---------- sitemap ----------
 function sitemap(origin) {
-  const paths = ['/', '/novinky', '/navody', '/triedy', '/rasy', '/guildy', '/guildy/pridat', '/guilda', '/ankety', '/o-nas',
-    ...news.map((n) => `/novinky/${n.slug}`), ...guides.map((g) => `/navody/${g.slug}`), ...classes.map((c) => `/triedy/${c.slug}`)];
-  const xml = `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${paths.map((p) => `<url><loc>${origin}${p}</loc></url>`).join('')}</urlset>`;
+  const newest = news[0]?.date.slice(0, 10);
+  const entries = [
+    { p: '/', prio: '1.0', lastmod: newest },
+    { p: '/novinky', prio: '0.9', lastmod: newest },
+    { p: '/navody', prio: '0.8' },
+    { p: '/triedy', prio: '0.8' },
+    { p: '/rasy', prio: '0.8' },
+    { p: '/guildy', prio: '0.7' },
+    { p: '/guildy/pridat', prio: '0.5' },
+    { p: '/guilda', prio: '0.6' },
+    { p: '/ankety', prio: '0.6' },
+    { p: '/o-nas', prio: '0.3' },
+    ...news.map((n) => ({ p: `/novinky/${n.slug}`, prio: '0.7', lastmod: n.date.slice(0, 10) })),
+    ...guides.map((g) => ({ p: `/navody/${g.slug}`, prio: '0.7' })),
+    ...classes.map((c) => ({ p: `/triedy/${c.slug}`, prio: '0.6' })),
+  ];
+  const xml = `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${entries.map((e) => `<url><loc>${origin}${e.p}</loc>${e.lastmod ? `<lastmod>${e.lastmod}</lastmod>` : ''}<priority>${e.prio}</priority></url>`).join('')}</urlset>`;
   return new Response(xml, { headers: { 'content-type': 'application/xml; charset=utf-8' } });
 }
 
@@ -722,6 +825,7 @@ export default {
 
     if (path === '/robots.txt') return new Response(`User-agent: *\nDisallow: /admin\nSitemap: ${origin}/sitemap.xml\n`, { headers: { 'content-type': 'text/plain' } });
     if (path === '/sitemap.xml') return sitemap(origin);
+    if (path === '/og.svg') return new Response(ogImage(), { headers: { 'content-type': 'image/svg+xml; charset=utf-8', 'cache-control': 'public, max-age=86400' } });
     if (path === '/admin') return admin(request, env, url, origin);
     if (path === '/guildy/pridat') {
       if (request.method === 'POST') return submitGuild(request, env, origin);
