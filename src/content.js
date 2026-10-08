@@ -260,3 +260,42 @@ export const races = [
   { slug: 'troll', name: 'Troll', faction: 'H', start: 'Durotar', classes: ['warrior', 'hunter', 'rogue', 'priest', 'shaman', 'mage', 'warlock'], newClasses: ['warlock'] },
   { slug: 'skyborne', name: 'Skyborne', faction: 'AH', start: 'Zephras Isle', classes: ['warrior', 'hunter', 'rogue', 'druid', 'mage', 'shaman'], newClasses: ['warrior', 'hunter', 'rogue', 'druid', 'mage', 'shaman'], note: 'Mage len za Alianciu, shaman len za Hordu. Vyžaduje Skyborne balík.' },
 ];
+
+// Ankety — hlasuje sa cez cookie (1 hlas na zariadenie, dá sa zmeniť).
+export const polls = [
+  {
+    slug: 'trieda',
+    question: 'Akú triedu budeš hrať ako prvú?',
+    options: classes.map((c) => ({ slug: c.slug, label: c.name })),
+  },
+  {
+    slug: 'frakcia',
+    question: 'Aliancia, alebo Horda?',
+    options: [
+      { slug: 'A', label: 'Aliancia' },
+      { slug: 'H', label: 'Horda' },
+      { slug: '?', label: 'Ešte neviem' },
+    ],
+  },
+  {
+    slug: 'styl',
+    question: 'Ako budeš hlavne hrať?',
+    options: [
+      { slug: 'pve', label: 'PvE raidy' },
+      { slug: 'pvp', label: 'PvP' },
+      { slug: 'rp', label: 'RP' },
+      { slug: 'casual', label: 'Casual / social' },
+      { slug: 'hardcore', label: 'Hardcore (keď príde)' },
+    ],
+  },
+  {
+    slug: 'realm',
+    question: 'Na akom type realmu začínaš?',
+    options: [
+      { slug: 'normal', label: 'Normal' },
+      { slug: 'pvp', label: 'PvP' },
+      { slug: 'rp', label: 'RP' },
+      { slug: 'hardcore', label: 'Počkám na Hardcore' },
+    ],
+  },
+];

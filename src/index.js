@@ -1,5 +1,5 @@
 import { CSS } from './style.js';
-import { news, guides, classes, races, LAUNCH_UTC, RAIDS_DATE } from './content.js';
+import { news, guides, classes, races, polls, LAUNCH_UTC, RAIDS_DATE } from './content.js';
 
 // ---------- pomocné ----------
 const MES = ['januára','februára','marca','apríla','mája','júna','júla','augusta','septembra','októbra','novembra','decembra'];
@@ -29,6 +29,7 @@ const NAV_ICON = {
   edicie: svg(`<path d="M12 2 21 11l-9.5 9.5a1.5 1.5 0 0 1-2.1 0L3 14.1a1.5 1.5 0 0 1 0-2.1z" ${S}/><circle cx="16" cy="7" r="1.6" fill="currentColor"/>`, 21),
   faq: svg(`<circle cx="12" cy="12" r="9" ${S}/><path d="M9.3 9.3a2.7 2.7 0 1 1 3.9 2.4c-.8.4-1.2.9-1.2 1.8" ${S}/><circle cx="12" cy="17" r="1" fill="currentColor" stroke="none"/>`, 21),
   guilda: svg(`<path d="M12 2.5 14 8l5.8.5-4.4 3.8L16.8 18 12 14.8 7.2 18l1.4-5.7L4.2 8.5 10 8z" ${S}/>`, 21),
+  ankety: svg(`<path d="M5 19V10M12 19V5M19 19v-7" ${S}/><path d="M3 19h18" ${S}/>`, 21),
 };
 
 const GUIDE_ICON = {
@@ -154,12 +155,50 @@ const CREST = svg(`<path d="M16 2 28 7v9c0 9-5 14.5-12 17-7-2.5-12-8-12-17V7z" $
 const CAL_ICON = svg(`<rect x="3" y="4.5" width="18" height="16" rx="2.5" ${S}/><line x1="3" y1="9.5" x2="21" y2="9.5" ${S}/><line x1="7" y1="2.5" x2="7" y2="6.5" ${S}/><line x1="17" y1="2.5" x2="17" y2="6.5" ${S}/>`, 17);
 const GUILD_ICON = svg(`<path d="M5 21V4" ${S}/><path d="M5 4l13 3-13 3" ${S}/>`, 26);
 
-const NAV = [['/novinky', 'Novinky', 'novinky'], ['/navody', 'Návody', 'navody'], ['/triedy', 'Classy', 'triedy'], ['/rasy', 'Rasy', 'rasy'], ['/navody/edicie-a-ceny', 'Edície', 'edicie'], ['/guildy', 'Guildy CZ/SK', 'guildy'], ['/guilda', 'Naša guilda', 'guilda'], ['/navody/faq', 'FAQ', 'faq'], ['/o-nas', 'O webe', 'o-nas']];
+const POLL_OPT_ICON = {
+  pve: svg(`<path d="M12 2 20 5v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V5z" ${S}/>`, 18),
+  pvp: svg(`<path d="M3 21 15 9M21 3 9 15" ${S}/><path d="M3 3l3 3M21 21l-3-3" ${S}/>`, 18),
+  rp: svg(`<path d="M3 5.5h14a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2H9.5L5 19v-3.5H3a2 2 0 0 1-2-2v-6a2 2 0 0 1 2-2z" ${S}/>`, 18),
+  casual: svg(`<path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a7 7 0 0 0 10.5 10.5z" fill="currentColor" stroke="none"/>`, 18),
+  hardcore: svg(`<circle cx="12" cy="9.5" r="6" ${S}/><path d="M9 15 8 21h2l.5-2h3l.5 2h2l-1-6" ${S}/><circle cx="9.5" cy="9" r="1" fill="currentColor"/><circle cx="14.5" cy="9" r="1" fill="currentColor"/>`, 18),
+  normal: svg(`<circle cx="12" cy="12" r="7.5" ${S}/>`, 18),
+  '?': svg(`<circle cx="12" cy="12" r="9" ${S}/><path d="M9.3 9.3a2.7 2.7 0 1 1 3.9 2.4c-.8.4-1.2.9-1.2 1.8" ${S}/><circle cx="12" cy="17" r="1" fill="currentColor" stroke="none"/>`, 18),
+};
+const pollOptIcon = (pollSlug, optSlug) => (pollSlug === 'trieda' && CLASS_ICON[optSlug]) || (pollSlug === 'frakcia' && FACTION_ICON[optSlug]) || POLL_OPT_ICON[optSlug] || '';
+
+const NAV = [
+  ['/novinky', 'Novinky', 'novinky'],
+  { label: 'Návody', ic: 'navody', items: [
+    ['/navody', 'Všetky návody', 'navody'],
+    ['/triedy', 'Classy', 'triedy'],
+    ['/rasy', 'Rasy', 'rasy'],
+    ['/navody/edicie-a-ceny', 'Edície', 'edicie'],
+    ['/navody/faq', 'FAQ', 'faq'],
+  ] },
+  { label: 'Guildy', ic: 'guildy', items: [
+    ['/guildy', 'Adresár CZ/SK', 'guildy'],
+    ['/guilda', 'Naša guilda', 'guilda'],
+    ['/guildy/pridat', 'Pridať guildu', 'guildy'],
+  ] },
+  ['/ankety', 'Ankety', 'ankety'],
+  ['/o-nas', 'O webe', 'o-nas'],
+];
+
+const navActive = (href, path) => path === href || path.startsWith(href + '/');
 
 function page({ title, desc, path, body, origin, noindex }) {
   const full = title ? `${title} | WoW Forever SK` : 'WoW Forever SK – novinky, návody a guildy po slovensky';
   const d = desc || 'Slovenský fan web o World of Warcraft: Forever. Novinky, návody, triedy, rasy a adresár CZ/SK guild.';
-  const nav = NAV.map(([href, label, ic]) => `<a href="${href}"${path === href || path.startsWith(href + '/') ? ' aria-current="page"' : ''}><span class="ic">${NAV_ICON[ic]}</span>${label}</a>`).join('');
+  const navItem = (entry) => {
+    if (Array.isArray(entry)) {
+      const [href, label, ic] = entry;
+      return `<a href="${href}"${navActive(href, path) ? ' aria-current="page"' : ''}><span class="ic">${NAV_ICON[ic]}</span>${label}</a>`;
+    }
+    const childActive = entry.items.some(([href]) => navActive(href, path));
+    const sub = entry.items.map(([href, label, ic]) => `<a href="${href}"${navActive(href, path) ? ' aria-current="page"' : ''}><span class="ic">${NAV_ICON[ic]}</span>${label}</a>`).join('');
+    return `<div class="navgroup${childActive ? ' current' : ''}"><button type="button" class="navgroup-trigger" aria-haspopup="true"${childActive ? ' aria-current="page"' : ''}><span class="ic">${NAV_ICON[entry.ic]}</span>${entry.label}<span class="caret">▾</span></button><div class="dropdown">${sub}</div></div>`;
+  };
+  const nav = NAV.map(navItem).join('');
   const isHome = path === '/';
   const lang = `<div class="lang" aria-label="Jazyk verzie">
     <a href="/" class="on" title="Slovenská verzia">SK</a><span>/</span><a href="/cz" title="Česká verzia (pripravujeme)">CZ</a>
@@ -189,6 +228,19 @@ ${isHome ? `<script>(()=>{const f=()=>{document.body.classList.toggle('scrolled'
 }
 
 const html = (s, status = 200, extra = {}) => new Response(s, { status, headers: { 'content-type': 'text/html; charset=utf-8', 'cache-control': 'public, max-age=300', ...extra } });
+
+// ---------- hlasujúci (cookie) ----------
+const getCookie = (request, name) => {
+  const h = request.headers.get('cookie') || '';
+  const m = h.match(new RegExp('(?:^|; )' + name + '=([^;]*)'));
+  return m ? decodeURIComponent(m[1]) : null;
+};
+function voterFrom(request) {
+  const existing = getCookie(request, 'voter');
+  if (existing) return { voter: existing, setCookie: null };
+  const voter = crypto.randomUUID();
+  return { voter, setCookie: `voter=${voter}; Max-Age=31536000; Path=/; SameSite=Lax` };
+}
 
 // ---------- odpočet (questlog) ----------
 function countdownParts(target, now) {
@@ -229,7 +281,7 @@ function questCard(now) {
 // ---------- stránky ----------
 const MES_SKR = ['jan','feb','mar','apr','máj','jún','júl','aug','sep','okt','nov','dec'];
 
-function home(origin, now, guildRows, recruitCount = 0) {
+function home(origin, now, guildRows, recruitCount = 0, pd = { counts: {}, mine: {} }) {
   const latest = news.slice(0, 4).map((n, i) => newsItem(n, i === 0)).join('');
   const g = guides.slice(0, 4).map((x) => `<a class="guide-card" href="/navody/${x.slug}"><span class="ic">${guideIcon(x.slug)}</span><div><b>${esc(x.title)}</b><p>${esc(x.perex)}</p></div></a>`).join('');
   const guildBlock = guildRows.length
@@ -249,6 +301,10 @@ function home(origin, now, guildRows, recruitCount = 0) {
     return `<li class="${state}"><span class="dot"></span><b>${t.label}${i === nextIdx ? '<em>čoskoro</em>' : ''}</b><span>${t.text}</span></li>`;
   }).join('');
 
+  const cameo = classes.map((c, i) => `<a href="/triedy/${c.slug}" style="--c:${c.color};--d:${(i * 0.18).toFixed(2)}s"><span class="badge">${CLASS_ICON[c.slug]}</span><span class="name">${c.name}</span></a>`).join('');
+  const frakciaPoll = pollBySlug.frakcia;
+  const myFrakciaVote = pd.mine[frakciaPoll.slug];
+
   const body = `
 <section class="hero">
   <div class="hero-bg">${heroArt()}</div>
@@ -262,6 +318,7 @@ function home(origin, now, guildRows, recruitCount = 0) {
   ${questCard(now)}
   </div>
 </section>
+<nav class="cameo" aria-label="Rýchly výber triedy">${cameo}</nav>
 <section class="section">
   <a class="guildcta" href="/guilda">
     <span class="ic">${NAV_ICON.guilda}</span>
@@ -284,6 +341,10 @@ function home(origin, now, guildRows, recruitCount = 0) {
     <div class="section-head" style="margin-top:32px"><h2><span class="ic">${DIVIDER}</span>Nové guildy</h2><a href="/guildy">Adresár</a></div>
     ${guildBlock}
   </div>
+</section>
+<section class="section">
+  <div class="section-head"><h2><span class="ic">${DIVIDER}</span>Anketa</h2><a href="/ankety">Všetky ankety</a></div>
+  <div class="poll-grid one">${pollCard(frakciaPoll, pd.counts[frakciaPoll.slug] || {}, myFrakciaVote, { back: '/' })}</div>
 </section>`;
   return page({ path: '/', body, origin });
 }
@@ -518,6 +579,75 @@ async function submitRecruit(request, env, origin) {
   return Response.redirect(`${origin}/guilda?ok=1`, 303);
 }
 
+// ---------- ankety ----------
+const pollBySlug = Object.fromEntries(polls.map((p) => [p.slug, p]));
+const skPlural = (n, one, few, many) => (n === 1 ? one : n >= 2 && n <= 4 ? few : many);
+
+function pollResults(poll, counts = {}) {
+  const total = poll.options.reduce((s, o) => s + (counts[o.slug] || 0), 0);
+  const bars = poll.options
+    .map((o) => ({ ...o, c: counts[o.slug] || 0 }))
+    .sort((a, b) => b.c - a.c)
+    .map((o) => {
+      const pct = total ? Math.round((o.c / total) * 100) : 0;
+      return `<li><span class="opt"><span class="ic">${pollOptIcon(poll.slug, o.slug)}</span>${esc(o.label)}</span><span class="bar"><span class="fill" style="width:${pct}%"></span></span><span class="pct">${pct}&nbsp;%</span></li>`;
+    }).join('');
+  return `<ul class="poll-bars">${bars}</ul><p class="poll-total">${total} ${skPlural(total, 'hlas', 'hlasy', 'hlasov')}</p>`;
+}
+
+function pollVoteForm(poll, back) {
+  const opts = poll.options.map((o) => `<button class="poll-opt" type="submit" name="option" value="${esc(o.slug)}"><span class="ic">${pollOptIcon(poll.slug, o.slug)}</span>${esc(o.label)}</button>`).join('');
+  return `<form class="poll-form" method="post" action="/ankety"><input type="hidden" name="poll" value="${poll.slug}"><input type="hidden" name="back" value="${esc(back)}">${opts}</form>`;
+}
+
+function pollCard(poll, counts, myVote, { back = '/ankety', edit = false } = {}) {
+  const voted = myVote && !edit;
+  return `<div class="poll-card" id="anketa-${poll.slug}">
+    <h3><span class="ic">${NAV_ICON.ankety}</span>${esc(poll.question)}</h3>
+    ${voted ? `${pollResults(poll, counts)}<a class="change-vote" href="${back === '/' ? '/ankety' : back}?edit=${poll.slug}#anketa-${poll.slug}">Zmeniť hlas</a>` : pollVoteForm(poll, back)}
+  </div>`;
+}
+
+async function pollData(env, voter) {
+  const counts = {};
+  const mine = {};
+  try {
+    const { results = [] } = await env.DB.prepare(`SELECT poll, option_slug, COUNT(*) c FROM poll_votes GROUP BY poll, option_slug`).all();
+    for (const r of results) (counts[r.poll] ||= {})[r.option_slug] = r.c;
+  } catch (e) {}
+  if (voter) {
+    try {
+      const { results = [] } = await env.DB.prepare(`SELECT poll, option_slug FROM poll_votes WHERE voter=?`).bind(voter).all();
+      for (const r of results) mine[r.poll] = r.option_slug;
+    } catch (e) {}
+  }
+  return { counts, mine };
+}
+
+function pollsPage(origin, { counts, mine }, editSlug) {
+  const cards = polls.map((p) => pollCard(p, counts[p.slug] || {}, mine[p.slug], { back: '/ankety', edit: editSlug === p.slug })).join('');
+  const body = `<h1>Ankety</h1><p class="lead">Zisťujeme, ako budeme hrať. Hlasuj — výsledky sa počítajú naživo, hlas vieš kedykoľvek zmeniť.</p><div class="poll-grid">${cards}</div>`;
+  return page({ title: 'Ankety', desc: 'Hlasuj v anketách o WoW Forever: trieda, frakcia, štýl hry a typ realmu.', path: '/ankety', body, origin });
+}
+
+async function submitVote(request, env, origin) {
+  const fd = await request.formData();
+  const pollSlug = String(fd.get('poll') || '');
+  const option = String(fd.get('option') || '');
+  const back = String(fd.get('back') || '/ankety');
+  const poll = pollBySlug[pollSlug];
+  const { voter, setCookie } = voterFrom(request);
+  const headers = setCookie ? { 'set-cookie': setCookie } : {};
+  if (poll && poll.options.some((o) => o.slug === option)) {
+    try {
+      await env.DB.prepare(`INSERT INTO poll_votes (poll, option_slug, voter) VALUES (?,?,?) ON CONFLICT(poll,voter) DO UPDATE SET option_slug=excluded.option_slug, created_at=datetime('now')`)
+        .bind(pollSlug, option, voter).run();
+    } catch (e) {}
+  }
+  const safeBack = back.startsWith('/') ? back : '/ankety';
+  return new Response(null, { status: 303, headers: { location: `${origin}${safeBack === '/' ? '/' : safeBack}#anketa-${pollSlug}`, ...headers } });
+}
+
 // ---------- administrácia ----------
 async function admin(request, env, url, origin) {
   const key = request.method === 'POST' ? String((await request.clone().formData()).get('key') || '') : url.searchParams.get('key') || '';
@@ -546,7 +676,7 @@ async function admin(request, env, url, origin) {
 
 // ---------- sitemap ----------
 function sitemap(origin) {
-  const paths = ['/', '/novinky', '/navody', '/triedy', '/rasy', '/guildy', '/guildy/pridat', '/guilda', '/o-nas',
+  const paths = ['/', '/novinky', '/navody', '/triedy', '/rasy', '/guildy', '/guildy/pridat', '/guilda', '/ankety', '/o-nas',
     ...news.map((n) => `/novinky/${n.slug}`), ...guides.map((g) => `/navody/${g.slug}`), ...classes.map((c) => `/triedy/${c.slug}`)];
   const xml = `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${paths.map((p) => `<url><loc>${origin}${p}</loc></url>`).join('')}</urlset>`;
   return new Response(xml, { headers: { 'content-type': 'application/xml; charset=utf-8' } });
@@ -575,14 +705,24 @@ export default {
       try { count = (await env.DB.prepare(`SELECT COUNT(*) AS c FROM recruits`).first())?.c || 0; } catch (e) {}
       return html(guildaPage(origin, count, { ok: url.searchParams.get('ok') === '1' }), 200, { 'cache-control': 'no-store' });
     }
+    if (path === '/ankety') {
+      if (request.method === 'POST') return submitVote(request, env, origin);
+      const { voter, setCookie } = voterFrom(request);
+      const pd = await pollData(env, voter);
+      const headers = { 'cache-control': 'no-store', ...(setCookie ? { 'set-cookie': setCookie } : {}) };
+      return html(pollsPage(origin, pd, url.searchParams.get('edit')), 200, headers);
+    }
     if (request.method !== 'GET' && request.method !== 'HEAD') return new Response('Method not allowed', { status: 405 });
 
     if (path === '/') {
       let rows = [];
       let recruitCount = 0;
+      const { voter, setCookie } = voterFrom(request);
+      const pd = await pollData(env, voter);
       try { rows = (await env.DB.prepare(`SELECT name, faction, realm, focus, lang FROM guilds WHERE status='approved' ORDER BY created_at DESC LIMIT 4`).all()).results || []; } catch (e) {}
       try { recruitCount = (await env.DB.prepare(`SELECT COUNT(*) AS c FROM recruits`).first())?.c || 0; } catch (e) {}
-      return html(home(origin, now, rows, recruitCount), 200, { 'cache-control': 'public, max-age=60' });
+      const headers = { 'cache-control': 'no-store', ...(setCookie ? { 'set-cookie': setCookie } : {}) };
+      return html(home(origin, now, rows, recruitCount, pd), 200, headers);
     }
     if (path === '/novinky') return html(newsList(origin));
     if (path === '/navody') return html(guideList(origin));

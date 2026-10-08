@@ -27,3 +27,12 @@ CREATE TABLE IF NOT EXISTS recruits (
   created_at TEXT NOT NULL DEFAULT (datetime('now'))
 );
 CREATE INDEX IF NOT EXISTS idx_recruits_created ON recruits (created_at);
+
+CREATE TABLE IF NOT EXISTS poll_votes (
+  poll TEXT NOT NULL,
+  option_slug TEXT NOT NULL,
+  voter TEXT NOT NULL,
+  created_at TEXT NOT NULL DEFAULT (datetime('now')),
+  PRIMARY KEY (poll, voter)
+);
+CREATE INDEX IF NOT EXISTS idx_poll_votes_poll ON poll_votes (poll);
