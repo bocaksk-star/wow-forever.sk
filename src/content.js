@@ -233,6 +233,44 @@ export const guides = [
 <h2>Kde nájdem slovenskú alebo českú guildu?</h2>
 <p>V našom <a href="/guildy">adresári CZ/SK guild</a>. Ak guildu vediete, <a href="/guildy/pridat">pridajte ju</a> zadarmo.</p>`,
   },
+  {
+    slug: 'najlepsia-trieda-pre-zaciatocnikov',
+    title: 'Najlepšia trieda pre začiatočníkov vo WoW Forever',
+    perex: 'Ak hráte vanilla WoW prvýkrát, niektoré class sa levelujú jednoduchšie a odpúšťajú viac chýb ako iné.',
+    body: `
+<p>Všetkých deväť class sa dá hrať sólo aj v skupine, no pre úplného začiatočníka sú niektoré výrazne pohodlnejšie — menej riskantné pri pullovaní, menej závislé od presného časovania a lepšie odpúšťajú chyby.</p>
+<h2>Najjednoduchší štart</h2>
+<ul>
+<li><strong>Hunter</strong> — pet tankuje väčšinu damage za vás a vy strieľate z diaľky, takže riziko smrti je najnižšie zo všetkých class. Najrýchlejšie sólo levelovanie v hre. Pozrite si <a href="/triedy/hunter">prehľad Hunter</a>.</li>
+<li><strong>Mage</strong> — Frostbolt spomaľuje nepriateľa skôr, než sa k vám dostane, a Polymorph vie na čas úplne vyradiť ďalšieho z boja. Náročnejší na manu, ale veľmi bezpečný pri jednom cieli. Pozrite <a href="/triedy/mage">prehľad Mage</a>.</li>
+<li><strong>Warlock</strong> — démonický pet (napríklad Voidwalker) tankuje za vás podobne ako u Huntera, k tomu DoT kúzla, ktoré poškodzujú nepriateľa aj keď naň práve neútočíte. Pozrite <a href="/triedy/warlock">prehľad Warlock</a>.</li>
+</ul>
+<h2>Trochu náročnejšie, ale veľmi žiadané</h2>
+<ul>
+<li><strong>Priest</strong> — liečiť sa učíte priamo na vlastnej postave (self-heal cez Renew a Power Word: Shield), čo odpúšťa chyby pri levelovaní. V skupinách je liečiteľ vždy vyhľadávaný. Pozrite <a href="/triedy/priest">prehľad Priest</a>.</li>
+<li><strong>Paladin</strong> — odolný vďaka aurám a buffom, dobre znáša aj zlý pull vďaka Bubble (Divine Shield). Vo Forever ho navyše môže hrať aj Horda cez Forsaken paladina. Pozrite <a href="/triedy/paladin">prehľad Paladin</a>.</li>
+</ul>
+<h2>Náročnejšie na začiatok</h2>
+<p>Warrior, rogue a (čiastočne) shaman bez petov alebo diaľkových kúziel vyžadujú presnejšie plánovanie pullov a viac liečivých elixírov/jedla. Nie sú zlé, len odpúšťajú menej chýb. Druid je flexibilný, ale vo vanille sa oplatí hrať ho najmä ako liečiteľa, čo tiež vyžaduje viac skúseností.</p>
+<p>Napokon je najdôležitejšie hrať class, ktorý vás baví — vo WoW Forever budete na leveli 60 tráviť veľmi dlhý čas. Ak si neviete vybrať, skúste si prejsť celý <a href="/triedy">prehľad všetkých deviatich class</a> alebo si pozrite odporúčané <a href="/navody/buildy">levelovacie buildy</a> v našej talent kalkulačke.</p>`,
+  },
+  {
+    slug: 'ako-zalozit-guildu',
+    title: 'Ako založiť guildu na štart WoW Forever',
+    perex: 'Guilda sa oplatí mať pripravenú ešte pred spustením hry. Čo si premyslieť a ako nás nájsť v adresári.',
+    body: `
+<p>WoW Forever sa hrá vo veľkej miere v skupine — pullovanie bez liečiteľa a tanka je na vyšších leveloch riskantné a raidy od 9. decembra potrebujú 10 až 40 ľudí naraz. Mať guildu pripravenú pred štartom vám ušetrí prvé chaotické dni.</p>
+<h2>Čo si premyslieť vopred</h2>
+<ol>
+<li><strong>Typ realmu.</strong> Normal, PvP alebo RP — celá guilda by mala ísť na ten istý realm a tie isté pravidlá, inak sa po štarte rozdelíte.</li>
+<li><strong>Frakcia.</strong> Aliancia alebo Horda. Niektoré nové kombinácie rás a class (napríklad Forsaken paladin alebo dwarf shaman) môžu zmeniť, ktorá frakcia vám sedí.</li>
+<li><strong>Zameranie.</strong> PvE raidy, PvP, roleplay alebo len spoločné levelovanie bez záväzkov — povedzte to rovno v popise, nech sa k vám hlásia ľudia s rovnakým očakávaním.</li>
+<li><strong>Komunikácia.</strong> Discord server založte vopred, nech máte kde koordinovať skupiny už od prvého večera.</li>
+</ol>
+<h2>Kde nájsť prvých členov</h2>
+<p>Pridajte guildu zadarmo do nášho <a href="/guildy">adresára CZ/SK guild</a> — filtruje sa podľa frakcie, realmu, zamerania aj jazyka, takže vás nájdu presne tí hráči, ktorých hľadáte. Pridanie zaberie necelú minútu cez formulár <a href="/guildy/pridat">Pridať guildu</a>.</p>
+<p>Sledujte aj <a href="/novinky">novinky</a> — pri každej väčšej správe o Forever sa tu objavia noví hráči, ktorí práve hľadajú partiu.</p>`,
+  },
 ];
 
 // Triedy (vanilla mená ponechávame po anglicky, ako ich používa komunita)

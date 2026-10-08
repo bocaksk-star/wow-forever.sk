@@ -360,6 +360,16 @@ button.btn{cursor:pointer;font-family:inherit;background:none}
 .share-btn{display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:8px;color:var(--gold-soft);background:var(--surface-2);border:1px solid var(--line);transition:border-color .15s,color .15s,transform .15s}
 .share-btn:hover{border-color:var(--gold);color:var(--gold);transform:translateY(-1px)}
 
+/* Reklama */
+.ad-slot{margin:2em auto;padding:14px 0;display:flex;flex-direction:column;align-items:center;gap:8px}
+.ad-slot-label{font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);opacity:.7}
+.ad-slot-unit{display:flex;justify-content:center;overflow:hidden;max-width:100%}
+.ad-wide{display:block}
+.ad-narrow{display:none}
+@media (max-width:720px){.ad-wide{display:none}.ad-narrow{display:block}}
+.ad-slot.ad-inline{margin:2.2em auto}
+.ad-slot.ad-footer{margin:0 auto 0;padding-top:0}
+
 /* Zdroje a pätička */
 .sources{margin-top:2.5em;padding-top:1em;border-top:1px solid var(--line);font-size:.95rem;color:var(--muted)}
 .sources ul{padding-left:1.1em}

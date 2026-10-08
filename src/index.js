@@ -1,5 +1,6 @@
 import { CSS } from './style.js';
 import { news, guides, classes, races, polls, LAUNCH_UTC, RAIDS_DATE } from './content.js';
+import { czHome, czGuides } from './content.cz.js';
 import { TALENT_TREES, greedyAllocate, BUILD_PLAN, FOREVER_CHANGES } from './talents.js';
 
 // ---------- pomocné ----------
@@ -142,6 +143,29 @@ function shareButtons(url, title) {
   const tw = `https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}&text=${encodeURIComponent(title)}`;
   const fb = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`;
   return `<div class="share-row"><span class="share-label">Zdieľať:</span><a class="share-btn" href="${tw}" target="_blank" rel="noopener" aria-label="Zdieľať na X">${SHARE_ICON.x}</a><a class="share-btn" href="${fb}" target="_blank" rel="noopener" aria-label="Zdieľať na Facebooku">${SHARE_ICON.facebook}</a></div>`;
+}
+
+// ---------- reklama (Adsterra) ----------
+const AD_UNITS = {
+  banner468x60: { key: 'eeedede03832f55b21bdd803cb4ab899', w: 468, h: 60 },
+  rect300x250: { key: '03070430f9d6bb52a41601fb1b93604b', w: 300, h: 250 },
+  sky160x600: { key: '1d69a8d4a471fad20cd96b321a022aba', w: 160, h: 600 },
+  rect160x300: { key: 'ec22620a0cf85b187544f8b1523f4b15', w: 160, h: 300 },
+  banner320x50: { key: 'b35036c933c23b8a74535a5e178964d2', w: 320, h: 50 },
+  leaderboard728x90: { key: '06721eac51ce3aa12983dc769ca7ff48', w: 728, h: 90 },
+};
+// jeden reklamný formát: <ins>-like div, atOptions sa nastaví tesne pred invoke.js tak, aby si ho ten istý script prečítal
+function adUnit(name) {
+  const u = AD_UNITS[name];
+  return `<div class="ad-slot-unit" style="width:${u.w}px;height:${u.h}px"><script type="text/javascript">atOptions={'key':'${u.key}','format':'iframe','height':${u.h},'width':${u.w},'params':{}};</script><script type="text/javascript" src="https://versatilesentiment.com/${u.key}/invoke.js"></script></div>`;
+}
+// zobrazí jeden formát (voliteľne s nápisom „Reklama“ pre transparentnosť)
+function adSlot(name, extraClass = '') {
+  return `<div class="ad-slot ${extraClass}"><span class="ad-slot-label">Reklama</span>${adUnit(name)}</div>`;
+}
+// responzívny banner: na šírku leaderboard, na mobile menší banner — vykreslia sa oba, CSS ukáže len jeden podľa šírky obrazovky
+function adBannerResponsive(extraClass = '') {
+  return `<div class="ad-slot ${extraClass}"><span class="ad-slot-label">Reklama</span><div class="ad-wide">${adUnit('leaderboard728x90')}</div><div class="ad-narrow">${adUnit('banner320x50')}</div></div>`;
 }
 
 const FACTION_ICON = {
@@ -380,11 +404,14 @@ const NAV = [
 
 const navActive = (href, path) => path === href || path.startsWith(href + '/');
 
-function page({ title, desc, path, body, origin, noindex, jsonLd }) {
-  const full = title ? `${title} | WoW Forever SK` : 'WoW Forever SK – novinky, návody a guildy po slovensky';
-  const d = desc || 'Slovenský fan web o World of Warcraft: Forever. Novinky, návody, Class, rasy a adresár CZ/SK guild.';
+function page({ title, desc, path, body, origin, noindex, jsonLd, noAds, cz, altPath }) {
+  const full = title ? `${title} | WoW Forever ${cz ? 'CZ' : 'SK'}` : cz ? 'WoW Forever CZ – novinky a návody o WoW: Forever česky' : 'WoW Forever SK – novinky, návody a guildy po slovensky';
+  const d = desc || (cz ? 'Český prehľad o World of Warcraft: Forever.' : 'Slovenský fan web o World of Warcraft: Forever. Novinky, návody, Class, rasy a adresár CZ/SK guild.');
   const ogImg = `${origin}/og.svg`;
   const structuredData = noindex ? '' : `${siteJsonLd(origin)}${breadcrumbJsonLd(path, title, origin)}${jsonLd || ''}`;
+  const hreflang = altPath
+    ? `<link rel="alternate" hreflang="${cz ? 'sk' : 'cs'}" href="${origin}${altPath}"><link rel="alternate" hreflang="${cz ? 'cs' : 'sk'}" href="${origin}${path}">`
+    : '';
   const navItem = (entry) => {
     if (Array.isArray(entry)) {
       const [href, label, ic] = entry;
@@ -395,14 +422,16 @@ function page({ title, desc, path, body, origin, noindex, jsonLd }) {
     return `<div class="navgroup${childActive ? ' current' : ''}"><button type="button" class="navgroup-trigger" aria-haspopup="true"${childActive ? ' aria-current="page"' : ''}><span class="ic">${NAV_ICON[entry.ic]}</span>${entry.label}<span class="caret">▾</span></button><div class="dropdown">${sub}</div></div>`;
   };
   const nav = NAV.map(navItem).join('');
-  const isHome = path === '/';
+  const isHome = path === '/' || path === '/cz';
+  const skHref = cz ? (altPath || '/') : '/';
+  const czHref = cz ? '/cz' : (altPath || '/cz');
   const lang = `<div class="lang" aria-label="Jazyk verzie">
-    <a href="/" class="on" title="Slovenská verzia">SK</a><span>/</span><a href="/cz" title="Česká verzia (pripravujeme)">CZ</a>
+    <a href="${skHref}"${cz ? '' : ' class="on"'} title="Slovenská verzia">SK</a><span>/</span><a href="${czHref}"${cz ? ' class="on"' : ''} title="Česká verzia">CZ</a>
   </div>`;
-  return `<!doctype html><html lang="sk"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  return `<!doctype html><html lang="${cz ? 'cs' : 'sk'}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>${esc(full)}</title><meta name="description" content="${esc(d)}">
-<link rel="canonical" href="${origin}${path}"><meta property="og:title" content="${esc(full)}"><meta property="og:description" content="${esc(d)}"><meta property="og:type" content="website"><meta property="og:locale" content="sk_SK"><meta property="og:site_name" content="WoW Forever SK"><meta property="og:url" content="${origin}${path}">
-<meta property="og:image" content="${ogImg}"><meta property="og:image:type" content="image/svg+xml"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="WoW Forever SK — World of Warcraft: Forever po slovensky">
+<link rel="canonical" href="${origin}${path}">${hreflang}<meta property="og:title" content="${esc(full)}"><meta property="og:description" content="${esc(d)}"><meta property="og:type" content="website"><meta property="og:locale" content="${cz ? 'cs_CZ' : 'sk_SK'}"><meta property="og:site_name" content="WoW Forever ${cz ? 'CZ' : 'SK'}"><meta property="og:url" content="${origin}${path}">
+<meta property="og:image" content="${ogImg}"><meta property="og:image:type" content="image/svg+xml"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="WoW Forever — World of Warcraft: Forever">
 <meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="${esc(full)}"><meta name="twitter:description" content="${esc(d)}"><meta name="twitter:image" content="${ogImg}">
 ${noindex ? '<meta name="robots" content="noindex">' : ''}
 <link rel="icon" href="${FAVICON}"><meta name="theme-color" content="#0F1528">
@@ -415,13 +444,13 @@ ${structuredData}
 <div class="embers" aria-hidden="true">${[8,22,37,52,67,81,94].map((l,i)=>`<i style="left:${l}%;animation-duration:${14+i*3}s;animation-delay:${i*-2.3}s;--dx:${(i%2?1:-1)*(10+i*4)}px"></i>`).join('')}</div>
 <a class="skip" href="#obsah">Preskočiť na obsah</a>
 <header class="top"><div class="wrap">
-  <a class="brand" href="/">${LOGO}WoW <span>Forever</span> SK</a>
+  <a class="brand" href="/">${LOGO}WoW <span>Forever</span> ${cz ? 'CZ' : 'SK'}</a>
   <button class="navtoggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Menu">${MENU}</button>
   <nav class="nav" id="site-nav" aria-label="Hlavná navigácia">${nav}</nav>
   ${lang}
 </div></header>
-<main id="obsah"><div class="wrap">${body}</div></main>
-<footer><div class="wrap"><div class="footer-top"><span class="ic">${CREST}</span><span class="brand-sm">WoW <span>Forever</span> SK</span></div><div>WoW Forever SK je neoficiálny fanúšikovský web. Nie je spojený so spoločnosťou Blizzard Entertainment.</div><div>World of Warcraft a Blizzard Entertainment sú ochranné známky spoločnosti Blizzard Entertainment, Inc.</div></div></footer>
+<main id="obsah"><div class="wrap">${body}${noAds ? '' : adSlot('banner468x60', 'ad-footer')}</div></main>
+<footer><div class="wrap"><div class="footer-top"><span class="ic">${CREST}</span><span class="brand-sm">WoW <span>Forever</span> ${cz ? 'CZ' : 'SK'}</span></div><div>${cz ? 'WoW Forever CZ je neoficiální fanouškovský web. Není spojen se společností Blizzard Entertainment.' : 'WoW Forever SK je neoficiálny fanúšikovský web. Nie je spojený so spoločnosťou Blizzard Entertainment.'}</div><div>World of Warcraft a Blizzard Entertainment sú ochranné známky spoločnosti Blizzard Entertainment, Inc.</div></div></footer>
 <script>(()=>{const b=document.querySelector('.navtoggle'),n=document.getElementById('site-nav');if(!b||!n)return;b.addEventListener('click',()=>{const open=n.classList.toggle('open');b.setAttribute('aria-expanded',open?'true':'false');});n.addEventListener('click',e=>{if(e.target.tagName==='A')n.classList.remove('open');});})();</script>
 ${isHome ? `<script>(()=>{const f=()=>{document.body.classList.toggle('scrolled', window.scrollY>160);};f();addEventListener('scroll',f,{passive:true});})();</script>` : ''}
 </body></html>`;
@@ -523,6 +552,7 @@ function home(origin, now, guildRows, recruitCount = 0, pd = { counts: {}, mine:
   </div>
 </section>
 <nav class="cameo" aria-label="Rýchly výber Class">${cameo}</nav>
+${adBannerResponsive()}
 <section class="section">
   <a class="guildcta" href="/guilda">
     <span class="ic">${NAV_ICON.guilda}</span>
@@ -550,7 +580,7 @@ function home(origin, now, guildRows, recruitCount = 0, pd = { counts: {}, mine:
   <div class="section-head"><h2><span class="ic">${DIVIDER}</span>Anketa</h2><a href="/ankety">Všetky ankety</a></div>
   <div class="poll-grid one">${pollCard(frakciaPoll, pd.counts[frakciaPoll.slug] || {}, myFrakciaVote, { back: '/' })}</div>
 </section>`;
-  return page({ path: '/', body, origin });
+  return page({ path: '/', body, origin, altPath: '/cz' });
 }
 
 const newsItem = (n, highlight) => {
@@ -559,24 +589,25 @@ const newsItem = (n, highlight) => {
 };
 
 function newsList(origin) {
-  const body = `<h1>Novinky</h1><p class="lead">Správy o WoW Forever po slovensky, s odkazmi na pôvodné zdroje.</p><ul class="newslist">${news.map(newsItem).join('')}</ul>`;
+  const body = `<h1>Novinky</h1><p class="lead">Správy o WoW Forever po slovensky, s odkazmi na pôvodné zdroje.</p>${adSlot('banner468x60', 'ad-inline')}<ul class="newslist">${news.map(newsItem).join('')}</ul>`;
   return page({ title: 'Novinky', desc: 'Najnovšie správy o World of Warcraft: Forever po slovensky.', path: '/novinky', body, origin });
 }
 
 function newsDetail(n, origin) {
   const src = n.sources?.length ? `<div class="sources"><b>Zdroje</b><ul>${n.sources.map(([t, u]) => `<li><a href="${u}" rel="noopener" target="_blank">${esc(t)}</a></li>`).join('')}</ul></div>` : '';
-  const body = `<a class="back" href="/novinky">Späť na novinky</a><article class="prose"><h1>${esc(n.title)}</h1><p class="meta"><time datetime="${n.date}">${skDate(n.date)}</time></p><p class="lead">${esc(n.perex)}</p>${n.body}${shareButtons(`${origin}/novinky/${n.slug}`, n.title)}${src}</article>`;
+  const body = `<a class="back" href="/novinky">Späť na novinky</a><article class="prose"><h1>${esc(n.title)}</h1><p class="meta"><time datetime="${n.date}">${skDate(n.date)}</time></p><p class="lead">${esc(n.perex)}</p>${adSlot('rect300x250', 'ad-inline')}${n.body}${shareButtons(`${origin}/novinky/${n.slug}`, n.title)}${src}</article>`;
   return page({ title: n.title, desc: n.perex, path: `/novinky/${n.slug}`, body, origin, jsonLd: newsArticleJsonLd(n, origin) });
 }
 
 function guideList(origin) {
-  const body = `<h1>Návody</h1><p class="lead">Všetko, čo potrebujete vedieť pred štartom a v prvých týždňoch.</p><ul class="linklist"><li><a href="/triedy">Class</a><p>Deväť class-ov, ich úlohy v skupine a ktoré rasy ich môžu hrať.</p></li><li><a href="/rasy">Rasy</a><p>Osem pôvodných rás, nová Skyborne a všetky nové kombinácie.</p></li><li><a href="/navody/talenty">Talent Calculator</a><p>Vlastná kalkulačka — rozdeľ 51 bodov a zdieľaj build odkazom.</p></li><li><a href="/navody/buildy">Odporúčané buildy</a><p>Levelovacie a raidové buildy pre každý class, rovno v kalkulačke.</p></li>${guides.map((x) => `<li><a href="/navody/${x.slug}">${esc(x.title)}</a><p>${esc(x.perex)}</p></li>`).join('')}</ul>`;
+  const body = `<h1>Návody</h1><p class="lead">Všetko, čo potrebujete vedieť pred štartom a v prvých týždňoch.</p>${adSlot('banner468x60', 'ad-inline')}<ul class="linklist"><li><a href="/triedy">Class</a><p>Deväť class-ov, ich úlohy v skupine a ktoré rasy ich môžu hrať.</p></li><li><a href="/rasy">Rasy</a><p>Osem pôvodných rás, nová Skyborne a všetky nové kombinácie.</p></li><li><a href="/navody/talenty">Talent Calculator</a><p>Vlastná kalkulačka — rozdeľ 51 bodov a zdieľaj build odkazom.</p></li><li><a href="/navody/buildy">Odporúčané buildy</a><p>Levelovacie a raidové buildy pre každý class, rovno v kalkulačke.</p></li>${guides.map((x) => `<li><a href="/navody/${x.slug}">${esc(x.title)}</a><p>${esc(x.perex)}</p></li>`).join('')}</ul>`;
   return page({ title: 'Návody', desc: 'Slovenské návody k World of Warcraft: Forever — talenty, kalkulačka, buildy, class a rasy.', path: '/navody', body, origin });
 }
 
 function guideDetail(g, origin) {
-  const body = `<a class="back" href="/navody">Späť na návody</a><article class="prose"><h1>${esc(g.title)}</h1><p class="lead">${esc(g.perex)}</p><div class="tablewrap">${g.body}</div>${shareButtons(`${origin}/navody/${g.slug}`, g.title)}</article>`;
-  return page({ title: g.title, desc: g.perex, path: `/navody/${g.slug}`, body, origin, jsonLd: g.slug === 'faq' ? faqJsonLd(g.body) : '' });
+  const body = `<a class="back" href="/navody">Späť na návody</a><article class="prose"><h1>${esc(g.title)}</h1><p class="lead">${esc(g.perex)}</p>${adSlot('rect300x250', 'ad-inline')}<div class="tablewrap">${g.body}</div>${shareButtons(`${origin}/navody/${g.slug}`, g.title)}</article>`;
+  const czEquiv = czGuides.find((x) => x.skSlug === g.slug);
+  return page({ title: g.title, desc: g.perex, path: `/navody/${g.slug}`, body, origin, jsonLd: g.slug === 'faq' ? faqJsonLd(g.body) : '', altPath: czEquiv ? `/cz/navody/${czEquiv.slug}` : undefined });
 }
 
 function racesForClass(slug) {
@@ -655,6 +686,7 @@ ${changesHtml}
   const generalChanges = FOREVER_CHANGES.general;
   const body = `<h1>Talent Calculator</h1><p class="lead">Our own talent calculator for World of Warcraft: Forever — spend 51 points across three trees for any class and share your build with a link. Click to add a point, Shift+click or right-click to remove one.</p>
 <div class="tcal-changes" style="margin-bottom:18px"><h4>Forever zmeny — ${esc(generalChanges.label)} <span class="meta">(${esc(generalChanges.source)})</span></h4><ul>${generalChanges.points.map((p) => `<li>${esc(p)}</li>`).join('')}</ul></div>
+${adSlot('rect300x250', 'ad-inline')}
 <div class="tcal"><div class="tcal-tabs" role="tablist">${tabs}</div>${panels}</div>
 <p class="meta" style="margin-top:20px">Talent names, trees and point thresholds are the real WoW Forever beta data, not vanilla WoW's. Effect descriptions are our own short wording, not copied tooltips. Each class tab also lists other Forever-specific mechanic changes we found. See also the <a href="/navody/buildy">recommended builds</a> (in Slovak).</p>
 <script>(()=>{
@@ -822,8 +854,14 @@ function notFound(origin) {
   return html(page({ title: 'Stránka sa nenašla', path: '/404', origin, noindex: true, body: `<article class="prose"><h1>Táto cesta nikam nevedie</h1><p class="lead">Stránka neexistuje alebo bola presunutá.</p><p><a class="btn ghost" href="/">Na úvod</a></p></article>` }), 404);
 }
 
-function czStub(origin) {
-  return html(page({ title: 'Česká verzia', path: '/cz', origin, noindex: true, body: `<article class="prose"><h1>Česká verzia sa pripravuje</h1><p class="lead">Pracujeme na českom preklade webu. Zatiaľ si pozrite slovenskú verziu.</p><p><a class="btn ghost" href="/">Na slovenskú verziu</a></p></article>` }));
+function czHomePage(origin) {
+  const body = `<article class="prose">${czHome.body}${adSlot('rect300x250', 'ad-inline')}</article>`;
+  return html(page({ title: czHome.title, desc: czHome.desc, path: '/cz', origin, cz: true, altPath: '/', body }));
+}
+
+function czGuideDetail(g, origin) {
+  const body = `<a class="back" href="/cz">Zpět na úvod</a><article class="prose"><h1>${esc(g.title)}</h1><p class="lead">${esc(g.perex)}</p>${adSlot('rect300x250', 'ad-inline')}<div class="tablewrap">${g.body}</div></article>`;
+  return html(page({ title: g.title, desc: g.perex, path: `/cz/navody/${g.slug}`, origin, cz: true, altPath: `/navody/${g.skSlug}`, body, jsonLd: g.slug === 'caste-otazky' ? faqJsonLd(g.body) : '' }));
 }
 
 // ---------- guildy ----------
@@ -1038,7 +1076,7 @@ async function admin(request, env, url, origin) {
   const key = request.method === 'POST' ? String((await request.clone().formData()).get('key') || '') : url.searchParams.get('key') || '';
   let adminKey = env.ADMIN_KEY;
   if (!adminKey) { try { adminKey = (await env.DB.prepare(`SELECT value FROM settings WHERE key='admin_key'`).first())?.value; } catch (e) {} }
-  if (!adminKey || key !== adminKey) return html(page({ title: 'Administrácia', path: '/admin', origin, noindex: true, body: '<h1>Administrácia</h1><p class="lead">Chýba alebo nesedí kľúč.</p>' }), 401, { 'cache-control': 'no-store' });
+  if (!adminKey || key !== adminKey) return html(page({ title: 'Administrácia', path: '/admin', origin, noindex: true, noAds: true, body: '<h1>Administrácia</h1><p class="lead">Chýba alebo nesedí kľúč.</p>' }), 401, { 'cache-control': 'no-store' });
   if (request.method === 'POST') {
     const fd = await request.formData();
     const id = Number(fd.get('id')); const act = String(fd.get('act'));
@@ -1056,7 +1094,7 @@ async function admin(request, env, url, origin) {
   const recruitRows = recruits.map((r) => `<tr><td>${r.id}</td><td>${esc(r.nick || '—')}</td><td>${FACTIONS[r.faction] || 'Neviem'}</td><td>${esc(classBySlugAdmin[r.class] || '—')}</td><td>${esc(r.focus || '—')}</td><td>${esc(r.contact)}</td><td><span class="meta">${esc(r.note || '')}</span></td><td><span class="meta">${esc(r.created_at)}</span></td><td>${btn(r.id, 'recruit_delete', 'Zmazať')}</td></tr>`).join('');
   const body = `<h1>Administrácia guild</h1><p class="lead">Čakajúce zápisy sú hore.</p><div class="tablewrap"><table class="table"><thead><tr><th>#</th><th>Guilda</th><th>Info</th><th>Kontakt</th><th>Stav</th><th></th></tr></thead><tbody>${rows || '<tr><td colspan="6">Zatiaľ žiadne zápisy.</td></tr>'}</tbody></table></div>
 <h2>Prihlásení do našej guildy (${recruits.length})</h2><div class="tablewrap"><table class="table"><thead><tr><th>#</th><th>Prezývka</th><th>Frakcia</th><th>Class</th><th>Zameranie</th><th>Kontakt</th><th>Odkaz</th><th>Kedy</th><th></th></tr></thead><tbody>${recruitRows || '<tr><td colspan="9">Zatiaľ sa nikto neprihlásil.</td></tr>'}</tbody></table></div>`;
-  return html(page({ title: 'Administrácia', path: '/admin', origin, noindex: true, body }), 200, { 'cache-control': 'no-store' });
+  return html(page({ title: 'Administrácia', path: '/admin', origin, noindex: true, noAds: true, body }), 200, { 'cache-control': 'no-store' });
 }
 
 // ---------- sitemap ----------
@@ -1075,9 +1113,11 @@ function sitemap(origin) {
     { p: '/guilda', prio: '0.6' },
     { p: '/ankety', prio: '0.6' },
     { p: '/o-nas', prio: '0.3' },
+    { p: '/cz', prio: '0.6' },
     ...news.map((n) => ({ p: `/novinky/${n.slug}`, prio: '0.7', lastmod: n.date.slice(0, 10) })),
     ...guides.map((g) => ({ p: `/navody/${g.slug}`, prio: '0.7' })),
     ...classes.map((c) => ({ p: `/triedy/${c.slug}`, prio: '0.6' })),
+    ...czGuides.map((g) => ({ p: `/cz/navody/${g.slug}`, prio: '0.5' })),
   ];
   const xml = `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${entries.map((e) => `<url><loc>${origin}${e.p}</loc>${e.lastmod ? `<lastmod>${e.lastmod}</lastmod>` : ''}<priority>${e.prio}</priority></url>`).join('')}</urlset>`;
   return new Response(xml, { headers: { 'content-type': 'application/xml; charset=utf-8' } });
@@ -1144,9 +1184,10 @@ export default {
     if (path === '/navody/talenty') return html(talentCalc(origin));
     if (path === '/navody/buildy') return html(buildsGuide(origin));
     if (path === '/o-nas') return html(about(origin));
-    if (path === '/cz') return czStub(origin);
+    if (path === '/cz') return czHomePage(origin);
     if (path === '/guildy') return html(await guildList(env, url, origin), 200, { 'cache-control': 'public, max-age=60' });
     let r;
+    if ((r = m(/^\/cz\/navody\/([a-z0-9-]+)$/))) { const g = czGuides.find((x) => x.slug === r[1]); if (g) return czGuideDetail(g, origin); }
     if ((r = m(/^\/novinky\/([a-z0-9-]+)$/))) { const n = news.find((x) => x.slug === r[1]); if (n) return html(newsDetail(n, origin)); }
     if ((r = m(/^\/navody\/([a-z0-9-]+)$/))) { const g = guides.find((x) => x.slug === r[1]); if (g) return html(guideDetail(g, origin)); }
     if ((r = m(/^\/triedy\/([a-z0-9-]+)$/))) { const c = classBySlug[r[1]]; if (c) return html(classDetail(c, origin)); }
