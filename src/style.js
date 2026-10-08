@@ -123,7 +123,9 @@ main{padding:40px 0 80px}
 .hero-emblem .rule{display:inline-flex;color:var(--gold);opacity:.75;align-self:center}
 .hero-emblem h1 .rule:first-child{animation:slideInL .6s ease-out .48s both}
 .hero-emblem h1 .rule:last-child{animation:slideInR .6s ease-out .82s both}
-.hero-tagline{margin:2px 0 0;color:var(--muted);font-size:1.02rem;letter-spacing:.03em;animation:fadeUp .7s ease-out 1.05s both}
+.hero-tagline{margin:8px 0 0;display:flex;align-items:center;justify-content:center;gap:12px;color:var(--gold-soft);font-size:1.04rem;font-weight:500;letter-spacing:.2em;text-transform:uppercase;text-shadow:0 1px 16px rgba(226,174,76,.35);animation:fadeUp .7s ease-out 1.05s both}
+.hero-tagline .sparkle{font-size:.8em;opacity:.85}
+@media (max-width:480px){.hero-tagline{letter-spacing:.08em;font-size:.88rem;gap:8px}}
 @media (max-width:640px){.hero-emblem h1{flex-wrap:wrap;gap:8px 10px}.hero-emblem .rule{display:none}}
 @keyframes crestIn{0%{opacity:0;transform:scale(.3) rotate(-10deg)}65%{opacity:1;transform:scale(1.1) rotate(2deg)}100%{opacity:1;transform:scale(1) rotate(0)}}
 @keyframes slideInL{0%{opacity:0;transform:translateX(-36px)}100%{opacity:1;transform:translateX(0)}}
@@ -255,6 +257,8 @@ main{padding:40px 0 80px}
 .poll-bars .fill{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg, var(--gold) 0%, var(--gold-soft) 100%);transition:width .5s ease}
 .poll-bars .pct{text-align:right;color:var(--muted);font-size:.9rem;font-variant-numeric:tabular-nums}
 .poll-total{margin:12px 0 0;color:var(--muted);font-size:.88rem}
+.namevote-more{margin:12px 0 0;font-size:.9rem}
+.namevote-cta{margin:8px 0 0;color:var(--muted);font-size:.86rem}
 .change-vote{display:inline-block;margin-top:8px;font-size:.88rem;color:var(--muted)}
 .change-vote:hover{color:var(--gold-soft)}
 

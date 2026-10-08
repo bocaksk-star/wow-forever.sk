@@ -14,7 +14,7 @@ export const news = [
 <p>Kto kúpil Skyborne Heroic Pack, Skyborne Epic Pack alebo Warcraft Forever Collection, môže si od <strong>27. októbra do 3. novembra</strong> vopred rezervovať meno postavy. Ostatní si mená vyberajú až pri štarte hry.</p>
 <p>Novinkou oproti Classicu je, že postavy majú <strong>meno aj priezvisko</strong>. Šanca, že vaše obľúbené meno bude voľné, je tak výrazne vyššia.</p>
 <p>Realmy fungujú inak, ako sme zvyknutí. Blizzard plánuje pre každý región jeden „mega-realm“ na každé pravidlá: <strong>Normal, PvP a RP</strong>. Hardcore realm príde neskôr, podľa roadmapy v zime 2026. Nemusíte teda riešiť, na ktorý z desiatok serverov ísť, ale len to, aké pravidlá chcete hrať.</p>
-<p>Tip: dohodnite sa s guildou na type realmu ešte pred štartom. V našom <a href="/guildy">adresári CZ/SK guild</a> je to pri každej guilde uvedené.</p>`,
+<p>Tip: dohodnite sa s guildou na type realmu ešte pred štartom. V našom <a href="/guildy/adresar">adresári CZ/SK guild</a> je to pri každej guilde uvedené.</p>`,
     sources: [
       ['Warcraft Wiki: World of Warcraft: Forever', 'https://warcraft.wiki.gg/wiki/Forever'],
       ['Blizzard: Carve a New Path with WoW: Forever', 'https://worldofwarcraft.blizzard.com/news/24302093/'],
@@ -114,7 +114,7 @@ export const guides = [
 <ol>
 <li><strong>Vyberte typ realmu.</strong> V Európe bude jeden veľký realm na každé pravidlá: Normal, PvP alebo RP. Hardcore príde neskôr.</li>
 <li><strong>Vytvorte postavu.</strong> Vo Forever má postava meno aj priezvisko. Ak neviete, aký class zvoliť, pozrite si <a href="/triedy">prehľad Class</a>.</li>
-<li><strong>Nájdite si guildu.</strong> Vo vanilla svete sa veci robia spolu. Slovenské a české guildy sú v našom <a href="/guildy">adresári</a>.</li>
+<li><strong>Nájdite si guildu.</strong> Vo vanilla svete sa veci robia spolu. Slovenské a české guildy sú v našom <a href="/guildy/adresar">adresári</a>.</li>
 </ol>
 <h2>Na čo si zvyknúť</h2>
 <ul>
@@ -231,7 +231,7 @@ export const guides = [
 <h2>Je hra v slovenčine alebo češtine?</h2>
 <p>Nie. Hra je v angličtine. Preto robíme tento web: novinky a návody po slovensky.</p>
 <h2>Kde nájdem slovenskú alebo českú guildu?</h2>
-<p>V našom <a href="/guildy">adresári CZ/SK guild</a>. Ak guildu vediete, <a href="/guildy/pridat">pridajte ju</a> zadarmo.</p>`,
+<p>V našom <a href="/guildy/adresar">adresári CZ/SK guild</a>. Ak guildu vediete, <a href="/guildy/adresar/pridat">pridajte ju</a> zadarmo.</p>`,
   },
   {
     slug: 'najlepsia-trieda-pre-zaciatocnikov',
@@ -268,7 +268,7 @@ export const guides = [
 <li><strong>Komunikácia.</strong> Discord server založte vopred, nech máte kde koordinovať skupiny už od prvého večera.</li>
 </ol>
 <h2>Kde nájsť prvých členov</h2>
-<p>Pridajte guildu zadarmo do nášho <a href="/guildy">adresára CZ/SK guild</a> — filtruje sa podľa frakcie, realmu, zamerania aj jazyka, takže vás nájdu presne tí hráči, ktorých hľadáte. Pridanie zaberie necelú minútu cez formulár <a href="/guildy/pridat">Pridať guildu</a>.</p>
+<p>Pridajte guildu zadarmo do nášho <a href="/guildy/adresar">adresára CZ/SK guild</a> — filtruje sa podľa frakcie, realmu, zamerania aj jazyka, takže vás nájdu presne tí hráči, ktorých hľadáte. Pridanie zaberie necelú minútu cez formulár <a href="/guildy/adresar/pridat">Pridať guildu</a>.</p>
 <p>Sledujte aj <a href="/novinky">novinky</a> — pri každej väčšej správe o Forever sa tu objavia noví hráči, ktorí práve hľadajú partiu.</p>`,
   },
 ];

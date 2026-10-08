@@ -36,3 +36,21 @@ CREATE TABLE IF NOT EXISTS poll_votes (
   PRIMARY KEY (poll, voter)
 );
 CREATE INDEX IF NOT EXISTS idx_poll_votes_poll ON poll_votes (poll);
+
+-- Návrhy mien pre vlastnú guildu + hlasovanie o najlepšom
+CREATE TABLE IF NOT EXISTS guild_names (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  name TEXT NOT NULL,
+  note TEXT,
+  contact TEXT,
+  status TEXT NOT NULL DEFAULT 'pending' CHECK (status IN ('pending','approved','rejected')),
+  created_at TEXT NOT NULL DEFAULT (datetime('now'))
+);
+CREATE INDEX IF NOT EXISTS idx_guild_names_status ON guild_names (status, created_at);
+
+CREATE TABLE IF NOT EXISTS guild_name_votes (
+  voter TEXT PRIMARY KEY,
+  name_id INTEGER NOT NULL,
+  created_at TEXT NOT NULL DEFAULT (datetime('now'))
+);
+CREATE INDEX IF NOT EXISTS idx_guild_name_votes_name ON guild_name_votes (name_id);

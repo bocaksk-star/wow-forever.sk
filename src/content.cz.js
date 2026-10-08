@@ -19,7 +19,7 @@ export const czHome = {
 </ul>
 <h2>Čeština a slovenština</h2>
 <p>Samotná hra vyjde pouze v angličtině. Tento web proto přináší alespoň novinky a návody ve slovenštině — jazyce, kterému čeští hráči bez problémů rozumí — a tuto stránku navíc i česky. Postupně přidáváme další česky psaný obsah.</p>
-<div class="btns"><a class="btn primary" href="/cz/navody/jak-zacit">Jak začít hrát (česky)</a><a class="btn ghost" href="/guildy">Adresář CZ/SK guild</a></div>
+<div class="btns"><a class="btn primary" href="/cz/navody/jak-zacit">Jak začít hrát (česky)</a><a class="btn ghost" href="/guildy/adresar">Adresář CZ/SK guild</a></div>
 <h2>Časté otázky</h2>
 <p>Odpovědi na nejčastější otázky — musím si hru kupovat, přenese se postava z Classicu a další — najdete v naší <a href="/cz/navody/caste-otazky">česky psané FAQ</a>.</p>
 <h2>Více obsahu</h2>
@@ -44,7 +44,7 @@ export const czGuides = [
 <ol>
 <li><strong>Vyberte typ realmu.</strong> V Evropě bude jeden velký realm na každá pravidla: Normal, PvP nebo RP. Hardcore přijde později.</li>
 <li><strong>Vytvořte postavu.</strong> Ve Forever má postava jméno i příjmení. Pokud nevíte, jaké povolání zvolit, podívejte se na <a href="/triedy">přehled povolání</a> (slovensky).</li>
-<li><strong>Najděte si guildu.</strong> Ve vanilla světě se věci dělají společně. Slovenské a české guildy jsou v našem <a href="/guildy">adresáři</a>.</li>
+<li><strong>Najděte si guildu.</strong> Ve vanilla světě se věci dělají společně. Slovenské a české guildy jsou v našem <a href="/guildy/adresar">adresáři</a>.</li>
 </ol>
 <h2>Na co si zvyknout</h2>
 <ul>
@@ -75,6 +75,6 @@ export const czGuides = [
 <h2>Je hra v češtině nebo slovenštině?</h2>
 <p>Ne. Hra je v angličtině. Proto děláme tento web: novinky a návody slovensky, vybrané stránky i česky.</p>
 <h2>Kde najdu slovenskou nebo českou guildu?</h2>
-<p>V našem <a href="/guildy">adresáři CZ/SK guild</a>. Pokud guildu vedete, <a href="/guildy/pridat">přidejte ji</a> zdarma.</p>`,
+<p>V našem <a href="/guildy/adresar">adresáři CZ/SK guild</a>. Pokud guildu vedete, <a href="/guildy/adresar/pridat">přidejte ji</a> zdarma.</p>`,
   },
 ];
