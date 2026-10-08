@@ -1,0 +1,17 @@
+name = "wow-forever-sk"
+main = "src/index.js"
+compatibility_date = "2026-10-01"
+workers_dev = true
+
+# Vlastná doména. Funguje, až keď je wow-forever.sk pridaná ako site v tvojom Cloudflare účte.
+routes = [
+  { pattern = "wow-forever.sk", custom_domain = true },
+  { pattern = "www.wow-forever.sk", custom_domain = true },
+]
+
+[[d1_databases]]
+binding = "DB"
+database_name = "wow-forever-sk"
+database_id = "8449d190-5795-4b48-8bef-ed7fa48992e0"
+
+# Admin kľúč (schvaľovanie guild na /admin?key=...): npx wrangler secret put ADMIN_KEY
