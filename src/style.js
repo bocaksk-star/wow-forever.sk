@@ -16,7 +16,9 @@ a{color:var(--gold-soft);text-underline-offset:3px;text-decoration-thickness:1px
 a:hover{color:var(--gold)}
 :focus-visible{outline:2px solid var(--gold);outline-offset:3px;border-radius:2px}
 img{max-width:100%}
-.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+.wrap{max-width:1400px;margin:0 auto;padding:0 32px}
+.bleed{width:100vw;margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw)}
+@media (max-width:900px){.wrap{padding:0 18px}}
 .skip{position:absolute;left:-999px}.skip:focus{left:16px;top:12px;background:var(--gold);color:var(--night);padding:8px 12px;z-index:9}
 
 /* Hlavička */
@@ -62,15 +64,15 @@ main{padding:40px 0 80px}
 .meta{color:var(--muted);font-size:.95rem}
 .back{display:inline-block;margin-bottom:18px;font-size:1rem}
 
-/* Hero: questlog */
-.hero{position:relative;border-radius:16px;overflow:hidden;border:1px solid var(--line);margin:20px 0 48px;padding:48px 32px}
+/* Hero: questlog, full-bleed */
+.hero{position:relative;overflow:hidden;border-bottom:1px solid var(--line);width:100vw;margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw);margin-top:0;margin-bottom:56px;padding:76px 0 68px}
 .hero-bg{position:absolute;inset:0;z-index:0}
 .hero-bg svg{width:100%;height:100%;display:block}
 .hero-fade{position:absolute;inset:0;z-index:1;background:linear-gradient(100deg, rgba(8,11,22,.88) 0%, rgba(8,11,22,.6) 32%, rgba(8,11,22,.18) 58%, rgba(8,11,22,.1) 100%)}
-.hero-grid{position:relative;z-index:2;display:grid;grid-template-columns:1.1fr 1fr;gap:48px;align-items:center}
-@media (max-width:860px){.hero{padding:32px 20px}.hero-grid{grid-template-columns:1fr;gap:28px}}
-.hero h1{font-size:clamp(2.4rem,5.5vw,3.8rem);line-height:1.05;margin-bottom:.35em;text-shadow:0 2px 24px rgba(0,0,0,.5)}
-.hero .lead{margin-bottom:1.2em}
+.hero-grid{position:relative;z-index:2;max-width:1400px;margin:0 auto;padding:0 32px;display:grid;grid-template-columns:1.15fr .85fr;gap:64px;align-items:center}
+@media (max-width:900px){.hero{padding:48px 0}.hero-grid{grid-template-columns:1fr;gap:28px;padding:0 18px}}
+.hero h1{font-size:clamp(2.6rem,6vw,4.4rem);line-height:1.04;margin-bottom:.35em;text-shadow:0 2px 24px rgba(0,0,0,.5)}
+.hero .lead{margin-bottom:1.2em;font-size:1.35rem;max-width:42ch}
 .btns{display:flex;gap:12px;flex-wrap:wrap}
 .btn{display:inline-flex;align-items:center;gap:8px;padding:12px 20px;border-radius:6px;font-weight:700;text-decoration:none;font-size:1.05rem;border:1px solid var(--gold);transition:background .15s,transform .15s,box-shadow .15s}
 .btn.primary{background:var(--gold);color:#1A1306}
