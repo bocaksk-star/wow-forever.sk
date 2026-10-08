@@ -93,41 +93,45 @@ function worldArt() {
   return `<svg viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
 <defs>
   <linearGradient id="wsky" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#090A18"/><stop offset="38%" stop-color="#121433"/><stop offset="70%" stop-color="#1B2048"/><stop offset="100%" stop-color="#232A52"/></linearGradient>
-  <linearGradient id="auroraA" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#7FE3C0" stop-opacity="0"/><stop offset="45%" stop-color="#7FE3C0" stop-opacity=".30"/><stop offset="100%" stop-color="#E2AE4C" stop-opacity="0"/></linearGradient>
-  <linearGradient id="auroraB" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#6A9BEB" stop-opacity="0"/><stop offset="55%" stop-color="#B98CE6" stop-opacity=".22"/><stop offset="100%" stop-color="#6A9BEB" stop-opacity="0"/></linearGradient>
-  <radialGradient id="wmoon" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#F0CB82" stop-opacity=".6"/><stop offset="100%" stop-color="#F0CB82" stop-opacity="0"/></radialGradient>
+  <linearGradient id="auroraA" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#7FE3C0" stop-opacity="0"/><stop offset="50%" stop-color="#7FE3C0" stop-opacity=".40"/><stop offset="100%" stop-color="#7FE3C0" stop-opacity="0"/></linearGradient>
+  <linearGradient id="auroraB" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#B98CE6" stop-opacity="0"/><stop offset="50%" stop-color="#B98CE6" stop-opacity=".32"/><stop offset="100%" stop-color="#B98CE6" stop-opacity="0"/></linearGradient>
+  <linearGradient id="auroraC" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#E2AE4C" stop-opacity="0"/><stop offset="50%" stop-color="#E2AE4C" stop-opacity=".22"/><stop offset="100%" stop-color="#E2AE4C" stop-opacity="0"/></linearGradient>
+  <radialGradient id="wmoon" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#F0CB82" stop-opacity=".55"/><stop offset="100%" stop-color="#F0CB82" stop-opacity="0"/></radialGradient>
   <linearGradient id="far3" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1B2142"/><stop offset="100%" stop-color="#141A36"/></linearGradient>
   <linearGradient id="far2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#141A36"/><stop offset="100%" stop-color="#0E1329"/></linearGradient>
   <linearGradient id="far1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#0C0F22"/><stop offset="100%" stop-color="#080A18"/></linearGradient>
   <radialGradient id="wfog" cx="50%" cy="100%" r="85%"><stop offset="0%" stop-color="#090A18" stop-opacity=".92"/><stop offset="100%" stop-color="#090A18" stop-opacity="0"/></radialGradient>
+  <filter id="soft" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="22"/></filter>
 </defs>
 <rect width="1600" height="900" fill="url(#wsky)"/>
-<path d="M-50 150 C 250 60, 500 220, 850 110 S 1400 60, 1650 160" fill="none" stroke="url(#auroraA)" stroke-width="90" stroke-linecap="round"/>
-<path d="M-50 230 C 300 150, 550 300, 900 190 S 1450 140, 1650 240" fill="none" stroke="url(#auroraB)" stroke-width="70" stroke-linecap="round"/>
-<circle cx="260" cy="150" r="130" fill="url(#wmoon)"/>
-<circle cx="260" cy="150" r="52" fill="#F3E6C4"/>
-<circle cx="242" cy="134" r="9" fill="#DCC697" opacity=".55"/><circle cx="278" cy="166" r="6" fill="#DCC697" opacity=".45"/><circle cx="276" cy="130" r="4" fill="#DCC697" opacity=".4"/>
-${[[420,90,.8],[520,180,.5],[610,60,.7],[700,220,.4],[790,100,.9],[900,50,.6],[990,190,.5],[1080,80,.8],[1180,140,.4],[1260,60,.7],[1350,200,.5],[1440,100,.8],[1520,50,.6],[90,250,.5],[150,80,.6],[70,320,.4],[1550,280,.5]].map(([x,y,o])=>`<circle cx="${x}" cy="${y}" r="${1+o*1.2}" fill="#fff" opacity="${o*.85}"/>`).join('')}
-<line x1="1020" y1="70" x2="1160" y2="130" stroke="#F0E2BE" stroke-width="2" opacity=".8"/>
-<line x1="1160" y1="130" x2="1150" y2="122" stroke="#F0E2BE" stroke-width="2" opacity=".5"/>
-<g opacity=".55" fill="#0A0D1E">
-  <path d="M980 230 Q1020 205 1060 230 Q1095 212 1130 234 Q1150 224 1170 236 L1170 260 Q1100 244 1040 258 Q1005 248 980 258 Z"/>
-  <path d="M250 320 Q290 300 330 320 Q360 305 390 322 L390 344 Q320 332 260 344 Z"/>
+<g filter="url(#soft)">
+  <path d="M250 190 C 450 110, 650 230, 850 150 S 1250 110, 1500 210" fill="none" stroke="url(#auroraA)" stroke-width="85" stroke-linecap="round"/>
+  <path d="M220 260 C 430 320, 650 180, 880 260 S 1280 320, 1480 240" fill="none" stroke="url(#auroraB)" stroke-width="70" stroke-linecap="round"/>
+  <path d="M300 130 C 480 170, 700 90, 920 140 S 1300 150, 1450 110" fill="none" stroke="url(#auroraC)" stroke-width="60" stroke-linecap="round"/>
 </g>
-<g transform="translate(1180 170) scale(1.15)" opacity=".8" fill="#0A0D1E">
+<circle cx="800" cy="150" r="140" fill="url(#wmoon)"/>
+<circle cx="800" cy="150" r="50" fill="#F3E6C4"/>
+<circle cx="782" cy="134" r="9" fill="#DCC697" opacity=".5"/><circle cx="818" cy="166" r="6" fill="#DCC697" opacity=".42"/><circle cx="815" cy="130" r="4" fill="#DCC697" opacity=".38"/>
+${[[90,70,.8],[180,150,.5],[280,90,.7],[380,200,.4],[480,60,.6],[600,220,.5],[680,70,.8],[920,220,.5],[1020,80,.7],[1120,170,.4],[1220,60,.8],[1320,210,.5],[1420,100,.7],[1520,180,.4],[60,260,.5],[1550,280,.5],[950,60,.6],[1090,40,.5]].map(([x,y,o])=>`<circle cx="${x}" cy="${y}" r="${1+o*1.2}" fill="#fff" opacity="${o*.85}"/>`).join('')}
+<line x1="560" y1="80" x2="700" y2="150" stroke="#F0E2BE" stroke-width="2" opacity=".75"/>
+<line x1="700" y1="150" x2="690" y2="141" stroke="#F0E2BE" stroke-width="2" opacity=".45"/>
+<g opacity=".5" fill="#0A0D1E">
+  <path d="M520 230 Q560 205 600 230 Q635 212 670 234 Q690 224 710 236 L710 260 Q640 244 580 258 Q545 248 520 258 Z"/>
+</g>
+<g transform="translate(980 190) scale(1.1)" opacity=".75" fill="#0A0D1E">
   <path d="M0 10 C 40 -16, 90 -14, 140 14 C 110 8, 90 20, 70 16 C 50 24, 26 10, 0 10 Z"/>
 </g>
 <path d="M0 430 L120 360 240 420 360 330 480 410 600 350 720 430 840 360 960 420 1080 340 1200 420 1320 360 1440 410 1600 370 1600 900 0 900 Z" fill="url(#far3)"/>
 <path d="M0 500 L140 440 260 495 400 420 540 490 660 430 800 500 940 430 1080 495 1220 430 1360 490 1500 440 1600 480 1600 900 0 900 Z" fill="url(#far2)" opacity=".92"/>
 <g>
-  <path d="M1080 500 L1130 300 1165 420 1190 360 1230 500 Z" fill="url(#far1)"/>
-  <path d="M1130 300 L1142 335 1165 325 1150 352 1165 420 Z" fill="#8A6A3E" opacity=".55"/>
-  <rect x="1118" y="330" width="26" height="100" fill="#07091A"/>
-  <rect x="1122" y="350" width="18" height="60" fill="#0A0D1E" stroke="#5B4030" stroke-width="1" opacity=".6"/>
-  <rect x="1126" y="362" width="4" height="7" fill="#E2AE4C" opacity=".85"/>
-  <rect x="1134" y="380" width="4" height="7" fill="#E2AE4C" opacity=".6"/>
-  <path d="M1112 330 L1131 296 1150 330 Z" fill="#07091A"/>
-  <rect x="1129" y="280" width="4" height="20" fill="#07091A"/>
+  <path d="M750 500 L800 300 835 420 860 360 900 500 Z" fill="url(#far1)"/>
+  <path d="M800 300 L812 335 835 325 820 352 835 420 Z" fill="#8A6A3E" opacity=".55"/>
+  <rect x="788" y="330" width="26" height="100" fill="#07091A"/>
+  <rect x="792" y="350" width="18" height="60" fill="#0A0D1E" stroke="#5B4030" stroke-width="1" opacity=".6"/>
+  <rect x="796" y="362" width="4" height="7" fill="#E2AE4C" opacity=".85"/>
+  <rect x="804" y="380" width="4" height="7" fill="#E2AE4C" opacity=".6"/>
+  <path d="M782 330 L801 296 820 330 Z" fill="#07091A"/>
+  <rect x="799" y="280" width="4" height="20" fill="#07091A"/>
 </g>
 <path d="M0 560 L150 505 280 555 420 495 560 550 700 500 840 555 980 495 1120 550 1260 500 1400 545 1600 520 1600 900 0 900 Z" fill="url(#far1)"/>
 <rect width="1600" height="900" fill="url(#wfog)"/>
