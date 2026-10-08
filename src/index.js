@@ -30,6 +30,15 @@ const NAV_ICON = {
   faq: svg(`<circle cx="12" cy="12" r="9" ${S}/><path d="M9.3 9.3a2.7 2.7 0 1 1 3.9 2.4c-.8.4-1.2.9-1.2 1.8" ${S}/><circle cx="12" cy="17" r="1" fill="currentColor" stroke="none"/>`, 21),
 };
 
+const GUIDE_ICON = {
+  'ako-zacat': svg(`<path d="M5 3v18l15-9z" fill="currentColor" stroke="none"/>`, 20),
+  'forever-vs-classic': svg(`<path d="M12 3v18M4 7l-2.5 5a3 3 0 0 0 5.5 0zM20 7l-2.5 5a3 3 0 0 0 5.5 0zM4 7h16M8 21h8" ${S}/>`, 20),
+  'edicie-a-ceny': svg(`<circle cx="9" cy="9" r="6.5" ${S}/><circle cx="15" cy="15" r="6.5" ${S}/>`, 20),
+  'novy-obsah': svg(`<path d="M9 3 3 5.5v15L9 18l6 2.5 6-2.5v-15L15 5.5 9 3z" ${S}/><path d="M9 3v15M15 5.5v15" ${S}/>`, 20),
+  faq: NAV_ICON.faq,
+};
+const guideIcon = (slug) => GUIDE_ICON[slug] || svg(`<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" ${S}/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" ${S}/>`, 20);
+
 const CLASS_ICON = {
   warrior: svg(`<g transform="rotate(45 12 12)"><line x1="12" y1="2" x2="12" y2="15" ${S}/><line x1="8.5" y1="15" x2="15.5" y2="15" ${S}/><line x1="12" y1="15" x2="12" y2="20" ${S}/><circle cx="12" cy="20.5" r="1.3" fill="currentColor"/></g>`, 22),
   paladin: svg(`<rect x="7.5" y="2.5" width="9" height="5" rx="1" transform="rotate(45 12 5)" ${S}/><line x1="9.5" y1="8" x2="2" y2="21" ${S}/>`, 22),
@@ -141,6 +150,8 @@ ${[[90,70,.8],[180,150,.5],[280,90,.7],[380,200,.4],[480,60,.6],[600,220,.5],[68
 }
 
 const CREST = svg(`<path d="M16 2 28 7v9c0 9-5 14.5-12 17-7-2.5-12-8-12-17V7z" ${S}/><path d="M16 9v16M10 14l12 6M22 14l-12 6" stroke="currentColor" stroke-width="1.1" opacity=".55" fill="none"/><circle cx="16" cy="14" r="3" fill="currentColor"/>`, 30, 'class="crest"');
+const CAL_ICON = svg(`<rect x="3" y="4.5" width="18" height="16" rx="2.5" ${S}/><line x1="3" y1="9.5" x2="21" y2="9.5" ${S}/><line x1="7" y1="2.5" x2="7" y2="6.5" ${S}/><line x1="17" y1="2.5" x2="17" y2="6.5" ${S}/>`, 17);
+const GUILD_ICON = svg(`<path d="M5 21V4" ${S}/><path d="M5 4l13 3-13 3" ${S}/>`, 26);
 
 const NAV = [['/novinky', 'Novinky', 'novinky'], ['/navody', 'Návody', 'navody'], ['/triedy', 'Classy', 'triedy'], ['/rasy', 'Rasy', 'rasy'], ['/navody/edicie-a-ceny', 'Edície', 'edicie'], ['/guildy', 'Guildy CZ/SK', 'guildy'], ['/navody/faq', 'FAQ', 'faq'], ['/o-nas', 'O webe', 'o-nas']];
 
@@ -215,12 +226,28 @@ function questCard(now) {
 }
 
 // ---------- stránky ----------
+const MES_SKR = ['jan','feb','mar','apr','máj','jún','júl','aug','sep','okt','nov','dec'];
+
 function home(origin, now, guildRows) {
-  const latest = news.slice(0, 4).map(newsItem).join('');
-  const g = guides.map((x) => `<li><a href="/navody/${x.slug}">${esc(x.title)}</a><p>${esc(x.perex)}</p></li>`).join('');
+  const latest = news.slice(0, 4).map((n, i) => newsItem(n, i === 0)).join('');
+  const g = guides.slice(0, 4).map((x) => `<a class="guide-card" href="/navody/${x.slug}"><span class="ic">${guideIcon(x.slug)}</span><div><b>${esc(x.title)}</b><p>${esc(x.perex)}</p></div></a>`).join('');
   const guildBlock = guildRows.length
-    ? `<ul class="linklist">${guildRows.map((r) => `<li><a href="/guildy">${esc(r.name)}</a><p>${FACTIONS[r.faction] || ''} · ${esc(r.realm)} · ${esc(r.focus)} · ${esc(r.lang)}</p></li>`).join('')}</ul>`
-    : `<div class="empty"><p>Zatiaľ tu nie je žiadna guilda. Buďte prví.</p><a class="btn ghost" href="/guildy/pridat">Pridať guildu</a></div>`;
+    ? `<ul class="guild-list">${guildRows.map((r) => `<li><a href="/guildy"><span class="tag ${r.faction === 'A' ? 'a' : 'h'}">${FACTIONS[r.faction] || ''}</span><div><b>${esc(r.name)}</b><p>${esc(r.realm)} · ${esc(r.focus)} · ${esc(r.lang)}</p></div></a></li>`).join('')}</ul>`
+    : `<div class="empty"><span class="ic">${GUILD_ICON}</span><p>Zatiaľ tu nie je žiadna guilda. Buďte prví.</p><a class="btn ghost" href="/guildy/pridat">Pridať guildu</a></div>`;
+
+  const timeline = [
+    { date: '2026-10-21', label: 'do 21. októbra', text: 'Beta test' },
+    { date: '2026-11-03', label: '27. okt. – 3. nov.', text: 'Rezervácia mien pre majiteľov balíkov' },
+    { date: '2026-11-05', label: '5. novembra 0:00', text: 'Spustenie hry (u nás)' },
+    { date: '2026-12-09', label: '9. decembra', text: 'Raidy Barrow Deeps, Hyjal Summit a Onyxia' },
+    { date: '2027-01-15', label: 'zima 2026', text: 'Hardcore realmy' },
+  ];
+  const nextIdx = timeline.findIndex((t) => Date.parse(t.date + 'T23:59:59Z') >= now);
+  const dates = timeline.map((t, i) => {
+    const state = i < nextIdx ? 'past' : i === nextIdx ? 'next' : 'upcoming';
+    return `<li class="${state}"><span class="dot"></span><b>${t.label}${i === nextIdx ? '<em>čoskoro</em>' : ''}</b><span>${t.text}</span></li>`;
+  }).join('');
+
   const body = `
 <section class="hero">
   <div class="hero-bg">${heroArt()}</div>
@@ -239,16 +266,13 @@ function home(origin, now, guildRows) {
   <ul class="newslist">${latest}</ul>
 </section>
 <section class="section two">
-  <div><div class="section-head"><h2><span class="ic">${DIVIDER}</span>Návody</h2><a href="/navody">Všetky</a></div><ul class="linklist">${g}</ul></div>
+  <div>
+    <div class="section-head"><h2><span class="ic">${DIVIDER}</span>Návody</h2><a href="/navody">Všetky</a></div>
+    <div class="guide-grid">${g}</div>
+  </div>
   <div>
     <div class="section-head"><h2><span class="ic">${DIVIDER}</span>Dôležité dátumy</h2></div>
-    <ul class="dates">
-      <li><b>do 21. októbra</b><span>Beta test</span></li>
-      <li><b>27. okt. – 3. nov.</b><span>Rezervácia mien pre majiteľov balíkov</span></li>
-      <li><b>5. novembra 0:00</b><span>Spustenie hry (u nás)</span></li>
-      <li><b>9. decembra</b><span>Raidy Barrow Deeps, Hyjal Summit a Onyxia</span></li>
-      <li><b>zima 2026</b><span>Hardcore realmy</span></li>
-    </ul>
+    <ul class="timeline">${dates}</ul>
     <div class="section-head" style="margin-top:32px"><h2><span class="ic">${DIVIDER}</span>Nové guildy</h2><a href="/guildy">Adresár</a></div>
     ${guildBlock}
   </div>
@@ -256,7 +280,10 @@ function home(origin, now, guildRows) {
   return page({ path: '/', body, origin });
 }
 
-const newsItem = (n) => `<li><time datetime="${n.date}">${skDate(n.date)}</time><div><a class="t" href="/novinky/${n.slug}">${esc(n.title)}</a><p>${esc(n.perex)}</p></div></li>`;
+const newsItem = (n, highlight) => {
+  const [y, m, d] = n.date.slice(0, 10).split('-').map(Number);
+  return `<li${highlight ? ' class="new"' : ''}><div class="dbadge"><b>${d}</b><span>${MES_SKR[m - 1]}</span></div><div><a class="t" href="/novinky/${n.slug}">${esc(n.title)}${highlight ? '<span class="pill-new">Nové</span>' : ''}</a><p>${esc(n.perex)}</p></div></li>`;
+};
 
 function newsList(origin) {
   const body = `<h1>Novinky</h1><p class="lead">Správy o WoW Forever po slovensky, s odkazmi na pôvodné zdroje.</p><ul class="newslist">${news.map(newsItem).join('')}</ul>`;
