@@ -125,6 +125,19 @@ main{padding:40px 0 80px}
 .section-head{display:flex;align-items:baseline;justify-content:space-between;gap:16px;border-bottom:1px solid var(--line);margin-bottom:8px}
 .section-head h2{margin:0 0 .4em;display:flex;align-items:center;gap:10px;letter-spacing:.015em}
 .ornament{color:var(--gold);opacity:.85}
+
+.guildcta{display:flex;align-items:center;gap:18px;padding:20px 24px;border-radius:12px;text-decoration:none;color:var(--text);
+  background:linear-gradient(120deg, rgba(226,174,76,.14), rgba(106,155,235,.08)), var(--surface);
+  border:1px solid rgba(226,174,76,.4);transition:transform .15s,box-shadow .15s,border-color .15s}
+.guildcta:hover{transform:translateY(-2px);box-shadow:0 14px 30px rgba(0,0,0,.32);border-color:rgba(226,174,76,.7)}
+.guildcta .ic{flex:none;color:var(--gold);background:rgba(226,174,76,.14);border:1px solid rgba(226,174,76,.4);border-radius:10px;width:46px;height:46px;display:grid;place-items:center}
+.guildcta b{font-family:var(--display);font-weight:400;font-size:1.25rem;color:var(--text)}
+.guildcta p{margin:.25em 0 0;color:var(--muted);font-size:.98rem}
+.guildcta p strong{color:var(--gold-soft);font-weight:600}
+.guildcta .go{margin-left:auto;flex:none;font-family:var(--display);color:var(--gold-soft);white-space:nowrap}
+@media (max-width:640px){.guildcta{flex-wrap:wrap}.guildcta .go{margin-left:62px}}
+.signup-count{display:inline-flex;align-items:center;gap:8px;color:var(--gold-soft);font-size:.98rem;margin:0 0 1em}
+.signup-count .ic{opacity:.9}
 .newslist{list-style:none;margin:0;padding:0;display:grid;gap:12px}
 .newslist li{padding:16px 18px;border:1px solid var(--line);border-radius:10px;background:var(--surface);display:grid;grid-template-columns:62px 1fr;gap:18px;align-items:start;transition:transform .15s,background .15s,box-shadow .15s,border-color .15s}
 .newslist li:hover{background:var(--surface-2);transform:translateY(-2px);box-shadow:0 10px 24px rgba(0,0,0,.3)}

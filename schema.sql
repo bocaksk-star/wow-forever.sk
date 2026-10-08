@@ -15,3 +15,15 @@ CREATE TABLE IF NOT EXISTS guilds (
 CREATE TABLE IF NOT EXISTS settings (key TEXT PRIMARY KEY, value TEXT NOT NULL);
 -- admin kľúč: INSERT OR REPLACE INTO settings (key, value) VALUES ('admin_key', '...');
 CREATE INDEX IF NOT EXISTS idx_guilds_status ON guilds (status, created_at);
+
+CREATE TABLE IF NOT EXISTS recruits (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  nick TEXT,
+  faction TEXT NOT NULL CHECK (faction IN ('A','H','?')),
+  class TEXT,
+  focus TEXT,
+  note TEXT,
+  contact TEXT NOT NULL,
+  created_at TEXT NOT NULL DEFAULT (datetime('now'))
+);
+CREATE INDEX IF NOT EXISTS idx_recruits_created ON recruits (created_at);

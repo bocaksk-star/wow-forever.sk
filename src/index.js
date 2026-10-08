@@ -28,6 +28,7 @@ const NAV_ICON = {
   'o-nas': svg(`<circle cx="12" cy="12" r="9" ${S}/><line x1="12" y1="11" x2="12" y2="16" ${S}/><circle cx="12" cy="7.6" r="1" fill="currentColor" stroke="none"/>`, 21),
   edicie: svg(`<path d="M12 2 21 11l-9.5 9.5a1.5 1.5 0 0 1-2.1 0L3 14.1a1.5 1.5 0 0 1 0-2.1z" ${S}/><circle cx="16" cy="7" r="1.6" fill="currentColor"/>`, 21),
   faq: svg(`<circle cx="12" cy="12" r="9" ${S}/><path d="M9.3 9.3a2.7 2.7 0 1 1 3.9 2.4c-.8.4-1.2.9-1.2 1.8" ${S}/><circle cx="12" cy="17" r="1" fill="currentColor" stroke="none"/>`, 21),
+  guilda: svg(`<path d="M12 2.5 14 8l5.8.5-4.4 3.8L16.8 18 12 14.8 7.2 18l1.4-5.7L4.2 8.5 10 8z" ${S}/>`, 21),
 };
 
 const GUIDE_ICON = {
@@ -153,7 +154,7 @@ const CREST = svg(`<path d="M16 2 28 7v9c0 9-5 14.5-12 17-7-2.5-12-8-12-17V7z" $
 const CAL_ICON = svg(`<rect x="3" y="4.5" width="18" height="16" rx="2.5" ${S}/><line x1="3" y1="9.5" x2="21" y2="9.5" ${S}/><line x1="7" y1="2.5" x2="7" y2="6.5" ${S}/><line x1="17" y1="2.5" x2="17" y2="6.5" ${S}/>`, 17);
 const GUILD_ICON = svg(`<path d="M5 21V4" ${S}/><path d="M5 4l13 3-13 3" ${S}/>`, 26);
 
-const NAV = [['/novinky', 'Novinky', 'novinky'], ['/navody', 'Návody', 'navody'], ['/triedy', 'Classy', 'triedy'], ['/rasy', 'Rasy', 'rasy'], ['/navody/edicie-a-ceny', 'Edície', 'edicie'], ['/guildy', 'Guildy CZ/SK', 'guildy'], ['/navody/faq', 'FAQ', 'faq'], ['/o-nas', 'O webe', 'o-nas']];
+const NAV = [['/novinky', 'Novinky', 'novinky'], ['/navody', 'Návody', 'navody'], ['/triedy', 'Classy', 'triedy'], ['/rasy', 'Rasy', 'rasy'], ['/navody/edicie-a-ceny', 'Edície', 'edicie'], ['/guildy', 'Guildy CZ/SK', 'guildy'], ['/guilda', 'Naša guilda', 'guilda'], ['/navody/faq', 'FAQ', 'faq'], ['/o-nas', 'O webe', 'o-nas']];
 
 function page({ title, desc, path, body, origin, noindex }) {
   const full = title ? `${title} | WoW Forever SK` : 'WoW Forever SK – novinky, návody a guildy po slovensky';
@@ -228,7 +229,7 @@ function questCard(now) {
 // ---------- stránky ----------
 const MES_SKR = ['jan','feb','mar','apr','máj','jún','júl','aug','sep','okt','nov','dec'];
 
-function home(origin, now, guildRows) {
+function home(origin, now, guildRows, recruitCount = 0) {
   const latest = news.slice(0, 4).map((n, i) => newsItem(n, i === 0)).join('');
   const g = guides.slice(0, 4).map((x) => `<a class="guide-card" href="/navody/${x.slug}"><span class="ic">${guideIcon(x.slug)}</span><div><b>${esc(x.title)}</b><p>${esc(x.perex)}</p></div></a>`).join('');
   const guildBlock = guildRows.length
@@ -260,6 +261,13 @@ function home(origin, now, guildRows) {
   </div>
   ${questCard(now)}
   </div>
+</section>
+<section class="section">
+  <a class="guildcta" href="/guilda">
+    <span class="ic">${NAV_ICON.guilda}</span>
+    <div><b>Zakladáme vlastnú guildu</b><p>Budeme ju viesť a hrať s vami od prvého dňa. Prihlás sa teraz, dáme ti vedieť, keď spustíme nábor naostro.${recruitCount > 0 ? ` <strong>${recruitCount} ${recruitCount === 1 ? 'hráč sa' : recruitCount < 5 ? 'hráči sa' : 'hráčov sa'} už prihlásilo.</strong>` : ''}</p></div>
+    <span class="go">Prihlásiť sa →</span>
+  </a>
 </section>
 <section class="section">
   <div class="section-head"><h2><span class="ic">${DIVIDER}</span>Najnovšie správy</h2><a href="/novinky">Všetky novinky</a></div>
@@ -459,6 +467,57 @@ async function submitGuild(request, env, origin) {
   return Response.redirect(`${origin}/guildy/pridat?ok=1`, 303);
 }
 
+// ---------- naša guilda ----------
+const CLASS_OPT = classes.map((c) => `<option value="${esc(c.slug)}">${esc(c.name)} (${esc(c.sk)})</option>`).join('');
+
+function guildaPage(origin, count, state = {}) {
+  const v = state.values || {};
+  const msg = state.ok
+    ? '<div class="notice">Si v tom! Ozveme sa ti cez zadaný kontakt, keď budeme guildu spúšťať naostro.</div>'
+    : state.error ? `<div class="notice err">${esc(state.error)}</div>` : '';
+  const countLine = count > 0 ? `<p class="signup-count"><span class="ic">${NAV_ICON.guilda}</span>${count} ${count === 1 ? 'hráč sa' : count < 5 ? 'hráči sa' : 'hráčov sa'} už prihlásilo</p>` : '';
+  const body = `<article class="prose">
+<h1>Zakladáme vlastnú guildu</h1>
+<p class="lead">Keď 4. – 5. novembra štartuje WoW Forever, ideme hrať aj my a guildu povedieme sami. Prihlás sa teraz, nech si medzi prvými, komu dáme vedieť, keď spustíme nábor naostro – ešte pred štartom.</p>
+${countLine}
+${msg}
+<form class="form" method="post" action="/guilda">
+<label class="f"><span>Prezývka</span><input name="nick" maxlength="40" placeholder="ako ťa budeme volať" value="${esc(v.nick)}"></label>
+<div class="pair">
+<label class="f"><span>Frakcia *</span><select name="faction" required><option value="">Vyberte</option><option value="A"${v.faction === 'A' ? ' selected' : ''}>Aliancia</option><option value="H"${v.faction === 'H' ? ' selected' : ''}>Horda</option><option value="?"${v.faction === '?' ? ' selected' : ''}>Ešte neviem</option></select></label>
+<label class="f"><span>Trieda</span><select name="class"><option value="">Ešte neviem</option>${CLASS_OPT}</select></label>
+</div>
+<label class="f"><span>Zameranie</span><select name="focus"><option value="">Ešte neviem</option>${opt(FOCUS, v.focus)}</select></label>
+<label class="f"><span>Odkaz pre nás</span><textarea name="note" maxlength="500" placeholder="skúsenosti, s kým chceš hrať, čokoľvek">${esc(v.note)}</textarea></label>
+<label class="f"><span>Kontakt *</span><input name="contact" required maxlength="100" placeholder="Discord meno alebo e-mail" value="${esc(v.contact)}"><small>Len na to, aby sme ťa vedeli osloviť pri nábore. Nikde ho nezverejníme.</small></label>
+<label class="hp" aria-hidden="true">Web<input name="web" tabindex="-1" autocomplete="off"></label>
+<input type="hidden" name="t" value="${Date.now()}">
+<div><button class="btn primary" type="submit">Prihlásiť sa do guildy</button></div>
+</form>
+</article>`;
+  return page({ title: 'Naša guilda', desc: 'Zakladáme vlastnú guildu pre WoW Forever. Prihlás sa a dáme ti vedieť, keď spustíme nábor.', path: '/guilda', body, origin });
+}
+
+async function submitRecruit(request, env, origin) {
+  const fd = await request.formData();
+  const v = Object.fromEntries(['nick', 'faction', 'class', 'focus', 'note', 'contact', 'web', 't'].map((k) => [k, String(fd.get(k) || '').trim()]));
+  if (v.web || Date.now() - Number(v.t || 0) < 3000) return html(guildaPage(origin, 0, { ok: true }));
+  const err = (m) => html(guildaPage(origin, 0, { error: m, values: v }), 400);
+  if (!['A', 'H', '?'].includes(v.faction)) return err('Vyberte frakciu.');
+  if (!v.contact || v.contact.length > 100) return err('Zadajte kontakt, aby sme sa vám mohli ozvať.');
+  if (v.nick.length > 40) return err('Prezývka je príliš dlhá.');
+  if (v.note.length > 500) return err('Odkaz je príliš dlhý.');
+  if (v.class && !classes.some((c) => c.slug === v.class)) v.class = '';
+  if (v.focus && !FOCUS.includes(v.focus)) v.focus = '';
+  try {
+    await env.DB.prepare(`INSERT INTO recruits (nick, faction, class, focus, note, contact) VALUES (?,?,?,?,?,?)`)
+      .bind(v.nick || null, v.faction, v.class || null, v.focus || null, v.note || null, v.contact).run();
+  } catch (e) {
+    return err('Nepodarilo sa to uložiť. Skúste to o chvíľu znova.');
+  }
+  return Response.redirect(`${origin}/guilda?ok=1`, 303);
+}
+
 // ---------- administrácia ----------
 async function admin(request, env, url, origin) {
   const key = request.method === 'POST' ? String((await request.clone().formData()).get('key') || '') : url.searchParams.get('key') || '';
@@ -471,18 +530,23 @@ async function admin(request, env, url, origin) {
     if (act === 'approve') await env.DB.prepare(`UPDATE guilds SET status='approved' WHERE id=?`).bind(id).run();
     if (act === 'reject') await env.DB.prepare(`UPDATE guilds SET status='rejected' WHERE id=?`).bind(id).run();
     if (act === 'delete') await env.DB.prepare(`DELETE FROM guilds WHERE id=?`).bind(id).run();
+    if (act === 'recruit_delete') await env.DB.prepare(`DELETE FROM recruits WHERE id=?`).bind(id).run();
     return Response.redirect(`${origin}/admin?key=${encodeURIComponent(key)}`, 303);
   }
   const { results = [] } = await env.DB.prepare(`SELECT * FROM guilds ORDER BY CASE status WHEN 'pending' THEN 0 WHEN 'approved' THEN 1 ELSE 2 END, created_at DESC LIMIT 300`).all();
+  const { results: recruits = [] } = await env.DB.prepare(`SELECT * FROM recruits ORDER BY created_at DESC LIMIT 500`).all();
   const btn = (id, act, label) => `<form method="post" style="display:inline"><input type="hidden" name="key" value="${esc(key)}"><input type="hidden" name="id" value="${id}"><input type="hidden" name="act" value="${act}"><button class="btn ghost" style="padding:6px 12px;font-size:.9rem">${label}</button></form>`;
   const rows = results.map((g) => `<tr><td>${g.id}</td><td><b>${esc(g.name)}</b><br><span class="meta">${esc(g.description || '')}</span></td><td>${FACTIONS[g.faction]}, ${esc(g.realm)}, ${esc(g.focus)}, ${esc(g.lang)}</td><td>${esc(g.contact)}<br>${esc(g.discord || '')}</td><td>${esc(g.status)}<br><span class="meta">${esc(g.created_at)}</span></td><td>${g.status !== 'approved' ? btn(g.id, 'approve', 'Schváliť') : ''} ${g.status !== 'rejected' ? btn(g.id, 'reject', 'Zamietnuť') : ''} ${btn(g.id, 'delete', 'Zmazať')}</td></tr>`).join('');
-  const body = `<h1>Administrácia guild</h1><p class="lead">Čakajúce zápisy sú hore.</p><div class="tablewrap"><table class="table"><thead><tr><th>#</th><th>Guilda</th><th>Info</th><th>Kontakt</th><th>Stav</th><th></th></tr></thead><tbody>${rows || '<tr><td colspan="6">Zatiaľ žiadne zápisy.</td></tr>'}</tbody></table></div>`;
+  const classBySlugAdmin = Object.fromEntries(classes.map((c) => [c.slug, c.name]));
+  const recruitRows = recruits.map((r) => `<tr><td>${r.id}</td><td>${esc(r.nick || '—')}</td><td>${FACTIONS[r.faction] || 'Neviem'}</td><td>${esc(classBySlugAdmin[r.class] || '—')}</td><td>${esc(r.focus || '—')}</td><td>${esc(r.contact)}</td><td><span class="meta">${esc(r.note || '')}</span></td><td><span class="meta">${esc(r.created_at)}</span></td><td>${btn(r.id, 'recruit_delete', 'Zmazať')}</td></tr>`).join('');
+  const body = `<h1>Administrácia guild</h1><p class="lead">Čakajúce zápisy sú hore.</p><div class="tablewrap"><table class="table"><thead><tr><th>#</th><th>Guilda</th><th>Info</th><th>Kontakt</th><th>Stav</th><th></th></tr></thead><tbody>${rows || '<tr><td colspan="6">Zatiaľ žiadne zápisy.</td></tr>'}</tbody></table></div>
+<h2>Prihlásení do našej guildy (${recruits.length})</h2><div class="tablewrap"><table class="table"><thead><tr><th>#</th><th>Prezývka</th><th>Frakcia</th><th>Trieda</th><th>Zameranie</th><th>Kontakt</th><th>Odkaz</th><th>Kedy</th><th></th></tr></thead><tbody>${recruitRows || '<tr><td colspan="9">Zatiaľ sa nikto neprihlásil.</td></tr>'}</tbody></table></div>`;
   return html(page({ title: 'Administrácia', path: '/admin', origin, noindex: true, body }), 200, { 'cache-control': 'no-store' });
 }
 
 // ---------- sitemap ----------
 function sitemap(origin) {
-  const paths = ['/', '/novinky', '/navody', '/triedy', '/rasy', '/guildy', '/guildy/pridat', '/o-nas',
+  const paths = ['/', '/novinky', '/navody', '/triedy', '/rasy', '/guildy', '/guildy/pridat', '/guilda', '/o-nas',
     ...news.map((n) => `/novinky/${n.slug}`), ...guides.map((g) => `/navody/${g.slug}`), ...classes.map((c) => `/triedy/${c.slug}`)];
   const xml = `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${paths.map((p) => `<url><loc>${origin}${p}</loc></url>`).join('')}</urlset>`;
   return new Response(xml, { headers: { 'content-type': 'application/xml; charset=utf-8' } });
@@ -505,12 +569,20 @@ export default {
       if (request.method === 'POST') return submitGuild(request, env, origin);
       return html(guildForm(origin, { ok: url.searchParams.get('ok') === '1' }), 200, { 'cache-control': 'no-store' });
     }
+    if (path === '/guilda') {
+      if (request.method === 'POST') return submitRecruit(request, env, origin);
+      let count = 0;
+      try { count = (await env.DB.prepare(`SELECT COUNT(*) AS c FROM recruits`).first())?.c || 0; } catch (e) {}
+      return html(guildaPage(origin, count, { ok: url.searchParams.get('ok') === '1' }), 200, { 'cache-control': 'no-store' });
+    }
     if (request.method !== 'GET' && request.method !== 'HEAD') return new Response('Method not allowed', { status: 405 });
 
     if (path === '/') {
       let rows = [];
+      let recruitCount = 0;
       try { rows = (await env.DB.prepare(`SELECT name, faction, realm, focus, lang FROM guilds WHERE status='approved' ORDER BY created_at DESC LIMIT 4`).all()).results || []; } catch (e) {}
-      return html(home(origin, now, rows), 200, { 'cache-control': 'public, max-age=60' });
+      try { recruitCount = (await env.DB.prepare(`SELECT COUNT(*) AS c FROM recruits`).first())?.c || 0; } catch (e) {}
+      return html(home(origin, now, rows, recruitCount), 200, { 'cache-control': 'public, max-age=60' });
     }
     if (path === '/novinky') return html(newsList(origin));
     if (path === '/navody') return html(guideList(origin));
