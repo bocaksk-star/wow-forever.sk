@@ -101,7 +101,7 @@ ${[[90,60,.9],[180,110,.6],[260,50,.7],[340,140,.5],[420,80,.8],[520,40,.6],[610
 
 // Hlavný znak webu — pôvodný medailón (mesiac nad horami), nie je prevzatý z Blizzardu.
 function crestBadge() {
-  return `<svg width="120" height="120" viewBox="0 0 120 120" aria-hidden="true">
+  return `<svg width="168" height="168" viewBox="0 0 120 120" aria-hidden="true">
 <defs>
   <radialGradient id="crestGlow" cx="50%" cy="38%" r="62%"><stop offset="0%" stop-color="#E2AE4C" stop-opacity=".38"/><stop offset="100%" stop-color="#E2AE4C" stop-opacity="0"/></radialGradient>
   <linearGradient id="crestRim" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#F0CB82"/><stop offset="100%" stop-color="#A9802F"/></linearGradient>
@@ -194,7 +194,7 @@ const NAV = [
   ['/novinky', 'Novinky', 'novinky'],
   { label: 'Návody', ic: 'navody', items: [
     ['/navody', 'Všetky návody', 'navody'],
-    ['/triedy', 'Classy', 'triedy'],
+    ['/triedy', 'Class', 'triedy'],
     ['/rasy', 'Rasy', 'rasy'],
     ['/navody/edicie-a-ceny', 'Edície', 'edicie'],
     ['/navody/faq', 'FAQ', 'faq'],
@@ -212,7 +212,7 @@ const navActive = (href, path) => path === href || path.startsWith(href + '/');
 
 function page({ title, desc, path, body, origin, noindex }) {
   const full = title ? `${title} | WoW Forever SK` : 'WoW Forever SK – novinky, návody a guildy po slovensky';
-  const d = desc || 'Slovenský fan web o World of Warcraft: Forever. Novinky, návody, triedy, rasy a adresár CZ/SK guild.';
+  const d = desc || 'Slovenský fan web o World of Warcraft: Forever. Novinky, návody, Class, rasy a adresár CZ/SK guild.';
   const navItem = (entry) => {
     if (Array.isArray(entry)) {
       const [href, label, ic] = entry;
@@ -284,7 +284,7 @@ function questCard(now) {
   const title = launchPassed ? 'Úloha: Na vrchol Hyjalu' : 'Úloha: Návrat do Azerothu';
   const text = launchPassed
     ? 'Azeroth je otvorený. Prvé raidy Barrow Deeps a Hyjal Summit sa otvárajú 9. decembra. Dovtedy treba dosiahnuť level 60 a zohnať partiu.'
-    : 'Brány sa otvárajú o polnoci zo 4. na 5. novembra. Priprav si meno postavy, vyber triedu a nájdi guildu, aby si nešiel do Azerothu sám.';
+    : 'Brány sa otvárajú o polnoci zo 4. na 5. novembra. Priprav si meno postavy, vyber class a nájdi guildu, aby si nešiel do Azerothu sám.';
   const CD_ICON = {
     d: svg(`<rect x="3" y="4.5" width="18" height="16" rx="2.5" ${S}/><line x1="3" y1="9.5" x2="21" y2="9.5" ${S}/><line x1="7" y1="2.5" x2="7" y2="6.5" ${S}/><line x1="17" y1="2.5" x2="17" y2="6.5" ${S}/>`, 18),
     h: svg(`<circle cx="12" cy="12.5" r="8.5" ${S}/><path d="M12 7.5v5.3l3.6 2.2" ${S}/>`, 18),
@@ -325,7 +325,7 @@ function home(origin, now, guildRows, recruitCount = 0, pd = { counts: {}, mine:
     return `<li class="${state}"><span class="dot"></span><b>${t.label}${i === nextIdx ? '<em>čoskoro</em>' : ''}</b><span>${t.text}</span></li>`;
   }).join('');
 
-  const cameo = classes.map((c, i) => `<a href="/triedy/${c.slug}" style="--c:${c.color};--d:${(i * 0.18).toFixed(2)}s"><span class="badge">${CLASS_ICON[c.slug]}</span><span class="name">${c.name}</span></a>`).join('');
+  const cameo = classes.map((c, i) => `<a href="/triedy/${c.slug}" style="--c:${c.color};--d:${(i * 0.18).toFixed(2)}s;--e:${(1.15 + i * 0.07).toFixed(2)}s"><span class="badge">${CLASS_ICON[c.slug]}</span><span class="name">${c.name}</span></a>`).join('');
   const frakciaPoll = pollBySlug.frakcia;
   const myFrakciaVote = pd.mine[frakciaPoll.slug];
 
@@ -335,7 +335,7 @@ function home(origin, now, guildRows, recruitCount = 0, pd = { counts: {}, mine:
   <div class="hero-fade"></div>
   <div class="hero-emblem">
     <div class="crest-badge">${crestBadge()}</div>
-    <h1><span class="rule">${DIVIDER}</span>WoW <em>Forever</em><b>SK</b><span class="rule">${DIVIDER}</span></h1>
+    <h1><span class="rule">${DIVIDER}</span><span class="word-wow">WoW</span> <em>Forever</em><b>SK</b><span class="rule">${DIVIDER}</span></h1>
     <p class="hero-tagline">World of Warcraft: Forever po slovensky</p>
   </div>
   <div class="hero-grid">
@@ -346,7 +346,7 @@ function home(origin, now, guildRows, recruitCount = 0, pd = { counts: {}, mine:
   ${questCard(now)}
   </div>
 </section>
-<nav class="cameo" aria-label="Rýchly výber triedy">${cameo}</nav>
+<nav class="cameo" aria-label="Rýchly výber Class">${cameo}</nav>
 <section class="section">
   <a class="guildcta" href="/guilda">
     <span class="ic">${NAV_ICON.guilda}</span>
@@ -394,7 +394,7 @@ function newsDetail(n, origin) {
 }
 
 function guideList(origin) {
-  const body = `<h1>Návody</h1><p class="lead">Všetko, čo potrebujete vedieť pred štartom a v prvých týždňoch.</p><ul class="linklist">${guides.map((x) => `<li><a href="/navody/${x.slug}">${esc(x.title)}</a><p>${esc(x.perex)}</p></li>`).join('')}<li><a href="/triedy">Triedy</a><p>Deväť tried, ich úlohy v skupine a ktoré rasy ich môžu hrať.</p></li><li><a href="/rasy">Rasy</a><p>Osem pôvodných rás, nová Skyborne a všetky nové kombinácie.</p></li></ul>`;
+  const body = `<h1>Návody</h1><p class="lead">Všetko, čo potrebujete vedieť pred štartom a v prvých týždňoch.</p><ul class="linklist">${guides.map((x) => `<li><a href="/navody/${x.slug}">${esc(x.title)}</a><p>${esc(x.perex)}</p></li>`).join('')}<li><a href="/triedy">Class</a><p>Deväť class-ov, ich úlohy v skupine a ktoré rasy ich môžu hrať.</p></li><li><a href="/rasy">Rasy</a><p>Osem pôvodných rás, nová Skyborne a všetky nové kombinácie.</p></li></ul>`;
   return page({ title: 'Návody', desc: 'Slovenské návody k World of Warcraft: Forever.', path: '/navody', body, origin });
 }
 
@@ -409,9 +409,9 @@ function racesForClass(slug) {
 
 function classList(origin) {
   const tiles = classes.map((c) => `<a class="tile" href="/triedy/${c.slug}" style="--c:${c.color}"><div class="tile-head"><span class="badge" style="--c:${c.color}">${CLASS_ICON[c.slug] || ''}</span><h3>${c.name}</h3></div><p class="sub">${c.sk[0].toUpperCase() + c.sk.slice(1)}</p><p class="roles">${roleIcons(c.roles)}</p></a>`).join('');
-  const body = `<h1>Triedy</h1><p class="lead">Deväť pôvodných tried. Vo Forever majú prepracované talenty, aby bola hrateľná každá špecializácia, a niektoré rasy dostali nové kombinácie.</p><div class="grid">${tiles}</div>
-<h2>Ktorá rasa môže hrať ktorú triedu</h2>${matrix()}`;
-  return page({ title: 'Triedy', desc: 'Prehľad tried vo WoW Forever: úlohy v skupine a dostupné rasy.', path: '/triedy', body, origin });
+  const body = `<h1>Class</h1><p class="lead">Deväť pôvodných class-ov. Vo Forever majú prepracované talenty, aby bola hrateľná každá špecializácia, a niektoré rasy dostali nové kombinácie.</p><div class="grid">${tiles}</div>
+<h2>Ktorá rasa môže hrať ktorý class</h2>${matrix()}`;
+  return page({ title: 'Class', desc: 'Prehľad Class vo WoW Forever: úlohy v skupine a dostupné rasy.', path: '/triedy', body, origin });
 }
 
 function matrix() {
@@ -430,7 +430,7 @@ function classDetail(c, origin) {
     const fac = r.faction === 'AH' ? '<span class="tag a">Aliancia</span><span class="tag h">Horda</span>' : `<span class="tag ${r.faction.toLowerCase()}">${FACTIONS[r.faction]}</span>`;
     return `<li><a href="/rasy#${r.slug}">${esc(r.name)}</a> ${fac}${r.newClasses.includes(c.slug) && r.slug !== 'skyborne' ? '<span class="tag new">nová kombinácia</span>' : ''}</li>`;
   }).join('');
-  const body = `<a class="back" href="/triedy">Späť na triedy</a><article class="prose">
+  const body = `<a class="back" href="/triedy">Späť na Class</a><article class="prose">
 <div class="detail-head"><span class="badge xl" style="--c:${c.color}">${CLASS_ICON[c.slug] || ''}</span><div><h1 style="color:${c.color};margin:0">${c.name}</h1><p class="sub" style="margin:.2em 0 0">${c.sk[0].toUpperCase() + c.sk.slice(1)}</p></div></div>
 <p class="lead">${esc(c.desc)}</p>
 <div class="tablewrap"><table><tbody><tr><th>Úloha v skupine</th><td class="roles">${roleIcons(c.roles)}</td></tr><tr><th>Brnenie</th><td>${c.armor}</td></tr></tbody></table></div>
@@ -447,8 +447,8 @@ function raceList(origin) {
     const cls = r.classes.map((s) => `<span class="tag cls${r.newClasses.includes(s) && r.slug !== 'skyborne' ? ' new' : ''}"><span class="ic">${CLASS_ICON[s] || ''}</span>${classBySlug[s].name}</span>`).join('');
     return `<div class="tile" id="${r.slug}" style="--c:${r.faction === 'A' ? 'var(--alliance)' : r.faction === 'H' ? 'var(--horde)' : 'var(--gold)'}"><h3>${esc(r.name)}</h3><p>Štart: ${esc(r.start)}</p><div>${fac}</div><div>${cls}</div>${r.note ? `<p style="margin-top:8px">${esc(r.note)}</p>` : ''}</div>`;
   }).join('');
-  const body = `<h1>Rasy</h1><p class="lead">Osem pôvodných rás a nová rasa Skyborne, ktorá si frakciu vyberá sama. Zlatou sú označené nové kombinácie rasy a triedy.</p><div class="grid">${tiles}</div><p class="meta" style="margin-top:20px">Podľa Warcraft Wiki k 8. 10. 2026, počas bety sa ešte môže zmeniť. Viac o Skyborne v <a href="/novinky/skyborne-nova-rasa">článku</a>.</p>`;
-  return page({ title: 'Rasy', desc: 'Rasy vo WoW Forever vrátane novej rasy Skyborne a nových kombinácií s triedami.', path: '/rasy', body, origin });
+  const body = `<h1>Rasy</h1><p class="lead">Osem pôvodných rás a nová rasa Skyborne, ktorá si frakciu vyberá sama. Zlatou sú označené nové kombinácie rasy a class-u.</p><div class="grid">${tiles}</div><p class="meta" style="margin-top:20px">Podľa Warcraft Wiki k 8. 10. 2026, počas bety sa ešte môže zmeniť. Viac o Skyborne v <a href="/novinky/skyborne-nova-rasa">článku</a>.</p>`;
+  return page({ title: 'Rasy', desc: 'Rasy vo WoW Forever vrátane novej rasy Skyborne a nových kombinácií s Class.', path: '/rasy', body, origin });
 }
 
 function about(origin) {
@@ -574,7 +574,7 @@ ${msg}
 <label class="f"><span>Prezývka</span><input name="nick" maxlength="40" placeholder="ako ťa budeme volať" value="${esc(v.nick)}"></label>
 <div class="pair">
 <label class="f"><span>Frakcia *</span><select name="faction" required><option value="">Vyberte</option><option value="A"${v.faction === 'A' ? ' selected' : ''}>Aliancia</option><option value="H"${v.faction === 'H' ? ' selected' : ''}>Horda</option><option value="?"${v.faction === '?' ? ' selected' : ''}>Ešte neviem</option></select></label>
-<label class="f"><span>Trieda</span><select name="class"><option value="">Ešte neviem</option>${CLASS_OPT}</select></label>
+<label class="f"><span>Class</span><select name="class"><option value="">Ešte neviem</option>${CLASS_OPT}</select></label>
 </div>
 <label class="f"><span>Zameranie</span><select name="focus"><option value="">Ešte neviem</option>${opt(FOCUS, v.focus)}</select></label>
 <label class="f"><span>Odkaz pre nás</span><textarea name="note" maxlength="500" placeholder="skúsenosti, s kým chceš hrať, čokoľvek">${esc(v.note)}</textarea></label>
@@ -655,7 +655,7 @@ async function pollData(env, voter) {
 function pollsPage(origin, { counts, mine }, editSlug) {
   const cards = polls.map((p) => pollCard(p, counts[p.slug] || {}, mine[p.slug], { back: '/ankety', edit: editSlug === p.slug })).join('');
   const body = `<h1>Ankety</h1><p class="lead">Zisťujeme, ako budeme hrať. Hlasuj — výsledky sa počítajú naživo, hlas vieš kedykoľvek zmeniť.</p><div class="poll-grid">${cards}</div>`;
-  return page({ title: 'Ankety', desc: 'Hlasuj v anketách o WoW Forever: trieda, frakcia, štýl hry a typ realmu.', path: '/ankety', body, origin });
+  return page({ title: 'Ankety', desc: 'Hlasuj v anketách o WoW Forever: Class, frakcia, štýl hry a typ realmu.', path: '/ankety', body, origin });
 }
 
 async function submitVote(request, env, origin) {
@@ -698,7 +698,7 @@ async function admin(request, env, url, origin) {
   const classBySlugAdmin = Object.fromEntries(classes.map((c) => [c.slug, c.name]));
   const recruitRows = recruits.map((r) => `<tr><td>${r.id}</td><td>${esc(r.nick || '—')}</td><td>${FACTIONS[r.faction] || 'Neviem'}</td><td>${esc(classBySlugAdmin[r.class] || '—')}</td><td>${esc(r.focus || '—')}</td><td>${esc(r.contact)}</td><td><span class="meta">${esc(r.note || '')}</span></td><td><span class="meta">${esc(r.created_at)}</span></td><td>${btn(r.id, 'recruit_delete', 'Zmazať')}</td></tr>`).join('');
   const body = `<h1>Administrácia guild</h1><p class="lead">Čakajúce zápisy sú hore.</p><div class="tablewrap"><table class="table"><thead><tr><th>#</th><th>Guilda</th><th>Info</th><th>Kontakt</th><th>Stav</th><th></th></tr></thead><tbody>${rows || '<tr><td colspan="6">Zatiaľ žiadne zápisy.</td></tr>'}</tbody></table></div>
-<h2>Prihlásení do našej guildy (${recruits.length})</h2><div class="tablewrap"><table class="table"><thead><tr><th>#</th><th>Prezývka</th><th>Frakcia</th><th>Trieda</th><th>Zameranie</th><th>Kontakt</th><th>Odkaz</th><th>Kedy</th><th></th></tr></thead><tbody>${recruitRows || '<tr><td colspan="9">Zatiaľ sa nikto neprihlásil.</td></tr>'}</tbody></table></div>`;
+<h2>Prihlásení do našej guildy (${recruits.length})</h2><div class="tablewrap"><table class="table"><thead><tr><th>#</th><th>Prezývka</th><th>Frakcia</th><th>Class</th><th>Zameranie</th><th>Kontakt</th><th>Odkaz</th><th>Kedy</th><th></th></tr></thead><tbody>${recruitRows || '<tr><td colspan="9">Zatiaľ sa nikto neprihlásil.</td></tr>'}</tbody></table></div>`;
   return html(page({ title: 'Administrácia', path: '/admin', origin, noindex: true, body }), 200, { 'cache-control': 'no-store' });
 }
 

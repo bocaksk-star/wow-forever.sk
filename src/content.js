@@ -113,7 +113,7 @@ export const guides = [
 <h2>Prvý večer</h2>
 <ol>
 <li><strong>Vyberte typ realmu.</strong> V Európe bude jeden veľký realm na každé pravidlá: Normal, PvP alebo RP. Hardcore príde neskôr.</li>
-<li><strong>Vytvorte postavu.</strong> Vo Forever má postava meno aj priezvisko. Ak neviete, akú triedu zvoliť, pozrite si <a href="/triedy">prehľad tried</a>.</li>
+<li><strong>Vytvorte postavu.</strong> Vo Forever má postava meno aj priezvisko. Ak neviete, aký class zvoliť, pozrite si <a href="/triedy">prehľad Class</a>.</li>
 <li><strong>Nájdite si guildu.</strong> Vo vanilla svete sa veci robia spolu. Slovenské a české guildy sú v našom <a href="/guildy">adresári</a>.</li>
 </ol>
 <h2>Na čo si zvyknúť</h2>
@@ -137,7 +137,7 @@ export const guides = [
 <tr><td>Obsah</td><td>Pôvodný, známy do detailu</td><td>Pôvodný + 1000+ nových questov, nové zóny, dungeony a raidy</td></tr>
 <tr><td>Smer vývoja</td><td>Burning Crusade, Wrath…</td><td>Rozširovanie do šírky, bez datadiskov</td></tr>
 <tr><td>Rasy</td><td>8 pôvodných</td><td>8 pôvodných + Skyborne</td></tr>
-<tr><td>Kombinácie rasa/trieda</td><td>Pôvodné</td><td>Nové, napríklad dwarf shaman alebo Forsaken paladin</td></tr>
+<tr><td>Kombinácie rasa/Class</td><td>Pôvodné</td><td>Nové, napríklad dwarf shaman alebo Forsaken paladin</td></tr>
 <tr><td>Talenty</td><td>Pôvodné</td><td>Prepracované, aby bola hrateľná každá špecializácia</td></tr>
 <tr><td>Grafika</td><td>Pôvodná</td><td>Lepšie svetlo, voda, hmla; prepínač SD/HD modelov</td></tr>
 <tr><td>Realmy</td><td>Viac serverov</td><td>Jeden mega-realm na pravidlá a región</td></tr>
@@ -245,7 +245,7 @@ export const classes = [
   { slug: 'shaman', name: 'Shaman', sk: 'šaman', color: '#0070DD', roles: ['Heal', 'DPS'], armor: 'Mail od levelu 40', desc: 'Totemy, liečenie celej skupiny a Windfury. Vo Forever ho môže hrať aj Aliancia cez dwarf shamana.' },
   { slug: 'mage', name: 'Mage', sk: 'mág', color: '#3FC7EB', roles: ['DPS'], armor: 'Cloth', desc: 'Silný damage na diaľku, AoE farmenie, portály a jedlo pre celý raid. Vždy vítaný v každej skupine.' },
   { slug: 'warlock', name: 'Warlock', sk: 'čarodejník', color: '#8788EE', roles: ['DPS'], armor: 'Cloth', desc: 'Démonickí spoločníci, DoT kúzla a summon pre skupinu. Pohodlné sólo levelovanie a silný v PvP.' },
-  { slug: 'druid', name: 'Druid', sk: 'druid', color: '#FF7C0A', roles: ['Heal', 'Tank', 'DPS'], armor: 'Leather', desc: 'Mení podoby: medveď tankuje, mačka bojuje, v ľudskej podobe lieči. Najflexibilnejšia trieda, hoci vo vanille najmä liečila.' },
+  { slug: 'druid', name: 'Druid', sk: 'druid', color: '#FF7C0A', roles: ['Heal', 'Tank', 'DPS'], armor: 'Leather', desc: 'Mení podoby: medveď tankuje, mačka bojuje, v ľudskej podobe lieči. Najflexibilnejší class, hoci vo vanille najmä liečil.' },
 ];
 
 // Rasy. newClasses = kombinácie nové oproti Classicu (podľa Warcraft Wiki k 8. 10. 2026).
@@ -265,7 +265,7 @@ export const races = [
 export const polls = [
   {
     slug: 'trieda',
-    question: 'Akú triedu budeš hrať ako prvú?',
+    question: 'Aký class budeš hrať ako prvý?',
     options: classes.map((c) => ({ slug: c.slug, label: c.name })),
   },
   {

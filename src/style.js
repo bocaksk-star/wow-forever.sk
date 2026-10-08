@@ -112,14 +112,25 @@ main{padding:40px 0 80px}
 /* Centrálne logo/znak webu v hero sekcii */
 .hero-emblem{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;text-align:center;gap:10px;max-width:1400px;margin:0 auto 40px;padding:0 32px}
 @media (max-width:900px){.hero-emblem{padding:0 18px;margin-bottom:28px}}
-.crest-badge{filter:drop-shadow(0 8px 20px rgba(0,0,0,.5))}
+.crest-badge{filter:drop-shadow(0 8px 20px rgba(0,0,0,.5));animation:crestIn 1.1s cubic-bezier(.22,1,.36,1) both}
 .hero-emblem h1{display:flex;align-items:flex-end;justify-content:center;gap:16px;margin:4px 0 0;font-family:var(--display);font-weight:400;
   font-size:clamp(1.9rem,4.4vw,3.1rem);letter-spacing:.02em;color:var(--text);text-shadow:0 2px 24px rgba(0,0,0,.5)}
-.hero-emblem h1 em{font-style:normal;background:linear-gradient(180deg, var(--gold-soft), var(--gold));-webkit-background-clip:text;background-clip:text;color:transparent}
-.hero-emblem h1 b{font-weight:400;font-size:.38em;letter-spacing:.16em;color:var(--gold-soft);align-self:center;margin-left:2px;padding:3px 9px;border:1px solid rgba(226,174,76,.5);border-radius:6px;background:rgba(226,174,76,.08)}
+.hero-emblem h1 em{font-style:normal;background:linear-gradient(180deg, var(--gold-soft), var(--gold));-webkit-background-clip:text;background-clip:text;color:transparent;
+  display:inline-block;animation:slideInR .7s cubic-bezier(.22,1,.36,1) .68s both}
+.hero-emblem h1 .word-wow{display:inline-block;animation:slideInL .7s cubic-bezier(.22,1,.36,1) .58s both}
+.hero-emblem h1 b{font-weight:400;font-size:.38em;letter-spacing:.16em;color:var(--gold-soft);align-self:center;margin-left:2px;padding:3px 9px;border:1px solid rgba(226,174,76,.5);border-radius:6px;background:rgba(226,174,76,.08);
+  display:inline-block;animation:popIn .5s cubic-bezier(.22,1,.36,1) .92s both}
 .hero-emblem .rule{display:inline-flex;color:var(--gold);opacity:.75;align-self:center}
-.hero-tagline{margin:2px 0 0;color:var(--muted);font-size:1.02rem;letter-spacing:.03em}
+.hero-emblem h1 .rule:first-child{animation:slideInL .6s ease-out .48s both}
+.hero-emblem h1 .rule:last-child{animation:slideInR .6s ease-out .82s both}
+.hero-tagline{margin:2px 0 0;color:var(--muted);font-size:1.02rem;letter-spacing:.03em;animation:fadeUp .7s ease-out 1.05s both}
 @media (max-width:640px){.hero-emblem h1{flex-wrap:wrap;gap:8px 10px}.hero-emblem .rule{display:none}}
+@keyframes crestIn{0%{opacity:0;transform:scale(.3) rotate(-10deg)}65%{opacity:1;transform:scale(1.1) rotate(2deg)}100%{opacity:1;transform:scale(1) rotate(0)}}
+@keyframes slideInL{0%{opacity:0;transform:translateX(-36px)}100%{opacity:1;transform:translateX(0)}}
+@keyframes slideInR{0%{opacity:0;transform:translateX(36px)}100%{opacity:1;transform:translateX(0)}}
+@keyframes popIn{0%{opacity:0;transform:scale(.5)}100%{opacity:1;transform:scale(1)}}
+@keyframes fadeUp{0%{opacity:0;transform:translateY(10px)}100%{opacity:1;transform:translateY(0)}}
+@media (prefers-reduced-motion: reduce){.crest-badge,.hero-emblem h1 *,.hero-tagline{animation:none !important}}
 .btns{display:flex;gap:12px;flex-wrap:wrap}
 .btn{display:inline-flex;align-items:center;gap:8px;padding:12px 20px;border-radius:6px;font-weight:700;text-decoration:none;font-size:1.05rem;border:1px solid var(--gold);transition:background .15s,transform .15s,box-shadow .15s}
 .btn.primary{background:var(--gold);color:#1A1306}
@@ -155,15 +166,17 @@ main{padding:40px 0 80px}
 
 /* Cameo pás tried — animované ikony inšpirované výberom postavy */
 .cameo{display:flex;flex-wrap:wrap;justify-content:center;gap:10px 6px;padding:18px 10px;margin:28px 0 4px}
-.cameo a{--c:var(--gold);display:flex;flex-direction:column;align-items:center;gap:6px;width:72px;text-decoration:none;color:var(--muted);
-  animation:bob 3.6s ease-in-out infinite;animation-delay:var(--d,0s)}
+.cameo a{--c:var(--gold);display:flex;flex-direction:column;align-items:center;gap:6px;width:72px;text-decoration:none;color:var(--muted);opacity:0;
+  animation-name:cameoIn,bob;animation-duration:.6s,3.6s;animation-timing-function:cubic-bezier(.22,1,.36,1),ease-in-out;
+  animation-delay:var(--e,0s),calc(var(--e,0s) + .6s + var(--d,0s));animation-fill-mode:both,none;animation-iteration-count:1,infinite}
+@keyframes cameoIn{0%{opacity:0;transform:translateY(16px) scale(.7)}100%{opacity:1;transform:translateY(0) scale(1)}}
 .cameo .badge{width:46px;height:46px;border-radius:50%;display:grid;place-items:center;color:var(--c);background:color-mix(in srgb, var(--c) 14%, var(--surface));
   border:1px solid color-mix(in srgb, var(--c) 45%, var(--line));transition:transform .18s,box-shadow .18s,border-color .18s}
 .cameo a:hover .badge{transform:scale(1.14) translateY(-2px);box-shadow:0 0 0 4px color-mix(in srgb, var(--c) 18%, transparent),0 8px 18px rgba(0,0,0,.35);border-color:var(--c)}
 .cameo span.name{font-size:.74rem;letter-spacing:.02em;transition:color .15s}
 .cameo a:hover span.name{color:var(--c)}
 @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
-@media (prefers-reduced-motion: reduce){.cameo a{animation:none}}
+@media (prefers-reduced-motion: reduce){.cameo a{animation:none;opacity:1}}
 
 .guildcta{display:flex;align-items:center;gap:18px;padding:20px 24px;border-radius:12px;text-decoration:none;color:var(--text);
   background:linear-gradient(120deg, rgba(226,174,76,.14), rgba(106,155,235,.08)), var(--surface);
