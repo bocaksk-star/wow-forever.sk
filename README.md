@@ -20,3 +20,6 @@ Ak doména v Cloudflare ešte nie je aktívna, zakomentuj `routes` vo `wrangler.
 - Schvaľovanie guild: `https://wow-forever.sk/admin?key=TVOJ_ADMIN_KEY`
 - Novinky, návody, triedy a rasy: `src/content.js` (novinky najnovšie hore), potom `npx wrangler deploy`.
 - Lokálne: `npx wrangler d1 execute wow-forever-sk --local --file=schema.sql`, `.dev.vars` s `ADMIN_KEY=...`, `npx wrangler dev`.
+
+---
+Auto-deploy: pripojené cez Cloudflare Workers Builds (GitHub `main` branch).
