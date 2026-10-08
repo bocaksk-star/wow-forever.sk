@@ -15,12 +15,51 @@ const LANGS = ['SK', 'CZ', 'SK + CZ'];
 const LOGO = `<svg width="30" height="30" viewBox="0 0 32 32" aria-hidden="true"><circle cx="21" cy="10" r="6" fill="#E2AE4C"/><circle cx="23.5" cy="8.5" r="5" fill="#0F1528"/><path d="M2 28 L11 13 L16 20 L20 15 L30 28 Z" fill="#6A9BEB" opacity=".9"/><path d="M11 13 L13.5 17 L11.5 16.2 L9.6 18 Z" fill="#E8E2D3"/></svg>`;
 const FAVICON = 'data:image/svg+xml,' + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="6" fill="#0F1528"/><circle cx="21" cy="10" r="6" fill="#E2AE4C"/><circle cx="23.5" cy="8.5" r="5" fill="#0F1528"/><path d="M2 28 L11 13 L16 20 L20 15 L30 28 Z" fill="#6A9BEB"/></svg>`);
 
-const NAV = [['/novinky', 'Novinky'], ['/navody', 'Návody'], ['/triedy', 'Triedy'], ['/rasy', 'Rasy'], ['/guildy', 'Guildy CZ/SK'], ['/o-nas', 'O webe']];
+// ---------- ikony ----------
+const svg = (inner, size = 18, extra = '') => `<svg width="${size}" height="${size}" viewBox="0 0 24 24" aria-hidden="true" ${extra}>${inner}</svg>`;
+const S = 'fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"';
+
+const NAV_ICON = {
+  novinky: svg(`<rect x="3" y="5" width="14" height="16" rx="1" ${S}/><line x1="7" y1="9" x2="13" y2="9" ${S}/><line x1="7" y1="13" x2="13" y2="13" ${S}/><line x1="7" y1="17" x2="11" y2="17" ${S}/><path d="M17 8h3a1 1 0 0 1 1 1v10a2 2 0 0 1-2 2h-2" ${S}/>`),
+  navody: svg(`<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" ${S}/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" ${S}/>`),
+  triedy: svg(`<path d="M12 2 20 5v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V5z" ${S}/>`),
+  rasy: svg(`<circle cx="9" cy="8" r="3.2" ${S}/><path d="M3 20c0-3.5 2.7-6 6-6s6 2.5 6 6" ${S}/><circle cx="17" cy="9" r="2.6" ${S}/><path d="M15.5 14.3c2.6.3 4.5 2.6 4.5 5.7" ${S}/>`),
+  guildy: svg(`<path d="M5 21V4" ${S}/><path d="M5 4l13 3-13 3" ${S}/>`),
+  'o-nas': svg(`<circle cx="12" cy="12" r="9" ${S}/><line x1="12" y1="11" x2="12" y2="16" ${S}/><circle cx="12" cy="7.6" r="1" fill="currentColor" stroke="none"/>`),
+};
+
+const CLASS_ICON = {
+  warrior: svg(`<g transform="rotate(45 12 12)"><line x1="12" y1="2" x2="12" y2="15" ${S}/><line x1="8.5" y1="15" x2="15.5" y2="15" ${S}/><line x1="12" y1="15" x2="12" y2="20" ${S}/><circle cx="12" cy="20.5" r="1.3" fill="currentColor"/></g>`, 22),
+  paladin: svg(`<rect x="7.5" y="2.5" width="9" height="5" rx="1" transform="rotate(45 12 5)" ${S}/><line x1="9.5" y1="8" x2="2" y2="21" ${S}/>`, 22),
+  hunter: svg(`<path d="M6 2C6 2 10 11.5 6 21" ${S}/><line x1="6" y1="2" x2="21" y2="17" ${S}/><path d="M17 13l4 4-4 4" ${S}/>`, 22),
+  rogue: svg(`<line x1="5" y1="20" x2="17" y2="8" ${S}/><path d="M14 5l5 5-3 1-2-2z" fill="currentColor" stroke="none"/><line x1="5" y1="20" x2="3" y2="22" ${S}/>`, 22),
+  priest: svg(`<circle cx="12" cy="12" r="8.5" ${S}/><line x1="12" y1="7.5" x2="12" y2="16.5" ${S}/><line x1="7.5" y1="12" x2="16.5" y2="12" ${S}/>`, 22),
+  shaman: svg(`<path d="M13 2 4 14h6l-1 8 10-13h-7l1-7z" fill="currentColor" stroke="none"/>`, 22),
+  mage: svg(`<path d="M12 2l2.2 7.3L21 11l-6.8 1.7L12 20l-2.2-7.3L3 11l6.8-1.7z" fill="currentColor" stroke="none"/>`, 22),
+  warlock: svg(`<path d="M12 2c2 3-1 4-1 7a3 3 0 1 0 6 0c0-1-.5-2-1-3 2 1.5 4 4.3 4 7.5a7 7 0 1 1-14 0C6 8 9 6 12 2z" fill="currentColor" stroke="none"/>`, 22),
+  druid: svg(`<path d="M4 20C4 10 12 4 20 4c0 8-6 16-16 16z" ${S}/><line x1="4" y1="20" x2="14" y2="10" ${S}/>`, 22),
+};
+
+const ROLE_ICON = {
+  Tank: svg(`<path d="M12 2 19 4.6v5.6c0 4.6-3.2 7.9-7 9.3-3.8-1.4-7-4.7-7-9.3V4.6z" ${S}/>`, 15),
+  Heal: svg(`<circle cx="12" cy="12" r="8.5" ${S}/><line x1="12" y1="8" x2="12" y2="16" ${S}/><line x1="8" y1="12" x2="16" y2="12" ${S}/>`, 15),
+  DPS: svg(`<g transform="rotate(45 12 12)"><line x1="12" y1="3" x2="12" y2="15" ${S}/><line x1="9" y1="15" x2="15" y2="15" ${S}/><line x1="12" y1="15" x2="12" y2="19" ${S}/></g>`, 15),
+};
+const roleIcons = (roles) => roles.map((r) => `<span class="role"><span class="ic">${ROLE_ICON[r] || ''}</span>${r}</span>`).join('');
+
+const FACTION_ICON = {
+  A: svg(`<path d="M12 2 20 5v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V5z" ${S}/><path d="M9 13c1-3 1-6 0-8M15 13c-1-3-1-6 0-8" ${S}/>`, 14),
+  H: svg(`<path d="M5 4l6 8-6 8M19 4l-6 8 6 8" ${S}/>`, 14),
+};
+
+const MENU = svg(`<line x1="3" y1="6" x2="21" y2="6" ${S}/><line x1="3" y1="12" x2="21" y2="12" ${S}/><line x1="3" y1="18" x2="21" y2="18" ${S}/>`, 22);
+
+const NAV = [['/novinky', 'Novinky', 'novinky'], ['/navody', 'Návody', 'navody'], ['/triedy', 'Triedy', 'triedy'], ['/rasy', 'Rasy', 'rasy'], ['/guildy', 'Guildy CZ/SK', 'guildy'], ['/o-nas', 'O webe', 'o-nas']];
 
 function page({ title, desc, path, body, origin, noindex }) {
   const full = title ? `${title} | WoW Forever SK` : 'WoW Forever SK – novinky, návody a guildy po slovensky';
   const d = desc || 'Slovenský fan web o World of Warcraft: Forever. Novinky, návody, triedy, rasy a adresár CZ/SK guild.';
-  const nav = NAV.map(([href, label]) => `<a href="${href}"${path === href || path.startsWith(href + '/') ? ' aria-current="page"' : ''}>${label}</a>`).join('');
+  const nav = NAV.map(([href, label, ic]) => `<a href="${href}"${path === href || path.startsWith(href + '/') ? ' aria-current="page"' : ''}><span class="ic">${NAV_ICON[ic]}</span>${label}</a>`).join('');
   return `<!doctype html><html lang="sk"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>${esc(full)}</title><meta name="description" content="${esc(d)}">
 <link rel="canonical" href="${origin}${path}"><meta property="og:title" content="${esc(full)}"><meta property="og:description" content="${esc(d)}"><meta property="og:type" content="website"><meta property="og:locale" content="sk_SK">
@@ -30,9 +69,14 @@ ${noindex ? '<meta name="robots" content="noindex">' : ''}
 <link href="https://fonts.googleapis.com/css2?family=Alegreya+Sans:ital,wght@0,400;0,500;0,700;1,400&family=Marcellus&display=swap&subset=latin-ext" rel="stylesheet">
 <style>${CSS}</style></head><body>
 <a class="skip" href="#obsah">Preskočiť na obsah</a>
-<header class="top"><div class="wrap"><a class="brand" href="/">${LOGO}WoW <span>Forever</span> SK</a><nav class="nav" aria-label="Hlavná navigácia">${nav}</nav></div></header>
+<header class="top"><div class="wrap">
+  <a class="brand" href="/">${LOGO}WoW <span>Forever</span> SK</a>
+  <button class="navtoggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Menu">${MENU}</button>
+  <nav class="nav" id="site-nav" aria-label="Hlavná navigácia">${nav}</nav>
+</div></header>
 <main id="obsah"><div class="wrap">${body}</div></main>
 <footer><div class="wrap"><div>WoW Forever SK je neoficiálny fanúšikovský web. Nie je spojený so spoločnosťou Blizzard Entertainment.</div><div>World of Warcraft a Blizzard Entertainment sú ochranné známky spoločnosti Blizzard Entertainment, Inc.</div></div></footer>
+<script>(()=>{const b=document.querySelector('.navtoggle'),n=document.getElementById('site-nav');if(!b||!n)return;b.addEventListener('click',()=>{const open=n.classList.toggle('open');b.setAttribute('aria-expanded',open?'true':'false');});n.addEventListener('click',e=>{if(e.target.tagName==='A')n.classList.remove('open');});})();</script>
 </body></html>`;
 }
 
@@ -81,7 +125,7 @@ function home(origin, now, guildRows) {
   <div>
     <h1>World of Warcraft: Forever po slovensky</h1>
     <p class="lead">Novinky, návody a adresár slovenských a českých guild pre novú verziu WoW, ktorá ostane na leveli 60 navždy.</p>
-    <div class="btns"><a class="btn primary" href="/guildy">Nájsť guildu</a><a class="btn ghost" href="/navody/ako-zacat">Ako začať</a></div>
+    <div class="btns"><a class="btn primary" href="/guildy"><span class="ic">${NAV_ICON.guildy}</span>Nájsť guildu</a><a class="btn ghost" href="/navody/ako-zacat"><span class="ic">${NAV_ICON.navody}</span>Ako začať</a></div>
   </div>
   ${questCard(now)}
 </section>
@@ -135,7 +179,7 @@ function racesForClass(slug) {
 }
 
 function classList(origin) {
-  const tiles = classes.map((c) => `<a class="tile" href="/triedy/${c.slug}" style="--c:${c.color}"><h3>${c.name}</h3><p>${c.sk[0].toUpperCase() + c.sk.slice(1)} · ${c.roles.join(', ')}</p></a>`).join('');
+  const tiles = classes.map((c) => `<a class="tile" href="/triedy/${c.slug}" style="--c:${c.color}"><div class="tile-head"><span class="badge" style="--c:${c.color}">${CLASS_ICON[c.slug] || ''}</span><h3>${c.name}</h3></div><p class="sub">${c.sk[0].toUpperCase() + c.sk.slice(1)}</p><p class="roles">${roleIcons(c.roles)}</p></a>`).join('');
   const body = `<h1>Triedy</h1><p class="lead">Deväť pôvodných tried. Vo Forever majú prepracované talenty, aby bola hrateľná každá špecializácia, a niektoré rasy dostali nové kombinácie.</p><div class="grid">${tiles}</div>
 <h2>Ktorá rasa môže hrať ktorú triedu</h2>${matrix()}`;
   return page({ title: 'Triedy', desc: 'Prehľad tried vo WoW Forever: úlohy v skupine a dostupné rasy.', path: '/triedy', body, origin });
@@ -157,8 +201,10 @@ function classDetail(c, origin) {
     const fac = r.faction === 'AH' ? '<span class="tag a">Aliancia</span><span class="tag h">Horda</span>' : `<span class="tag ${r.faction.toLowerCase()}">${FACTIONS[r.faction]}</span>`;
     return `<li><a href="/rasy#${r.slug}">${esc(r.name)}</a> ${fac}${r.newClasses.includes(c.slug) && r.slug !== 'skyborne' ? '<span class="tag new">nová kombinácia</span>' : ''}</li>`;
   }).join('');
-  const body = `<a class="back" href="/triedy">Späť na triedy</a><article class="prose"><h1 style="color:${c.color}">${c.name}</h1><p class="lead">${c.sk[0].toUpperCase() + c.sk.slice(1)}. ${esc(c.desc)}</p>
-<div class="tablewrap"><table><tbody><tr><th>Úloha v skupine</th><td>${c.roles.join(', ')}</td></tr><tr><th>Brnenie</th><td>${c.armor}</td></tr></tbody></table></div>
+  const body = `<a class="back" href="/triedy">Späť na triedy</a><article class="prose">
+<div class="detail-head"><span class="badge xl" style="--c:${c.color}">${CLASS_ICON[c.slug] || ''}</span><div><h1 style="color:${c.color};margin:0">${c.name}</h1><p class="sub" style="margin:.2em 0 0">${c.sk[0].toUpperCase() + c.sk.slice(1)}</p></div></div>
+<p class="lead">${esc(c.desc)}</p>
+<div class="tablewrap"><table><tbody><tr><th>Úloha v skupine</th><td class="roles">${roleIcons(c.roles)}</td></tr><tr><th>Brnenie</th><td>${c.armor}</td></tr></tbody></table></div>
 <h2>Rasy, ktoré môžu hrať ${c.name}</h2><ul>${rs}</ul>
 <p class="meta">Podrobný návod k talentom a rotácii doplníme po štarte, keď budú talenty z bety finálne.</p></article>`;
   return page({ title: `${c.name} (${c.sk})`, desc: `${c.name} vo WoW Forever: úloha v skupine, brnenie a dostupné rasy.`, path: `/triedy/${c.slug}`, body, origin });
@@ -166,8 +212,10 @@ function classDetail(c, origin) {
 
 function raceList(origin) {
   const tiles = races.map((r) => {
-    const fac = r.faction === 'AH' ? '<span class="tag a">Aliancia</span><span class="tag h">Horda</span>' : `<span class="tag ${r.faction.toLowerCase()}">${FACTIONS[r.faction]}</span>`;
-    const cls = r.classes.map((s) => `<span class="tag${r.newClasses.includes(s) && r.slug !== 'skyborne' ? ' new' : ''}">${classBySlug[s].name}</span>`).join('');
+    const fac = r.faction === 'AH'
+      ? `<span class="tag a">${FACTION_ICON.A}Aliancia</span><span class="tag h">${FACTION_ICON.H}Horda</span>`
+      : `<span class="tag ${r.faction.toLowerCase()}">${FACTION_ICON[r.faction]}${FACTIONS[r.faction]}</span>`;
+    const cls = r.classes.map((s) => `<span class="tag cls${r.newClasses.includes(s) && r.slug !== 'skyborne' ? ' new' : ''}"><span class="ic">${CLASS_ICON[s] || ''}</span>${classBySlug[s].name}</span>`).join('');
     return `<div class="tile" id="${r.slug}" style="--c:${r.faction === 'A' ? 'var(--alliance)' : r.faction === 'H' ? 'var(--horde)' : 'var(--gold)'}"><h3>${esc(r.name)}</h3><p>Štart: ${esc(r.start)}</p><div>${fac}</div><div>${cls}</div>${r.note ? `<p style="margin-top:8px">${esc(r.note)}</p>` : ''}</div>`;
   }).join('');
   const body = `<h1>Rasy</h1><p class="lead">Osem pôvodných rás a nová rasa Skyborne, ktorá si frakciu vyberá sama. Zlatou sú označené nové kombinácie rasy a triedy.</p><div class="grid">${tiles}</div><p class="meta" style="margin-top:20px">Podľa Warcraft Wiki k 8. 10. 2026, počas bety sa ešte môže zmeniť. Viac o Skyborne v <a href="/novinky/skyborne-nova-rasa">článku</a>.</p>`;
