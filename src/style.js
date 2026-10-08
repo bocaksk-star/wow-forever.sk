@@ -352,7 +352,7 @@ select:focus,input:focus,textarea:focus{border-color:var(--gold);outline:none;bo
 .hp{position:absolute;left:-9999px}
 .notice{border-left:3px solid var(--gold);background:var(--surface);padding:14px 18px;border-radius:0 6px 6px 0;margin:16px 0}
 .notice.err{border-color:var(--horde)}
-button.btn{cursor:pointer;font-family:inherit}
+button.btn{cursor:pointer;font-family:inherit;background:none}
 
 /* Zdroje a pätička */
 .sources{margin-top:2.5em;padding-top:1em;border-top:1px solid var(--line);font-size:.95rem;color:var(--muted)}
