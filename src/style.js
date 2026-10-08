@@ -107,8 +107,19 @@ main{padding:40px 0 80px}
     linear-gradient(100deg, rgba(8,11,22,.88) 0%, rgba(8,11,22,.6) 32%, rgba(8,11,22,.18) 58%, rgba(8,11,22,.1) 100%)}
 .hero-grid{position:relative;z-index:2;max-width:1400px;margin:0 auto;padding:0 32px;display:grid;grid-template-columns:1.15fr .85fr;gap:64px;align-items:center}
 @media (max-width:900px){.hero{padding:48px 0}.hero-grid{grid-template-columns:1fr;gap:28px;padding:0 18px}}
-.hero h1{font-size:clamp(2.6rem,6vw,4.4rem);line-height:1.04;margin-bottom:.35em;text-shadow:0 2px 24px rgba(0,0,0,.5)}
 .hero .lead{margin-bottom:1.2em;font-size:1.35rem;max-width:42ch}
+
+/* Centrálne logo/znak webu v hero sekcii */
+.hero-emblem{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;text-align:center;gap:10px;max-width:1400px;margin:0 auto 40px;padding:0 32px}
+@media (max-width:900px){.hero-emblem{padding:0 18px;margin-bottom:28px}}
+.crest-badge{filter:drop-shadow(0 8px 20px rgba(0,0,0,.5))}
+.hero-emblem h1{display:flex;align-items:flex-end;justify-content:center;gap:16px;margin:4px 0 0;font-family:var(--display);font-weight:400;
+  font-size:clamp(1.9rem,4.4vw,3.1rem);letter-spacing:.02em;color:var(--text);text-shadow:0 2px 24px rgba(0,0,0,.5)}
+.hero-emblem h1 em{font-style:normal;background:linear-gradient(180deg, var(--gold-soft), var(--gold));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero-emblem h1 b{font-weight:400;font-size:.38em;letter-spacing:.16em;color:var(--gold-soft);align-self:center;margin-left:2px;padding:3px 9px;border:1px solid rgba(226,174,76,.5);border-radius:6px;background:rgba(226,174,76,.08)}
+.hero-emblem .rule{display:inline-flex;color:var(--gold);opacity:.75;align-self:center}
+.hero-tagline{margin:2px 0 0;color:var(--muted);font-size:1.02rem;letter-spacing:.03em}
+@media (max-width:640px){.hero-emblem h1{flex-wrap:wrap;gap:8px 10px}.hero-emblem .rule{display:none}}
 .btns{display:flex;gap:12px;flex-wrap:wrap}
 .btn{display:inline-flex;align-items:center;gap:8px;padding:12px 20px;border-radius:6px;font-weight:700;text-decoration:none;font-size:1.05rem;border:1px solid var(--gold);transition:background .15s,transform .15s,box-shadow .15s}
 .btn.primary{background:var(--gold);color:#1A1306}

@@ -99,6 +99,30 @@ ${[[90,60,.9],[180,110,.6],[260,50,.7],[340,140,.5],[420,80,.8],[520,40,.6],[610
 </svg>`;
 }
 
+// Hlavný znak webu — pôvodný medailón (mesiac nad horami), nie je prevzatý z Blizzardu.
+function crestBadge() {
+  return `<svg width="120" height="120" viewBox="0 0 120 120" aria-hidden="true">
+<defs>
+  <radialGradient id="crestGlow" cx="50%" cy="38%" r="62%"><stop offset="0%" stop-color="#E2AE4C" stop-opacity=".38"/><stop offset="100%" stop-color="#E2AE4C" stop-opacity="0"/></radialGradient>
+  <linearGradient id="crestRim" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#F0CB82"/><stop offset="100%" stop-color="#A9802F"/></linearGradient>
+  <clipPath id="crestClip"><circle cx="60" cy="60" r="50"/></clipPath>
+</defs>
+<circle cx="60" cy="60" r="58" fill="url(#crestGlow)"/>
+<g clip-path="url(#crestClip)">
+  <circle cx="60" cy="60" r="50" fill="#121833"/>
+  <circle cx="68" cy="40" r="20" fill="#F3E6C4"/>
+  <circle cx="74" cy="35" r="16.5" fill="#121833"/>
+  <circle cx="40" cy="26" r="1.4" fill="#F3E6C4" opacity=".7"/><circle cx="90" cy="20" r="1" fill="#F3E6C4" opacity=".6"/><circle cx="98" cy="46" r="1.2" fill="#F3E6C4" opacity=".6"/>
+  <path d="M8 96 L34 48 50 72 66 54 84 66 112 96Z" fill="#6A9BEB"/>
+  <path d="M34 48 L40 58 36 56 30 64Z" fill="#E8E2D3" opacity=".9"/>
+  <path d="M66 54 L71 62 68 60.5 63 66Z" fill="#E8E2D3" opacity=".75"/>
+</g>
+<circle cx="60" cy="60" r="50" fill="none" stroke="url(#crestRim)" stroke-width="2.4"/>
+<circle cx="60" cy="60" r="44.5" fill="none" stroke="#E2AE4C" stroke-width="1" opacity=".4"/>
+<g fill="#E2AE4C"><circle cx="60" cy="7.5" r="2.3"/><circle cx="60" cy="112.5" r="2.3"/><circle cx="7.5" cy="60" r="2.3"/><circle cx="112.5" cy="60" r="2.3"/></g>
+</svg>`;
+}
+
 const DIVIDER = svg(`<path d="M2 12 L9 12" ${S}/><path d="M23 12 L16 12" ${S}/><path d="M12 7 L15 12 12 17 9 12Z" fill="currentColor" stroke="none"/>`, 24, 'class="ornament"');
 
 // Samostatná ilustrácia pre fixné pozadie: veža na útese, polár. žiara, drak na oblohe.
@@ -309,9 +333,13 @@ function home(origin, now, guildRows, recruitCount = 0, pd = { counts: {}, mine:
 <section class="hero">
   <div class="hero-bg">${heroArt()}</div>
   <div class="hero-fade"></div>
+  <div class="hero-emblem">
+    <div class="crest-badge">${crestBadge()}</div>
+    <h1><span class="rule">${DIVIDER}</span>WoW <em>Forever</em><b>SK</b><span class="rule">${DIVIDER}</span></h1>
+    <p class="hero-tagline">World of Warcraft: Forever po slovensky</p>
+  </div>
   <div class="hero-grid">
   <div>
-    <h1>World of Warcraft: Forever po slovensky</h1>
     <p class="lead">Novinky, návody a adresár slovenských a českých guild pre novú verziu WoW, ktorá ostane na leveli 60 navždy.</p>
     <div class="btns"><a class="btn primary" href="/guildy"><span class="ic">${NAV_ICON.guildy}</span>Nájsť guildu</a><a class="btn ghost" href="/navody/ako-zacat"><span class="ic">${NAV_ICON.navody}</span>Ako začať</a></div>
   </div>
