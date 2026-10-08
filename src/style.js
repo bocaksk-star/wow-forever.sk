@@ -285,7 +285,7 @@ td.roles{padding-top:12px}
 .matrix td.no{color:var(--line)}
 .matrix th:first-child,.matrix td:first-child{white-space:nowrap}
 
-/* Kalkulačka talentov */
+/* Talent calculator */
 .btn.sm{padding:7px 14px;font-size:.92rem;border-radius:5px}
 .tcal{margin-top:20px}
 .tcal-tabs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:18px;border-bottom:1px solid var(--line);padding-bottom:14px}
@@ -299,19 +299,23 @@ td.roles{padding-top:12px}
 .tcal-trees{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
 @media (max-width:900px){.tcal-trees{grid-template-columns:1fr}}
 .ttree{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 14px 18px}
-.ttree-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--line)}
+.ttree-head{display:flex;align-items:center;gap:9px;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--line)}
+.ttree-head .ic{color:var(--gold);flex:none;opacity:.9}
 .ttree-head h3{margin:0;font-size:1.08rem;color:var(--gold-soft)}
-.ttree-head span{color:var(--muted);font-size:.92rem}
+.ttree-head span:last-child{margin-left:auto;color:var(--muted);font-size:.92rem}
 .ttier-wrap{display:grid;gap:8px}
 .ttier{display:flex;flex-wrap:wrap;gap:8px}
 .tnode{flex:1 1 130px;min-width:120px;display:grid;gap:3px;text-align:left;background:var(--surface-2);border:1px solid var(--line);border-radius:7px;padding:8px 10px;color:var(--text);font:inherit;cursor:pointer;transition:border-color .15s,background .15s,opacity .15s}
 .tnode:hover:not(.locked){border-color:var(--gold-soft)}
-.tnode .tn-name{font-size:.86rem;font-weight:600;line-height:1.25}
+.tnode .tn-name{font-size:.86rem;font-weight:600;line-height:1.25;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
 .tnode .tn-pips{color:var(--gold);letter-spacing:1px;font-size:.78rem}
 .tnode .tn-rank{color:var(--muted);font-size:.78rem}
 .tnode.filled{border-color:var(--gold);background:color-mix(in srgb, var(--gold) 12%, var(--surface-2))}
 .tnode.locked{opacity:.4;cursor:not-allowed}
 .tnode.locked .tn-pips{color:var(--line)}
+.tnode-new{border-style:dashed;border-color:color-mix(in srgb, var(--gold) 55%, var(--line))}
+.tn-badge{font-size:.62rem;font-weight:700;letter-spacing:.04em;color:var(--night);background:var(--gold);border-radius:99px;padding:1px 6px;line-height:1.4}
+b.gold{color:var(--gold-soft)}
 
 /* Odporúčané buildy */
 .build-card{margin-top:34px;padding-top:28px;border-top:1px solid var(--line)}
