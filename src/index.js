@@ -1,6 +1,6 @@
 import { CSS } from './style.js';
 import { news, guides, classes, races, polls, LAUNCH_UTC, RAIDS_DATE } from './content.js';
-import { TALENT_TREES, greedyAllocate, BUILD_PLAN } from './talents.js';
+import { TALENT_TREES, greedyAllocate, BUILD_PLAN, FOREVER_CHANGES } from './talents.js';
 
 // ---------- pomocné ----------
 const MES = ['januára','februára','marca','apríla','mája','júna','júla','augusta','septembra','októbra','novembra','decembra'];
@@ -45,16 +45,56 @@ const GUIDE_ICON = {
 };
 const guideIcon = (slug) => GUIDE_ICON[slug] || svg(`<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" ${S}/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" ${S}/>`, 20);
 
+// Polished badge-style class icons: a ringed medallion (shared backdrop) around an original
+// thematic glyph per class — richer silhouettes than plain line art, still hand-drawn SVG paths.
+const badge = (glyph, size = 24) => svg(`<circle cx="12" cy="12" r="10.6" fill="currentColor" opacity=".07"/><circle cx="12" cy="12" r="10.6" fill="none" stroke="currentColor" stroke-width="1.1" opacity=".5"/>${glyph}`, size);
 const CLASS_ICON = {
-  warrior: svg(`<g transform="rotate(45 12 12)"><line x1="12" y1="2" x2="12" y2="15" ${S}/><line x1="8.5" y1="15" x2="15.5" y2="15" ${S}/><line x1="12" y1="15" x2="12" y2="20" ${S}/><circle cx="12" cy="20.5" r="1.3" fill="currentColor"/></g>`, 22),
-  paladin: svg(`<rect x="7.5" y="2.5" width="9" height="5" rx="1" transform="rotate(45 12 5)" ${S}/><line x1="9.5" y1="8" x2="2" y2="21" ${S}/>`, 22),
-  hunter: svg(`<path d="M6 2C6 2 10 11.5 6 21" ${S}/><line x1="6" y1="2" x2="21" y2="17" ${S}/><path d="M17 13l4 4-4 4" ${S}/>`, 22),
-  rogue: svg(`<line x1="5" y1="20" x2="17" y2="8" ${S}/><path d="M14 5l5 5-3 1-2-2z" fill="currentColor" stroke="none"/><line x1="5" y1="20" x2="3" y2="22" ${S}/>`, 22),
-  priest: svg(`<circle cx="12" cy="12" r="8.5" ${S}/><line x1="12" y1="7.5" x2="12" y2="16.5" ${S}/><line x1="7.5" y1="12" x2="16.5" y2="12" ${S}/>`, 22),
-  shaman: svg(`<path d="M13 2 4 14h6l-1 8 10-13h-7l1-7z" fill="currentColor" stroke="none"/>`, 22),
-  mage: svg(`<path d="M12 2l2.2 7.3L21 11l-6.8 1.7L12 20l-2.2-7.3L3 11l6.8-1.7z" fill="currentColor" stroke="none"/>`, 22),
-  warlock: svg(`<path d="M12 2c2 3-1 4-1 7a3 3 0 1 0 6 0c0-1-.5-2-1-3 2 1.5 4 4.3 4 7.5a7 7 0 1 1-14 0C6 8 9 6 12 2z" fill="currentColor" stroke="none"/>`, 22),
-  druid: svg(`<path d="M4 20C4 10 12 4 20 4c0 8-6 16-16 16z" ${S}/><line x1="4" y1="20" x2="14" y2="10" ${S}/>`, 22),
+  warrior: badge(`<g stroke-linecap="round" stroke-linejoin="round">
+    <path d="M7.2 4.6 11 8.4 8.6 10.8 4.8 7z" fill="currentColor" stroke="none"/>
+    <line x1="8.6" y1="10.8" x2="16.5" y2="18.7" ${S} stroke-width="2"/>
+    <path d="M16.8 4.6 13 8.4 15.4 10.8 19.2 7z" fill="currentColor" stroke="none" opacity=".85"/>
+    <line x1="15.4" y1="10.8" x2="7.5" y2="18.7" ${S} stroke-width="2" opacity=".85"/>
+    <circle cx="12" cy="13.8" r="1.1" fill="currentColor" stroke="none"/>
+  </g>`),
+  paladin: badge(`<g stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 3.4v2.6M8.4 5.3l1.6 2M15.6 5.3l-1.6 2" ${S}/>
+    <rect x="7.6" y="7.2" width="8.8" height="4.6" rx="1" fill="currentColor" stroke="none"/>
+    <line x1="12" y1="11.8" x2="12" y2="20" ${S} stroke-width="2.1"/>
+  </g>`),
+  hunter: badge(`<g stroke-linecap="round" stroke-linejoin="round">
+    <path d="M6.3 4C5.5 9 5.5 15 6.3 20" ${S}/>
+    <path d="M6.3 4c5 1.8 7.4 6 7.4 8s-2.4 6.2-7.4 8" ${S}/>
+    <line x1="6.3" y1="12" x2="18.5" y2="12" ${S}/>
+    <path d="M16 9.3 19.3 12 16 14.7z" fill="currentColor" stroke="none"/>
+  </g>`),
+  rogue: badge(`<g stroke-linecap="round" stroke-linejoin="round">
+    <line x1="5.2" y1="18.5" x2="13.8" y2="6.3" ${S} stroke-width="1.8"/>
+    <path d="M11.6 5 15.6 4l1 4-2.9 1.6-2.4-2z" fill="currentColor" stroke="none"/>
+    <path d="M5.2 18.5 7 16.3" ${S} stroke-width="1.8"/>
+    <line x1="18.8" y1="18.5" x2="10.2" y2="6.3" ${S} stroke-width="1.8" opacity=".85"/>
+    <path d="M12.4 5 8.4 4l-1 4 2.9 1.6 2.4-2z" fill="currentColor" stroke="none" opacity=".85"/>
+    <path d="M18.8 18.5 17 16.3" ${S} stroke-width="1.8" opacity=".85"/>
+  </g>`),
+  priest: badge(`<g stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="5.6" fill="currentColor" opacity=".12"/>
+    <path d="M12 4.8v3.4M12 15.8v3.4M4.8 12h3.4M15.8 12h3.4M6.9 6.9l2.4 2.4M14.7 14.7l2.4 2.4M17.1 6.9l-2.4 2.4M9.3 14.7l-2.4 2.4" ${S}/>
+    <circle cx="12" cy="12" r="2.3" fill="currentColor" stroke="none"/>
+  </g>`),
+  shaman: badge(`<g stroke-linecap="round" stroke-linejoin="round">
+    <path d="M13.4 3.6 7 13h4.3l-1.1 7.4L17.2 11h-4.3z" fill="currentColor" stroke="none"/>
+    <path d="M6 19.4c1.6-1 4-1 6 0 2-1 4.4-1 6 0" ${S} opacity=".6"/>
+  </g>`),
+  mage: badge(`<g stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="7.6" ${S} opacity=".45"/>
+    <path d="M12 5.5 13.6 10.4 18.5 12 13.6 13.6 12 18.5 10.4 13.6 5.5 12 10.4 10.4z" fill="currentColor" stroke="none"/>
+  </g>`),
+  warlock: badge(`<g stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 4c2.3 2.8-.8 3.8-.8 6.5a2.8 2.8 0 1 0 5.6 0c0-1-.5-1.8-1-2.6 2 1.6 3.5 4 3.5 6.7a7.3 7.3 0 1 1-14.6 0C4.7 10 8 7 12 4z" fill="currentColor" stroke="none"/>
+    <path d="M9.4 15.6q2.6 2 5.2 0" ${S} opacity=".6"/>
+  </g>`),
+  druid: badge(`<g stroke-linecap="round" stroke-linejoin="round">
+    <path d="M20.3 14.1A8.4 8.4 0 1 1 10.3 4.1a6.5 6.5 0 0 0 10 10z" fill="currentColor" stroke="none"/>
+  </g>`),
 };
 
 // Vlastné originálne ikony pre vetvy talentovej kalkulačky (jedna na tematický kľúč, zdieľaná naprieč triedami).
@@ -586,19 +626,24 @@ function talentCalc(origin) {
     const trees = data.trees.map((tree, ti) => {
       const maxTier = Math.max(...tree.talents.map((t) => t.t));
       const tiers = Array.from({ length: maxTier + 1 }, (_, tier) => {
-        const nodes = tree.talents.map((tal, idx) => (tal.t !== tier ? '' : `<button type="button" class="tnode${tal.nf ? ' tnode-new' : ''}" data-tree="${ti}" data-idx="${idx}" data-max="${tal.max}" data-tier="${tier}" data-rank="0" title="${esc(tal.d)}"><span class="tn-name">${esc(tal.name)}${tal.nf ? '<span class="tn-badge">New</span>' : ''}</span><span class="tn-pips">${'○'.repeat(tal.max)}</span><span class="tn-rank">0/${tal.max}</span></button>`)).join('');
+        const nodes = tree.talents.map((tal, idx) => (tal.t !== tier ? '' : `<button type="button" class="tnode" data-tree="${ti}" data-idx="${idx}" data-max="${tal.max}" data-tier="${tier}" data-rank="0" title="${esc(tal.d)}"><span class="tn-name">${esc(tal.name)}</span><span class="tn-pips">${'○'.repeat(tal.max)}</span><span class="tn-rank">0/${tal.max}</span></button>`)).join('');
         return `<div class="ttier">${nodes}</div>`;
       }).join('');
       return `<div class="ttree" data-tree-panel="${ti}"><div class="ttree-head"><span class="ic">${TREE_ICON[tree.icon] || ''}</span><h3>${esc(tree.name)}</h3><span data-tree-points="${ti}">0</span></div><div class="ttier-wrap">${tiers}</div></div>`;
     }).join('');
+    const fc = FOREVER_CHANGES[c.slug];
+    const changesHtml = fc ? `<div class="tcal-changes"><h4>Forever zmeny — ${esc(fc.label)} <span class="meta">(${esc(fc.source)})</span></h4><ul>${fc.points.map((p) => `<li>${esc(p)}</li>`).join('')}</ul></div>` : '';
     return `<div class="tcal-panel" data-class-panel="${c.slug}"${ci === 0 ? '' : ' hidden'}>
 <div class="tcal-summary"><div><b data-total-points>0</b> / 51 points · recommended level <b data-total-level>10</b></div><div class="tcal-actions"><button type="button" class="btn ghost sm" data-reset-all><span class="ic">${RESET_ICON}</span>Reset</button><button type="button" class="btn ghost sm" data-copy-link><span class="ic">${LINK_ICON}</span>Copy link</button></div></div>
 <div class="tcal-trees">${trees}</div>
+${changesHtml}
 </div>`;
   }).join('');
+  const generalChanges = FOREVER_CHANGES.general;
   const body = `<h1>Talent Calculator</h1><p class="lead">Our own talent calculator for World of Warcraft: Forever — spend 51 points across three trees for any class and share your build with a link. Click to add a point, Shift+click or right-click to remove one.</p>
+<div class="tcal-changes" style="margin-bottom:18px"><h4>Forever zmeny — ${esc(generalChanges.label)} <span class="meta">(${esc(generalChanges.source)})</span></h4><ul>${generalChanges.points.map((p) => `<li>${esc(p)}</li>`).join('')}</ul></div>
 <div class="tcal"><div class="tcal-tabs" role="tablist">${tabs}</div>${panels}</div>
-<p class="meta" style="margin-top:20px">Talents tagged <b class="gold">New</b> are abilities Forever folded back into the talent trees to make every spec viable — they were not part of vanilla WoW. The rest of the data is our own condensed summary of the classic talent mechanics, not taken from Blizzard. See also the <a href="/navody/buildy">recommended builds</a> (in Slovak).</p>
+<p class="meta" style="margin-top:20px">Talent trees below are vanilla WoW's own trees, which Forever hasn't changed. Each class tab also lists the real Forever-specific changes we found on <a href="https://wowforever.sk" target="_blank" rel="noopener">wowforever.sk</a> itself — some classes have a detailed write-up, others only a short beta overview so far. See also the <a href="/navody/buildy">recommended builds</a> (in Slovak).</p>
 <script>(()=>{
 const root=document.querySelector('.tcal');
 if(!root) return;

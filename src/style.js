@@ -313,9 +313,10 @@ td.roles{padding-top:12px}
 .tnode.filled{border-color:var(--gold);background:color-mix(in srgb, var(--gold) 12%, var(--surface-2))}
 .tnode.locked{opacity:.4;cursor:not-allowed}
 .tnode.locked .tn-pips{color:var(--line)}
-.tnode-new{border-style:dashed;border-color:color-mix(in srgb, var(--gold) 55%, var(--line))}
-.tn-badge{font-size:.62rem;font-weight:700;letter-spacing:.04em;color:var(--night);background:var(--gold);border-radius:99px;padding:1px 6px;line-height:1.4}
-b.gold{color:var(--gold-soft)}
+.tcal-changes{background:var(--surface);border:1px solid var(--line);border-left:3px solid var(--gold);border-radius:8px;padding:14px 18px;margin-top:16px}
+.tcal-changes h4{margin:0 0 8px;font-size:.98rem;color:var(--gold-soft)}
+.tcal-changes h4 .meta{font-weight:400;font-size:.78rem}
+.tcal-changes ul{margin:0;padding-left:20px;display:grid;gap:5px;font-size:.92rem;color:var(--muted)}
 
 /* Odporúčané buildy */
 .build-card{margin-top:34px;padding-top:28px;border-top:1px solid var(--line)}

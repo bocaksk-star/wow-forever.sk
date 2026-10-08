@@ -1,9 +1,11 @@
 // Our own talent calculator for WoW Forever — data is our condensed summary of the real
 // classic talent trees (facts about the game, not text or icons taken from Blizzard).
-// Each tree has 6 base tiers, unlocking every 5 points spent in that tree (0/5/10/15/20/25),
-// plus one deeper tier-6 "New in Forever" capstone per tree (unlocks at 30) — a real post-vanilla
-// ability folded back in, matching the site's premise that Forever reworked talents so every
-// spec is viable. Format: { t: tier, name, max: maxRank, d: short effect, nf?: true for "new in Forever" }
+// Each tree has 6 base tiers, unlocking every 5 points spent in that tree (0/5/10/15/20/25).
+// Format: { t: tier, name, max: maxRank, d: short effect }
+//
+// The talent trees below are vanilla's own trees — that part of the game Forever hasn't touched.
+// What Forever actually changes per class is tracked separately in FOREVER_CHANGES, sourced from
+// wowforever.sk's own news posts and class beta-overview pages, not guessed.
 
 export const TALENT_TREES = {
   warrior: {
@@ -20,7 +22,6 @@ export const TALENT_TREES = {
         { t: 4, name: 'Weapon Mastery', max: 5, d: '+1% damage per rank with one-handed weapons.' },
         { t: 4, name: 'Tactical Mastery', max: 5, d: 'Keep more rage when switching stances.' },
         { t: 5, name: 'Mortal Strike', max: 1, d: 'A vicious strike that reduces healing received by the target for 10 sec.' },
-        { t: 6, nf: true, name: 'Bladestorm', max: 1, d: 'New in Forever — spin into a whirlwind of steel, striking all nearby enemies for several seconds.' },
       ] },
       { key: 'fury', name: 'Fury', icon: 'flame-fist', talents: [
         { t: 0, name: 'Booming Voice', max: 5, d: '+ radius and duration of your shout effects.' },
@@ -34,7 +35,6 @@ export const TALENT_TREES = {
         { t: 4, name: 'Enrage', max: 5, d: 'Taking damage has a chance to increase your damage done for a few seconds.' },
         { t: 4, name: 'Death Wish', max: 1, d: '+20% physical damage, but also increased damage taken, for 30 sec.' },
         { t: 5, name: 'Flurry', max: 5, d: 'After a critical strike, attack speed is increased for your next few swings.' },
-        { t: 6, nf: true, name: 'Raging Blow', max: 1, d: 'New in Forever — an instant strike only usable while enraged, dealing heavy extra damage.' },
       ] },
       { key: 'prot', name: 'Protection', icon: 'shield', talents: [
         { t: 0, name: 'Improved Bloodrage', max: 2, d: 'Bloodrage also heals you for a small amount.' },
@@ -48,7 +48,6 @@ export const TALENT_TREES = {
         { t: 4, name: 'Last Stand', max: 1, d: 'Temporarily increases maximum health by 30%.' },
         { t: 4, name: 'One-Handed Weapon Specialization', max: 5, d: '+1% damage per rank with one-handed weapons while using a shield.' },
         { t: 5, name: 'Shield Slam', max: 1, d: 'Slams the target with your shield, dealing damage based on your block value.' },
-        { t: 6, nf: true, name: 'Shockwave', max: 1, d: 'New in Forever — sends a shockwave in front of you, stunning and damaging all enemies hit.' },
       ] },
     ],
   },
@@ -65,7 +64,6 @@ export const TALENT_TREES = {
         { t: 3, name: 'Holy Power', max: 5, d: '+1% critical strike chance with healing spells per rank.' },
         { t: 4, name: 'Blessed Recovery', max: 3, d: 'After being critically hit, heal yourself over 3 sec.' },
         { t: 5, name: 'Holy Shock', max: 1, d: 'An instant holy nova that heals an ally or damages an enemy.' },
-        { t: 6, nf: true, name: 'Beacon of Light', max: 1, d: 'New in Forever — your heals on the target also heal a beaconed ally, sharing the load across the raid.' },
       ] },
       { key: 'prot', name: 'Protection', icon: 'shield', talents: [
         { t: 0, name: 'Redoubt', max: 5, d: 'After blocking, +chance to block for a few seconds.' },
@@ -78,7 +76,6 @@ export const TALENT_TREES = {
         { t: 3, name: 'Guardian\'s Favor', max: 2, d: '+ range and -cooldown on Hand of Freedom/Protection.' },
         { t: 4, name: 'Reckoning', max: 5, d: 'Chance for an extra melee attack when you are struck in combat.' },
         { t: 5, name: 'Holy Shield', max: 1, d: '+ block chance, and blocked attacks damage the attacker.' },
-        { t: 6, nf: true, name: 'Avenger\'s Shield', max: 1, d: 'New in Forever — hurls a holy shield that damages and silences several enemies.' },
       ] },
       { key: 'ret', name: 'Retribution', icon: 'warhammer', talents: [
         { t: 0, name: 'Benediction', max: 5, d: '-1% mana cost of your spells per rank.' },
@@ -91,7 +88,6 @@ export const TALENT_TREES = {
         { t: 3, name: 'Crusade', max: 5, d: '+ damage and healing done against Humans, Orcs, Demons and Undead.' },
         { t: 4, name: 'Sanctity Aura', max: 1, d: 'An aura that increases holy damage done by the party.' },
         { t: 5, name: 'Repentance', max: 1, d: 'Puts the target in a state of stasis for a short time.' },
-        { t: 6, nf: true, name: 'Divine Storm', max: 1, d: 'New in Forever — a holy whirlwind that strikes nearby enemies and heals the lowest-health ally near you.' },
       ] },
     ],
   },
@@ -108,7 +104,6 @@ export const TALENT_TREES = {
         { t: 3, name: 'Frenzy', max: 5, d: 'After a critical strike, your pet\'s attack speed increases for a few seconds.' },
         { t: 4, name: 'Bestial Swiftness', max: 1, d: '+ your pet\'s movement speed.' },
         { t: 5, name: 'Bestial Wrath', max: 1, d: 'Your pet goes berserk, dealing much more damage and becoming immune to crowd control for 18 sec.' },
-        { t: 6, nf: true, name: 'Call of the Wild', max: 1, d: 'New in Forever — you and your pet both roar, boosting the attack power of the whole party for a short time.' },
       ] },
       { key: 'mm', name: 'Marksmanship', icon: 'bow', talents: [
         { t: 0, name: 'Improved Concussive Shot', max: 2, d: '+ snare duration from Concussive Shot.' },
@@ -121,7 +116,6 @@ export const TALENT_TREES = {
         { t: 3, name: 'Improved Serpent Sting', max: 3, d: 'Serpent Sting lasts longer.' },
         { t: 4, name: 'Barrage', max: 5, d: '-threat generated by your ranged attacks.' },
         { t: 5, name: 'Trueshot Aura', max: 1, d: 'An aura that boosts the attack power of your whole party.' },
-        { t: 6, nf: true, name: 'Chimera Shot', max: 1, d: 'New in Forever — a shot that refreshes Serpent Sting and deals bonus damage based on it.' },
       ] },
       { key: 'surv', name: 'Survival', icon: 'trap', talents: [
         { t: 0, name: 'Monster Slaying', max: 3, d: '+ damage against Beasts and Dragonkin.' },
@@ -134,7 +128,6 @@ export const TALENT_TREES = {
         { t: 3, name: 'Improved Feign Death', max: 2, d: '+ success chance on Feign Death.' },
         { t: 4, name: 'Counterattack', max: 1, d: 'After a dodge or parry, your next attack lands for extra damage.' },
         { t: 5, name: 'Wyvern Sting', max: 1, d: 'A sting that puts the target to sleep and causes damage over time if it wakes early.' },
-        { t: 6, nf: true, name: 'Explosive Shot', max: 1, d: 'New in Forever — fires a shot that explodes for heavy damage over the next few seconds.' },
       ] },
     ],
   },
@@ -151,7 +144,6 @@ export const TALENT_TREES = {
         { t: 3, name: 'Improved Poisons', max: 4, d: '+4% chance to apply your poisons per rank.' },
         { t: 4, name: 'Vigor', max: 1, d: '+ maximum energy.' },
         { t: 5, name: 'Seal Fate', max: 5, d: 'Critical strikes that award combo points grant an extra combo point.' },
-        { t: 6, nf: true, name: 'Mutilate', max: 1, d: 'New in Forever — a vicious double stab from stealth that always strikes with both weapons.' },
       ] },
       { key: 'combat', name: 'Combat', icon: 'twin-blades', talents: [
         { t: 0, name: 'Improved Sinister Strike', max: 3, d: '-energy cost of Sinister Strike.' },
@@ -164,7 +156,6 @@ export const TALENT_TREES = {
         { t: 3, name: 'Riposte', max: 1, d: 'A powerful counterattack available after a successful parry.' },
         { t: 4, name: 'Adrenaline Rush', max: 1, d: 'Doubles your energy regeneration for a short time.' },
         { t: 5, name: 'Blade Twisting', max: 2, d: '+ armor penetration with your weapons.' },
-        { t: 6, nf: true, name: 'Killing Spree', max: 1, d: 'New in Forever — blink between nearby enemies, striking each one with both weapons.' },
       ] },
       { key: 'sub', name: 'Subtlety', icon: 'mask', talents: [
         { t: 0, name: 'Improved Gouge', max: 2, d: '+ duration of Gouge.' },
@@ -177,7 +168,6 @@ export const TALENT_TREES = {
         { t: 3, name: 'Hemorrhage', max: 1, d: 'A strike that causes the target to bleed, increasing further damage taken.' },
         { t: 4, name: 'Improved Vanish', max: 2, d: 'Vanish removes more negative effects.' },
         { t: 5, name: 'Elusiveness', max: 2, d: '-cooldown on Cloak of Shadows and Vanish.' },
-        { t: 6, nf: true, name: 'Shadowstep', max: 1, d: 'New in Forever — teleport behind your target in an instant, ready to strike.' },
       ] },
     ],
   },
@@ -194,7 +184,6 @@ export const TALENT_TREES = {
         { t: 3, name: 'Power Infusion', max: 1, d: 'Temporarily increases the target\'s casting speed and reduces mana costs.' },
         { t: 4, name: 'Focused Will', max: 3, d: 'After being critically hit, take less damage for a few seconds.' },
         { t: 5, name: 'Inner Focus', max: 1, d: 'Your next spell costs no mana and has a greater effect.' },
-        { t: 6, nf: true, name: 'Penance', max: 1, d: 'New in Forever — a channeled bolt of holy energy that heals an ally or damages an enemy in three quick volleys.' },
       ] },
       { key: 'holy', name: 'Holy', icon: 'sunburst', talents: [
         { t: 0, name: 'Healing Focus', max: 5, d: 'Chance not to be interrupted while healing.' },
@@ -207,7 +196,6 @@ export const TALENT_TREES = {
         { t: 3, name: 'Holy Reach', max: 2, d: '+ radius of your party-wide spells.' },
         { t: 4, name: 'Lightwell', max: 1, d: 'Summons a well that allies can click to heal themselves.' },
         { t: 5, name: 'Spiritual Guidance', max: 5, d: 'A portion of your Spirit is added to your spell damage/healing.' },
-        { t: 6, nf: true, name: 'Circle of Healing', max: 1, d: 'New in Forever — an instant heal that jumps to several injured allies near the target.' },
       ] },
       { key: 'shadow', name: 'Shadow', icon: 'crescent-eye', talents: [
         { t: 0, name: 'Spirit Tap', max: 2, d: 'Killing a target grants bonus mana regeneration for a short time.' },
@@ -220,7 +208,6 @@ export const TALENT_TREES = {
         { t: 3, name: 'Silence', max: 1, d: 'Silences the target, preventing spellcasting for a few seconds.' },
         { t: 4, name: 'Vampiric Embrace', max: 1, d: 'A portion of your shadow damage also heals your party.' },
         { t: 5, name: 'Shadowform', max: 1, d: 'Assume a shadowy form, boosting shadow damage and reducing damage taken.' },
-        { t: 6, nf: true, name: 'Vampiric Touch', max: 1, d: 'New in Forever — a DoT that restores mana to the party whenever it deals damage.' },
       ] },
     ],
   },
@@ -237,7 +224,6 @@ export const TALENT_TREES = {
         { t: 3, name: 'Reverberation', max: 5, d: '-cooldown on your Shock spells.' },
         { t: 4, name: 'Elemental Fury', max: 5, d: '+ critical strike damage with elemental spells per rank.' },
         { t: 5, name: 'Elemental Mastery', max: 1, d: 'Your next spell is cast instantly and guaranteed to critically strike.' },
-        { t: 6, nf: true, name: 'Lava Burst', max: 1, d: 'New in Forever — a bolt of lava that is guaranteed to critically strike any target affected by your Flame Shock.' },
       ] },
       { key: 'enh', name: 'Enhancement', icon: 'fist-spark', talents: [
         { t: 0, name: 'Improved Lightning Shield', max: 5, d: '+ damage from Lightning Shield charges.' },
@@ -250,7 +236,6 @@ export const TALENT_TREES = {
         { t: 3, name: 'Spirit Weapons', max: 1, d: 'Melee attacks no longer cause threat, but your attack speed decreases.' },
         { t: 4, name: 'Mental Quickness', max: 5, d: 'A portion of your attack power is added to your spell damage.' },
         { t: 5, name: 'Stormstrike', max: 1, d: 'A melee strike that also boosts your next two Nature spell hits against the target.' },
-        { t: 6, nf: true, name: 'Lava Lash', max: 1, d: 'New in Forever — an off-hand strike dealing bonus fire damage, boosted if your weapon is flametongue-enchanted.' },
       ] },
       { key: 'resto', name: 'Restoration', icon: 'droplet', talents: [
         { t: 0, name: 'Improved Healing Wave', max: 5, d: 'Reduces the cast time of Healing Wave.' },
@@ -263,7 +248,6 @@ export const TALENT_TREES = {
         { t: 3, name: 'Nature\'s Swiftness', max: 1, d: 'Your next Nature spell is cast instantly.' },
         { t: 4, name: 'Improved Chain Heal', max: 2, d: 'Chain Heal jumps to more targets.' },
         { t: 5, name: 'Mana Tide Totem', max: 1, d: 'A totem that greatly boosts party mana regeneration for a short time.' },
-        { t: 6, nf: true, name: 'Riptide', max: 1, d: 'New in Forever — an instant heal that also leaves a heal-over-time on the target.' },
       ] },
     ],
   },
@@ -280,7 +264,6 @@ export const TALENT_TREES = {
         { t: 3, name: 'Arcane Mind', max: 5, d: '+ maximum mana.' },
         { t: 4, name: 'Improved Counterspell', max: 2, d: 'Counterspell silences the target for longer.' },
         { t: 5, name: 'Arcane Power', max: 1, d: 'Temporarily increases spell damage, at the cost of increased mana costs.' },
-        { t: 6, nf: true, name: 'Mirror Image', max: 1, d: 'New in Forever — summons two decoys of yourself that mimic your spells and draw enemy attention.' },
       ] },
       { key: 'fire', name: 'Fire', icon: 'flame', talents: [
         { t: 0, name: 'Improved Fireball', max: 5, d: 'Reduces the cast time of Fireball.' },
@@ -293,7 +276,6 @@ export const TALENT_TREES = {
         { t: 3, name: 'Burning Soul', max: 5, d: '-threat generated by your fire spells.' },
         { t: 4, name: 'Fire Power', max: 5, d: '+1% fire spell damage per rank.' },
         { t: 5, name: 'Combustion', max: 1, d: 'Your next few spells are guaranteed to critically strike.' },
-        { t: 6, nf: true, name: 'Living Bomb', max: 1, d: 'New in Forever — plants a DoT on the target that explodes for AoE damage when it ends or the target dies.' },
       ] },
       { key: 'frost', name: 'Frost', icon: 'snowflake', talents: [
         { t: 0, name: 'Improved Frostbolt', max: 5, d: 'Reduces the cast time of Frostbolt.' },
@@ -306,7 +288,6 @@ export const TALENT_TREES = {
         { t: 3, name: 'Improved Blizzard', max: 3, d: 'Blizzard has a chance to stun the target.' },
         { t: 4, name: 'Frost Channeling', max: 5, d: '-mana cost of your frost spells.' },
         { t: 5, name: 'Winter\'s Chill', max: 1, d: 'Frost spells reduce the target\'s resistance to further frost damage.' },
-        { t: 6, nf: true, name: 'Deep Freeze', max: 1, d: 'New in Forever — stuns a frozen target and deals heavy bonus damage while it lasts.' },
       ] },
     ],
   },
@@ -323,7 +304,6 @@ export const TALENT_TREES = {
         { t: 3, name: 'Empowered Corruption', max: 3, d: 'Corruption gains more benefit from your spell damage.' },
         { t: 4, name: 'Shadow Mastery', max: 5, d: '+1% shadow spell damage per rank.' },
         { t: 5, name: 'Dark Pact', max: 1, d: 'Drains mana from your summoned demon instead of yourself.' },
-        { t: 6, nf: true, name: 'Haunt', max: 1, d: 'New in Forever — a shadow bolt that boosts the damage of your DoTs on the target and returns health when it dies.' },
       ] },
       { key: 'demo', name: 'Demonology', icon: 'demon-horns', talents: [
         { t: 0, name: 'Improved Healthstone', max: 2, d: 'Healthstone heals for more.' },
@@ -336,7 +316,6 @@ export const TALENT_TREES = {
         { t: 3, name: 'Demonic Sacrifice', max: 1, d: 'Sacrifice your demon for a lasting personal bonus.' },
         { t: 4, name: 'Master Summoner', max: 2, d: '-cast time and mana cost of demon summoning spells.' },
         { t: 5, name: 'Master Demonologist', max: 5, d: 'Grants a bonus based on which demon you currently have summoned.' },
-        { t: 6, nf: true, name: 'Metamorphosis', max: 1, d: 'New in Forever — transform into a demon yourself, boosting damage and survivability for a short time.' },
       ] },
       { key: 'destro', name: 'Destruction', icon: 'fireball', talents: [
         { t: 0, name: 'Improved Shadow Bolt', max: 5, d: 'Shadow Bolt hits weaken the target against your next spell.' },
@@ -349,7 +328,6 @@ export const TALENT_TREES = {
         { t: 3, name: 'Destructive Reach', max: 2, d: '+ range of your Destruction spells.' },
         { t: 4, name: 'Pyroclasm', max: 2, d: 'After a stun, +critical strike chance for a few seconds.' },
         { t: 5, name: 'Ruin', max: 1, d: '+100% critical strike damage with Destruction spells.' },
-        { t: 6, nf: true, name: 'Chaos Bolt', max: 1, d: 'New in Forever — an unstoppable bolt of pure chaos that cannot be resisted, reflected or absorbed.' },
       ] },
     ],
   },
@@ -366,7 +344,6 @@ export const TALENT_TREES = {
         { t: 3, name: 'Moonglow', max: 3, d: '-mana cost of your main healing and nuking spells.' },
         { t: 4, name: 'Insect Swarm', max: 1, d: 'A DoT that reduces the target\'s chance to hit you.' },
         { t: 5, name: 'Force of Nature', max: 1, d: 'Summons treants that fight at your side for a short time.' },
-        { t: 6, nf: true, name: 'Starfall', max: 1, d: 'New in Forever — calls down falling stars that smash into enemies around you over several seconds.' },
       ] },
       { key: 'feral', name: 'Feral Combat', icon: 'claw', talents: [
         { t: 0, name: 'Ferocity', max: 5, d: '-rage/energy cost of several feral abilities.' },
@@ -379,7 +356,6 @@ export const TALENT_TREES = {
         { t: 3, name: 'Predatory Strikes', max: 3, d: '+ attack power based on your level while shapeshifted.' },
         { t: 4, name: 'Faerie Fire (Feral)', max: 1, d: 'An instant ranged attack that also exposes the target\'s armor.' },
         { t: 5, name: 'Mangle', max: 1, d: 'A vicious attack dealing heavy damage and causing further bleed damage to stack higher.' },
-        { t: 6, nf: true, name: 'Berserk', max: 1, d: 'New in Forever — removes the cooldown on several of your core abilities for a short time.' },
       ] },
       { key: 'resto', name: 'Restoration', icon: 'droplet', talents: [
         { t: 0, name: 'Improved Mark of the Wild', max: 2, d: 'Mark of the Wild grants a larger bonus.' },
@@ -392,8 +368,101 @@ export const TALENT_TREES = {
         { t: 3, name: 'Gift of Nature', max: 5, d: '+ healing done by all your spells.' },
         { t: 4, name: 'Improved Regrowth', max: 5, d: '+1% critical effect chance with Regrowth per rank.' },
         { t: 5, name: 'Tranquility', max: 1, d: 'A powerful channeled heal that restores the entire party over time.' },
-        { t: 6, nf: true, name: 'Wild Growth', max: 1, d: 'New in Forever — an instant heal-over-time that lands on several injured allies near the target at once.' },
       ] },
+    ],
+  },
+};
+
+// Real, sourced Forever-specific changes — read from wowforever.sk's own news posts and class
+// beta-overview pages (not invented talent nodes). Coverage varies: some classes have detailed
+// deep-dive articles, others only a short beta-overview page, which is noted per entry.
+export const FOREVER_CHANGES = {
+  general: {
+    label: 'Systém talentov',
+    source: 'Beta poznámky, strop postavy 30',
+    points: [
+      'Talenty sa otvárajú na leveli 10, rovnako ako vo vanille.',
+      'Pribudli nové medzníky pri 11, 21 a 31 minutých bodoch — menšie bonusy medzi klasickými prahmi po každých 5 bodoch.',
+      'Na 16 bodoch je nová voliteľná vetva (napr. u druida voľba medzi Primal Bite a Shifting Power) — Forever tu dáva hráčovi reálnu voľbu namiesto jedného povinného talentu.',
+      'Respec talentov je stále len cez trénera danej triedy.',
+      'Dual Specialization (druhá sada talentov) sa odomyká na leveli 40.',
+    ],
+  },
+  warrior: {
+    label: 'Warrior',
+    source: 'Class deep-dive článok',
+    points: [
+      'Upravený vzorec generovania rage — warrior naberá rage inak než vo vanille (presné čísla sa počas bety ešte ladia).',
+      'Tactical Mastery funguje už od levelu 14.',
+      'Victory Rush je k dispozícii od levelu 20.',
+      'Kritický zásah dáva až 100% bonus rage namiesto klasického nižšieho pomeru.',
+    ],
+  },
+  paladin: {
+    label: 'Paladin',
+    source: 'Class beta-overview (čiastkové info)',
+    points: [
+      'Judgement už nespotrebuje aktívny seal — seal ostáva aktívny aj po Judgemente, takže ho netreba stále dokola obnovovať.',
+      'Holy Strike rozširuje základný melee kit paladina (presné čísla stránka neuvádza).',
+    ],
+  },
+  hunter: {
+    label: 'Hunter',
+    source: 'Class deep-dive článok',
+    points: [
+      'Aimed Shot je dostupný už od levelu 20 ako základná schopnosť.',
+      'Arcane Shot a Multi-Shot zdieľajú cooldown.',
+      'Pasce sa dajú klásť priamo v boji (combat-placeable), nie len mimo neho.',
+      'Pribudla nová rodina spoločníkov — líška (Fox pet family).',
+    ],
+  },
+  rogue: {
+    label: 'Rogue',
+    source: 'Class beta-overview (čiastkové info)',
+    points: [
+      'Regenerácia energie je plynulá, nie na klasických oddelených tikoch.',
+      'Poškodenie jedov škáluje s Attack Power.',
+    ],
+  },
+  priest: {
+    label: 'Priest',
+    source: 'Class deep-dive článok',
+    points: [
+      'Fear Ward a Devouring Plague sú dostupné všetkým priestom od levelu 20, bez ohľadu na špecializáciu.',
+      'Rasové schopnosti priesta boli prerobené oproti vanille.',
+    ],
+  },
+  shaman: {
+    label: 'Shaman',
+    source: 'Class beta-overview (čiastkové info)',
+    points: [
+      'Totemic Recall zruší aktívne totemy a vráti časť ich many.',
+      'Totemic Projection presunie existujúce totemy na nové miesto bez nutnosti ich znova postaviť.',
+    ],
+  },
+  mage: {
+    label: 'Mage',
+    source: 'Class beta-overview (čiastkové info)',
+    points: [
+      'Nový systém „Comprehend Scroll" dáva mágom situačné scroll-kúzla popri klasickej rotácii.',
+      'Podľa októbrových beta poznámok prebieha ďalší balance pass a scroll-kúzla nejde castovať počas pohybu.',
+    ],
+  },
+  warlock: {
+    label: 'Warlock',
+    source: 'Class beta-overview (čiastkové info)',
+    points: [
+      'Banes a utility Curses sú oddelené — Bane of Agony tak môže bežať súčasne s Curse of the Elements na tom istom cieli.',
+      'Life Tap funguje ako vo vanille, bez uvedených zmien.',
+    ],
+  },
+  druid: {
+    label: 'Druid',
+    source: 'Class deep-dive článok',
+    points: [
+      'Shapeshifting už nebráni použitiu potiónov a iných konzumovateľných predmetov.',
+      'Revive (oživenie spoluhráča) je dostupné od levelu 12.',
+      'Na 16 bodoch vo Ferale je nová voľba medzi Primal Bite a Shifting Power (plus Improved Shifting Power).',
     ],
   },
 };
