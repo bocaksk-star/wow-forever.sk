@@ -56,30 +56,33 @@ const MENU = svg(`<line x1="3" y1="6" x2="21" y2="6" ${S}/><line x1="3" y1="12" 
 
 // ---------- dekoratívna grafika (pôvodná, inšpirovaná fantasy settingom) ----------
 function heroArt() {
-  return `<svg viewBox="0 0 1200 560" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  return `<svg viewBox="0 0 1200 460" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
 <defs>
-  <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#0A0E1F"/><stop offset="55%" stop-color="#121A33"/><stop offset="100%" stop-color="#1B2748"/></linearGradient>
-  <radialGradient id="moonglow" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#F0CB82" stop-opacity=".55"/><stop offset="100%" stop-color="#F0CB82" stop-opacity="0"/></radialGradient>
-  <linearGradient id="farmtn" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#19213F"/><stop offset="100%" stop-color="#121A33"/></linearGradient>
-  <linearGradient id="midmtn" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#232E54"/><stop offset="100%" stop-color="#171F3C"/></linearGradient>
-  <linearGradient id="treeglow" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#6A9BEB" stop-opacity=".5"/><stop offset="100%" stop-color="#6A9BEB" stop-opacity="0"/></linearGradient>
-  <radialGradient id="fog" cx="50%" cy="100%" r="75%"><stop offset="0%" stop-color="#0A0E1F" stop-opacity=".9"/><stop offset="100%" stop-color="#0A0E1F" stop-opacity="0"/></radialGradient>
+  <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#0A0E1F"/><stop offset="42%" stop-color="#171F3E"/><stop offset="68%" stop-color="#3C2E52"/><stop offset="85%" stop-color="#6B4A3A"/><stop offset="100%" stop-color="#2A1B14"/></linearGradient>
+  <radialGradient id="sunglow" cx="50%" cy="100%" r="70%"><stop offset="0%" stop-color="#F0CB82" stop-opacity=".45"/><stop offset="100%" stop-color="#F0CB82" stop-opacity="0"/></radialGradient>
+  <radialGradient id="moonglow" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#F0CB82" stop-opacity=".6"/><stop offset="100%" stop-color="#F0CB82" stop-opacity="0"/></radialGradient>
+  <radialGradient id="treeglow" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#7FB4F2" stop-opacity=".65"/><stop offset="100%" stop-color="#7FB4F2" stop-opacity="0"/></radialGradient>
+  <radialGradient id="fog" cx="50%" cy="100%" r="80%"><stop offset="0%" stop-color="#0A0E1F" stop-opacity=".85"/><stop offset="100%" stop-color="#0A0E1F" stop-opacity="0"/></radialGradient>
 </defs>
-<rect width="1200" height="560" fill="url(#sky)"/>
-<circle cx="965" cy="110" r="95" fill="url(#moonglow)"/>
-<circle cx="965" cy="110" r="38" fill="#F0E2BE"/>
-<circle cx="952" cy="98" r="7" fill="#D8C491" opacity=".5"/><circle cx="978" cy="124" r="4" fill="#D8C491" opacity=".4"/>
-${[[90,70,.9],[180,130,.6],[260,60,.7],[340,160,.5],[420,90,.8],[520,50,.6],[610,120,.4],[700,40,.7],[790,170,.5],[850,60,.9],[1080,80,.6],[1140,150,.5],[60,220,.4],[300,30,.5],[1100,30,.7]].map(([x,y,o])=>`<circle cx="${x}" cy="${y}" r="${1+o}" fill="#fff" opacity="${o*.8}"/>`).join('')}
-<path d="M0 330 L70 260 140 320 230 220 320 310 410 250 520 330 610 270 720 340 830 260 930 330 1030 270 1120 320 1200 280 1200 560 0 560 Z" fill="url(#farmtn)"/>
+<rect width="1200" height="460" fill="url(#sky)"/>
+<ellipse cx="600" cy="400" rx="700" ry="220" fill="url(#sunglow)"/>
+<circle cx="965" cy="90" r="100" fill="url(#moonglow)"/>
+<circle cx="965" cy="90" r="34" fill="#F3E6C4"/>
+<circle cx="954" cy="80" r="6" fill="#D8C491" opacity=".5"/><circle cx="978" cy="102" r="4" fill="#D8C491" opacity=".4"/>
+${[[90,60,.9],[180,110,.6],[260,50,.7],[340,140,.5],[420,80,.8],[520,40,.6],[610,100,.4],[700,35,.7],[790,150,.5],[850,55,.9],[1080,70,.6],[1140,130,.5],[60,190,.4],[300,25,.5],[1100,25,.7]].map(([x,y,o])=>`<circle cx="${x}" cy="${y}" r="${1+o}" fill="#fff" opacity="${o*.8}"/>`).join('')}
+<path d="M0 260 L70 200 140 250 230 160 320 240 410 190 520 260 610 210 720 270 830 200 930 260 1030 210 1120 250 1200 220 1200 460 0 460 Z" fill="#0D0A1C"/>
+<path d="M0 260 L70 200 140 250 230 160 320 240 410 190 520 260 610 210 720 270 830 200 930 260 1030 210 1120 250 1200 220" fill="none" stroke="#5B4030" stroke-width="2" opacity=".55"/>
 <g>
-  <path d="M520 330 L560 150 605 260 640 190 695 330 Z" fill="url(#midmtn)"/>
-  <path d="M560 150 L575 185 605 170 585 205 605 260 575 220 560 230 Z" fill="#E8E2D3" opacity=".9"/>
-  <ellipse cx="582" cy="150" rx="70" ry="40" fill="url(#treeglow)"/>
-  <path d="M582 150 C566 150 556 162 560 176 C540 182 538 206 558 212 C552 226 566 240 584 234 C598 246 620 240 620 222 C638 220 640 198 622 190 C628 174 612 158 594 164 C592 154 588 150 582 150Z" fill="#101A30" stroke="#6A9BEB" stroke-width="1.2" opacity=".92"/>
-  <line x1="582" y1="234" x2="582" y2="330" stroke="#101A30" stroke-width="7"/>
+  <path d="M470 260 L520 95 575 215 615 140 665 260 Z" fill="#160F28"/>
+  <path d="M520 95 L537 132 572 115 548 152 572 215 537 170 520 182 Z" fill="#F0CB82" opacity=".85"/>
+  <path d="M470 260 L520 95 575 215 615 140 665 260" fill="none" stroke="#8A6A3E" stroke-width="1.5" opacity=".5"/>
+  <ellipse cx="540" cy="95" rx="78" ry="46" fill="url(#treeglow)"/>
+  <path d="M540 95 C522 95 511 108 515 123 C493 130 491 156 513 163 C506 178 522 193 542 187 C557 200 582 193 582 174 C602 171 604 147 584 139 C591 121 573 104 553 110 C551 99 547 95 540 95Z" fill="#0C0F22" stroke="#7FB4F2" stroke-width="1.3" opacity=".95"/>
+  <line x1="540" y1="187" x2="540" y2="260" stroke="#0C0F22" stroke-width="8"/>
+  <line x1="540" y1="187" x2="540" y2="260" stroke="#7FB4F2" stroke-width="1" opacity=".3"/>
 </g>
-<path d="M0 390 L90 340 190 400 280 350 390 410 480 360 590 410 690 350 800 410 900 360 1000 410 1100 360 1200 400 1200 560 0 560 Z" fill="url(#midmtn)" opacity=".85"/>
-<rect width="1200" height="560" fill="url(#fog)"/>
+<path d="M0 320 L90 275 190 330 280 285 390 340 480 295 590 340 690 285 800 340 900 295 1000 340 1100 295 1200 325 1200 460 0 460 Z" fill="#171029" opacity=".92"/>
+<rect width="1200" height="460" fill="url(#fog)"/>
 </svg>`;
 }
 

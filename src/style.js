@@ -66,7 +66,7 @@ main{padding:40px 0 80px}
 .hero{position:relative;border-radius:16px;overflow:hidden;border:1px solid var(--line);margin:20px 0 48px;padding:48px 32px}
 .hero-bg{position:absolute;inset:0;z-index:0}
 .hero-bg svg{width:100%;height:100%;display:block}
-.hero-fade{position:absolute;inset:0;z-index:1;background:linear-gradient(105deg, rgba(8,11,22,.94) 0%, rgba(8,11,22,.78) 40%, rgba(8,11,22,.32) 72%, rgba(8,11,22,.1) 100%)}
+.hero-fade{position:absolute;inset:0;z-index:1;background:linear-gradient(100deg, rgba(8,11,22,.88) 0%, rgba(8,11,22,.6) 32%, rgba(8,11,22,.18) 58%, rgba(8,11,22,.1) 100%)}
 .hero-grid{position:relative;z-index:2;display:grid;grid-template-columns:1.1fr 1fr;gap:48px;align-items:center}
 @media (max-width:860px){.hero{padding:32px 20px}.hero-grid{grid-template-columns:1fr;gap:28px}}
 .hero h1{font-size:clamp(2.4rem,5.5vw,3.8rem);line-height:1.05;margin-bottom:.35em;text-shadow:0 2px 24px rgba(0,0,0,.5)}
