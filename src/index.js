@@ -90,7 +90,7 @@ const DIVIDER = svg(`<path d="M2 12 L9 12" ${S}/><path d="M23 12 L16 12" ${S}/><
 
 const CREST = svg(`<path d="M16 2 28 7v9c0 9-5 14.5-12 17-7-2.5-12-8-12-17V7z" ${S}/><path d="M16 9v16M10 14l12 6M22 14l-12 6" stroke="currentColor" stroke-width="1.1" opacity=".55" fill="none"/><circle cx="16" cy="14" r="3" fill="currentColor"/>`, 30, 'class="crest"');
 
-const NAV = [['/novinky', 'Novinky', 'novinky'], ['/navody', 'Návody', 'navody'], ['/triedy', 'Triedy', 'triedy'], ['/rasy', 'Rasy', 'rasy'], ['/guildy', 'Guildy CZ/SK', 'guildy'], ['/o-nas', 'O webe', 'o-nas']];
+const NAV = [['/novinky', 'Novinky', 'novinky'], ['/navody', 'Návody', 'navody'], ['/triedy', 'Classy', 'triedy'], ['/rasy', 'Rasy', 'rasy'], ['/guildy', 'Guildy CZ/SK', 'guildy'], ['/o-nas', 'O webe', 'o-nas']];
 
 function page({ title, desc, path, body, origin, noindex }) {
   const full = title ? `${title} | WoW Forever SK` : 'WoW Forever SK – novinky, návody a guildy po slovensky';
