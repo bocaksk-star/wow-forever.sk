@@ -12,6 +12,12 @@ body{margin:0;background:var(--night);color:var(--text);font-family:var(--body);
 body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;
   background:radial-gradient(ellipse 80% 50% at 70% -10%, rgba(106,155,235,.16), transparent 60%),
              radial-gradient(ellipse 60% 40% at 0% 0%, rgba(226,174,76,.07), transparent 60%)}
+
+/* Fixná krajina na pozadí — mesiac a hory ostávajú pri scrollovaní */
+.world-bg{position:fixed;inset:0;z-index:-2;opacity:.6;filter:saturate(.85)}
+.world-bg svg{width:100%;height:100%;display:block}
+.world-bg::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg, rgba(10,14,28,.15) 0%, rgba(10,14,28,.55) 55%, var(--night) 100%)}
+@media (max-width:720px){.world-bg{opacity:.4}}
 a{color:var(--gold-soft);text-underline-offset:3px;text-decoration-thickness:1px}
 a:hover{color:var(--gold)}
 :focus-visible{outline:2px solid var(--gold);outline-offset:3px;border-radius:2px}

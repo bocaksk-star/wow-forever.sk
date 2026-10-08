@@ -104,6 +104,7 @@ ${noindex ? '<meta name="robots" content="noindex">' : ''}
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Alegreya+Sans:ital,wght@0,400;0,500;0,700;1,400&family=Marcellus&display=swap&subset=latin-ext" rel="stylesheet">
 <style>${CSS}</style></head><body>
+<div class="world-bg" aria-hidden="true">${heroArt()}</div>
 <div class="embers" aria-hidden="true">${[8,22,37,52,67,81,94].map((l,i)=>`<i style="left:${l}%;animation-duration:${14+i*3}s;animation-delay:${i*-2.3}s;--dx:${(i%2?1:-1)*(10+i*4)}px"></i>`).join('')}</div>
 <a class="skip" href="#obsah">Preskočiť na obsah</a>
 <header class="top"><div class="wrap">
