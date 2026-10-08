@@ -63,9 +63,13 @@ main{padding:40px 0 80px}
 .back{display:inline-block;margin-bottom:18px;font-size:1rem}
 
 /* Hero: questlog */
-.hero{display:grid;grid-template-columns:1.1fr 1fr;gap:48px;align-items:center;padding:24px 0 56px}
-@media (max-width:860px){.hero{grid-template-columns:1fr;gap:28px}}
-.hero h1{font-size:clamp(2.4rem,5.5vw,3.8rem);line-height:1.05;margin-bottom:.35em}
+.hero{position:relative;border-radius:16px;overflow:hidden;border:1px solid var(--line);margin:20px 0 48px;padding:48px 32px}
+.hero-bg{position:absolute;inset:0;z-index:0}
+.hero-bg svg{width:100%;height:100%;display:block}
+.hero-fade{position:absolute;inset:0;z-index:1;background:linear-gradient(105deg, rgba(8,11,22,.94) 0%, rgba(8,11,22,.78) 40%, rgba(8,11,22,.32) 72%, rgba(8,11,22,.1) 100%)}
+.hero-grid{position:relative;z-index:2;display:grid;grid-template-columns:1.1fr 1fr;gap:48px;align-items:center}
+@media (max-width:860px){.hero{padding:32px 20px}.hero-grid{grid-template-columns:1fr;gap:28px}}
+.hero h1{font-size:clamp(2.4rem,5.5vw,3.8rem);line-height:1.05;margin-bottom:.35em;text-shadow:0 2px 24px rgba(0,0,0,.5)}
 .hero .lead{margin-bottom:1.2em}
 .btns{display:flex;gap:12px;flex-wrap:wrap}
 .btn{display:inline-flex;align-items:center;gap:8px;padding:12px 20px;border-radius:6px;font-weight:700;text-decoration:none;font-size:1.05rem;border:1px solid var(--gold);transition:background .15s,transform .15s,box-shadow .15s}
@@ -90,7 +94,8 @@ main{padding:40px 0 80px}
 /* Sekcie homepage */
 .section{padding:8px 0 40px}
 .section-head{display:flex;align-items:baseline;justify-content:space-between;gap:16px;border-bottom:1px solid var(--line);margin-bottom:8px}
-.section-head h2{margin:0 0 .4em}
+.section-head h2{margin:0 0 .4em;display:flex;align-items:center;gap:10px;letter-spacing:.015em}
+.ornament{color:var(--gold);opacity:.85}
 .newslist{list-style:none;margin:0;padding:0}
 .newslist li{padding:18px 0;border-bottom:1px solid var(--line);display:grid;grid-template-columns:120px 1fr;gap:20px}
 @media (max-width:600px){.newslist li{grid-template-columns:1fr;gap:4px}}
@@ -167,5 +172,14 @@ button.btn{cursor:pointer;font-family:inherit}
 .sources ul{padding-left:1.1em}
 footer{border-top:1px solid var(--line);padding:28px 0 40px;color:var(--muted);font-size:.92rem}
 footer .wrap{display:grid;gap:8px}
+.footer-top{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+.crest{color:var(--gold)}
+.brand-sm{font-family:var(--display);font-size:1.1rem;color:var(--text)}
+.brand-sm span{color:var(--gold)}
+
+/* Jemné iskry na pozadí */
+.embers{position:fixed;inset:0;pointer-events:none;z-index:-1;overflow:hidden}
+.embers i{position:absolute;bottom:-10px;width:3px;height:3px;border-radius:50%;background:var(--gold-soft);opacity:0;box-shadow:0 0 6px 1px rgba(226,174,76,.6);animation:rise linear infinite}
+@keyframes rise{0%{transform:translateY(0) translateX(0);opacity:0}8%{opacity:.75}92%{opacity:.3}100%{transform:translateY(-110vh) translateX(var(--dx,20px));opacity:0}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 `;

@@ -54,6 +54,39 @@ const FACTION_ICON = {
 
 const MENU = svg(`<line x1="3" y1="6" x2="21" y2="6" ${S}/><line x1="3" y1="12" x2="21" y2="12" ${S}/><line x1="3" y1="18" x2="21" y2="18" ${S}/>`, 22);
 
+// ---------- dekoratívna grafika (pôvodná, inšpirovaná fantasy settingom) ----------
+function heroArt() {
+  return `<svg viewBox="0 0 1200 560" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+<defs>
+  <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#0A0E1F"/><stop offset="55%" stop-color="#121A33"/><stop offset="100%" stop-color="#1B2748"/></linearGradient>
+  <radialGradient id="moonglow" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#F0CB82" stop-opacity=".55"/><stop offset="100%" stop-color="#F0CB82" stop-opacity="0"/></radialGradient>
+  <linearGradient id="farmtn" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#19213F"/><stop offset="100%" stop-color="#121A33"/></linearGradient>
+  <linearGradient id="midmtn" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#232E54"/><stop offset="100%" stop-color="#171F3C"/></linearGradient>
+  <linearGradient id="treeglow" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#6A9BEB" stop-opacity=".5"/><stop offset="100%" stop-color="#6A9BEB" stop-opacity="0"/></linearGradient>
+  <radialGradient id="fog" cx="50%" cy="100%" r="75%"><stop offset="0%" stop-color="#0A0E1F" stop-opacity=".9"/><stop offset="100%" stop-color="#0A0E1F" stop-opacity="0"/></radialGradient>
+</defs>
+<rect width="1200" height="560" fill="url(#sky)"/>
+<circle cx="965" cy="110" r="95" fill="url(#moonglow)"/>
+<circle cx="965" cy="110" r="38" fill="#F0E2BE"/>
+<circle cx="952" cy="98" r="7" fill="#D8C491" opacity=".5"/><circle cx="978" cy="124" r="4" fill="#D8C491" opacity=".4"/>
+${[[90,70,.9],[180,130,.6],[260,60,.7],[340,160,.5],[420,90,.8],[520,50,.6],[610,120,.4],[700,40,.7],[790,170,.5],[850,60,.9],[1080,80,.6],[1140,150,.5],[60,220,.4],[300,30,.5],[1100,30,.7]].map(([x,y,o])=>`<circle cx="${x}" cy="${y}" r="${1+o}" fill="#fff" opacity="${o*.8}"/>`).join('')}
+<path d="M0 330 L70 260 140 320 230 220 320 310 410 250 520 330 610 270 720 340 830 260 930 330 1030 270 1120 320 1200 280 1200 560 0 560 Z" fill="url(#farmtn)"/>
+<g>
+  <path d="M520 330 L560 150 605 260 640 190 695 330 Z" fill="url(#midmtn)"/>
+  <path d="M560 150 L575 185 605 170 585 205 605 260 575 220 560 230 Z" fill="#E8E2D3" opacity=".9"/>
+  <ellipse cx="582" cy="150" rx="70" ry="40" fill="url(#treeglow)"/>
+  <path d="M582 150 C566 150 556 162 560 176 C540 182 538 206 558 212 C552 226 566 240 584 234 C598 246 620 240 620 222 C638 220 640 198 622 190 C628 174 612 158 594 164 C592 154 588 150 582 150Z" fill="#101A30" stroke="#6A9BEB" stroke-width="1.2" opacity=".92"/>
+  <line x1="582" y1="234" x2="582" y2="330" stroke="#101A30" stroke-width="7"/>
+</g>
+<path d="M0 390 L90 340 190 400 280 350 390 410 480 360 590 410 690 350 800 410 900 360 1000 410 1100 360 1200 400 1200 560 0 560 Z" fill="url(#midmtn)" opacity=".85"/>
+<rect width="1200" height="560" fill="url(#fog)"/>
+</svg>`;
+}
+
+const DIVIDER = svg(`<path d="M2 12 L9 12" ${S}/><path d="M23 12 L16 12" ${S}/><path d="M12 7 L15 12 12 17 9 12Z" fill="currentColor" stroke="none"/>`, 24, 'class="ornament"');
+
+const CREST = svg(`<path d="M16 2 28 7v9c0 9-5 14.5-12 17-7-2.5-12-8-12-17V7z" ${S}/><path d="M16 9v16M10 14l12 6M22 14l-12 6" stroke="currentColor" stroke-width="1.1" opacity=".55" fill="none"/><circle cx="16" cy="14" r="3" fill="currentColor"/>`, 30, 'class="crest"');
+
 const NAV = [['/novinky', 'Novinky', 'novinky'], ['/navody', 'Návody', 'navody'], ['/triedy', 'Triedy', 'triedy'], ['/rasy', 'Rasy', 'rasy'], ['/guildy', 'Guildy CZ/SK', 'guildy'], ['/o-nas', 'O webe', 'o-nas']];
 
 function page({ title, desc, path, body, origin, noindex }) {
@@ -68,6 +101,7 @@ ${noindex ? '<meta name="robots" content="noindex">' : ''}
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Alegreya+Sans:ital,wght@0,400;0,500;0,700;1,400&family=Marcellus&display=swap&subset=latin-ext" rel="stylesheet">
 <style>${CSS}</style></head><body>
+<div class="embers" aria-hidden="true">${[8,22,37,52,67,81,94].map((l,i)=>`<i style="left:${l}%;animation-duration:${14+i*3}s;animation-delay:${i*-2.3}s;--dx:${(i%2?1:-1)*(10+i*4)}px"></i>`).join('')}</div>
 <a class="skip" href="#obsah">Preskočiť na obsah</a>
 <header class="top"><div class="wrap">
   <a class="brand" href="/">${LOGO}WoW <span>Forever</span> SK</a>
@@ -75,7 +109,7 @@ ${noindex ? '<meta name="robots" content="noindex">' : ''}
   <nav class="nav" id="site-nav" aria-label="Hlavná navigácia">${nav}</nav>
 </div></header>
 <main id="obsah"><div class="wrap">${body}</div></main>
-<footer><div class="wrap"><div>WoW Forever SK je neoficiálny fanúšikovský web. Nie je spojený so spoločnosťou Blizzard Entertainment.</div><div>World of Warcraft a Blizzard Entertainment sú ochranné známky spoločnosti Blizzard Entertainment, Inc.</div></div></footer>
+<footer><div class="wrap"><div class="footer-top"><span class="ic">${CREST}</span><span class="brand-sm">WoW <span>Forever</span> SK</span></div><div>WoW Forever SK je neoficiálny fanúšikovský web. Nie je spojený so spoločnosťou Blizzard Entertainment.</div><div>World of Warcraft a Blizzard Entertainment sú ochranné známky spoločnosti Blizzard Entertainment, Inc.</div></div></footer>
 <script>(()=>{const b=document.querySelector('.navtoggle'),n=document.getElementById('site-nav');if(!b||!n)return;b.addEventListener('click',()=>{const open=n.classList.toggle('open');b.setAttribute('aria-expanded',open?'true':'false');});n.addEventListener('click',e=>{if(e.target.tagName==='A')n.classList.remove('open');});})();</script>
 </body></html>`;
 }
@@ -122,21 +156,25 @@ function home(origin, now, guildRows) {
     : `<div class="empty"><p>Zatiaľ tu nie je žiadna guilda. Buďte prví.</p><a class="btn ghost" href="/guildy/pridat">Pridať guildu</a></div>`;
   const body = `
 <section class="hero">
+  <div class="hero-bg">${heroArt()}</div>
+  <div class="hero-fade"></div>
+  <div class="hero-grid">
   <div>
     <h1>World of Warcraft: Forever po slovensky</h1>
     <p class="lead">Novinky, návody a adresár slovenských a českých guild pre novú verziu WoW, ktorá ostane na leveli 60 navždy.</p>
     <div class="btns"><a class="btn primary" href="/guildy"><span class="ic">${NAV_ICON.guildy}</span>Nájsť guildu</a><a class="btn ghost" href="/navody/ako-zacat"><span class="ic">${NAV_ICON.navody}</span>Ako začať</a></div>
   </div>
   ${questCard(now)}
+  </div>
 </section>
 <section class="section">
-  <div class="section-head"><h2>Najnovšie správy</h2><a href="/novinky">Všetky novinky</a></div>
+  <div class="section-head"><h2><span class="ic">${DIVIDER}</span>Najnovšie správy</h2><a href="/novinky">Všetky novinky</a></div>
   <ul class="newslist">${latest}</ul>
 </section>
 <section class="section two">
-  <div><div class="section-head"><h2>Návody</h2><a href="/navody">Všetky</a></div><ul class="linklist">${g}</ul></div>
+  <div><div class="section-head"><h2><span class="ic">${DIVIDER}</span>Návody</h2><a href="/navody">Všetky</a></div><ul class="linklist">${g}</ul></div>
   <div>
-    <div class="section-head"><h2>Dôležité dátumy</h2></div>
+    <div class="section-head"><h2><span class="ic">${DIVIDER}</span>Dôležité dátumy</h2></div>
     <ul class="dates">
       <li><b>do 21. októbra</b><span>Beta test</span></li>
       <li><b>27. okt. – 3. nov.</b><span>Rezervácia mien pre majiteľov balíkov</span></li>
@@ -144,7 +182,7 @@ function home(origin, now, guildRows) {
       <li><b>9. decembra</b><span>Raidy Barrow Deeps, Hyjal Summit a Onyxia</span></li>
       <li><b>zima 2026</b><span>Hardcore realmy</span></li>
     </ul>
-    <div class="section-head" style="margin-top:32px"><h2>Nové guildy</h2><a href="/guildy">Adresár</a></div>
+    <div class="section-head" style="margin-top:32px"><h2><span class="ic">${DIVIDER}</span>Nové guildy</h2><a href="/guildy">Adresár</a></div>
     ${guildBlock}
   </div>
 </section>`;
