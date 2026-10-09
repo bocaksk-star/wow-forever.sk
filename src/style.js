@@ -259,6 +259,7 @@ main{padding:40px 0 80px}
 .poll-total{margin:12px 0 0;color:var(--muted);font-size:.88rem}
 .namevote-more{margin:12px 0 0;font-size:.9rem}
 .namevote-cta{margin:8px 0 0;color:var(--muted);font-size:.86rem}
+.guildcta + .namevote{margin-top:16px}
 .change-vote{display:inline-block;margin-top:8px;font-size:.88rem;color:var(--muted)}
 .change-vote:hover{color:var(--gold-soft)}
 

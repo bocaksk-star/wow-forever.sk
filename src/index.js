@@ -558,6 +558,7 @@ ${adBannerResponsive()}
     <div><b>Zakladáme vlastnú guildu</b><p>Budeme ju viesť a hrať s vami od prvého dňa. Prihlás sa teraz, dáme ti vedieť, keď spustíme nábor naostro.${recruitCount > 0 ? ` <strong>${recruitCount} ${recruitCount === 1 ? 'hráč sa' : recruitCount < 5 ? 'hráči sa' : 'hráčov sa'} už prihlásilo.</strong>` : ''}</p></div>
     <span class="go">Prihlásiť sa →</span>
   </a>
+  ${nameCard}
 </section>
 <section class="section">
   <div class="section-head"><h2><span class="ic">${DIVIDER}</span>Najnovšie správy</h2><a href="/novinky">Všetky novinky</a></div>
@@ -571,8 +572,6 @@ ${adBannerResponsive()}
   <div>
     <div class="section-head"><h2><span class="ic">${DIVIDER}</span>Dôležité dátumy</h2></div>
     <ul class="timeline">${dates}</ul>
-    <div class="section-head" style="margin-top:32px"><h2><span class="ic">${DIVIDER}</span>Názov guildy</h2><a href="/guildy">Hlasovať</a></div>
-    ${nameCard}
   </div>
 </section>
 <section class="section">
