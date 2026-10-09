@@ -54,3 +54,7 @@ CREATE TABLE IF NOT EXISTS guild_name_votes (
   created_at TEXT NOT NULL DEFAULT (datetime('now'))
 );
 CREATE INDEX IF NOT EXISTS idx_guild_name_votes_name ON guild_name_votes (name_id);
+
+-- RaidLead dashboard (/raid): stav bota + fronta akcií z dashboardu pre bota
+CREATE TABLE IF NOT EXISTS rl_state (k TEXT PRIMARY KEY, v TEXT NOT NULL, t INTEGER NOT NULL);
+CREATE TABLE IF NOT EXISTS rl_outbox (id INTEGER PRIMARY KEY AUTOINCREMENT, action TEXT NOT NULL, status TEXT NOT NULL DEFAULT 'queued', result TEXT, created INTEGER NOT NULL, done INTEGER);

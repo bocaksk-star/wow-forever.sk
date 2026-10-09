@@ -2,6 +2,7 @@ import { CSS } from './style.js';
 import { news, guides, classes, races, polls, LAUNCH_UTC, RAIDS_DATE } from './content.js';
 import { czHome, czGuides } from './content.cz.js';
 import { raids, upcomingRaids, raidBySlug } from './raids.js';
+import { handleRaid } from './raid/raid.js';
 import { TALENT_TREES, greedyAllocate, BUILD_PLAN, FOREVER_CHANGES } from './talents.js';
 
 // ---------- pomocné ----------
@@ -407,6 +408,8 @@ const NAV = [
     ['/raidy', 'Prehľad raidov', 'raidy'],
     ...raids.map((r) => [`/raidy/${r.slug}`, r.name, 'raidy']),
     ['/raidy/raidlead', 'RaidLead bot', 'raidlead'],
+    ['/raid/guild', 'DKP & progress guildy', 'buildy'],
+    ['/raid/me', 'Môj profil (DKP)', 'o-nas'],
   ] },
   ['/ankety', 'Ankety', 'ankety'],
   ['/o-nas', 'O webe', 'o-nas'],
@@ -1006,6 +1009,7 @@ function raidsIndex(origin) {
   const body = `<article class="prose">
 <h1>Raidy vo WoW Forever</h1>
 <p class="lead">Stratégie k bossom po slovensky, rozdelené podľa úloh — čo má robiť tank, healer a DPS. Rovnaké taktiky, aké učíme nášho raid leadera <a href="/raidy/raidlead">RaidLead</a>.</p>
+<p class="btns"><a class="btn ghost" href="/raid/guild"><span class="ic">${NAV_ICON.buildy}</span>DKP rebríček a progress guildy</a><a class="btn ghost" href="/raid/me"><span class="ic">${NAV_ICON['o-nas']}</span>Môj profil</a></p>
 <div class="grid">${cards}</div>
 <h2>Ako sa pripraviť na prvý raid</h2>
 <ul>
@@ -1306,6 +1310,7 @@ function sitemap(origin) {
     { p: '/raidy', prio: '0.8' },
     ...raids.map((r) => ({ p: `/raidy/${r.slug}`, prio: '0.7' })),
     { p: '/raidy/raidlead', prio: '0.6' },
+    { p: '/raid/guild', prio: '0.5' },
     { p: '/ankety', prio: '0.6' },
     { p: '/o-nas', prio: '0.3' },
     { p: '/cz', prio: '0.6' },
@@ -1338,11 +1343,16 @@ export default {
     const now = Date.now();
     const m = (re) => path.match(re);
 
-    if (path === '/robots.txt') return new Response(`User-agent: *\nDisallow: /admin\nSitemap: ${origin}/sitemap.xml\n`, { headers: { 'content-type': 'text/plain' } });
+    if (path === '/robots.txt') return new Response(`User-agent: *\nDisallow: /admin\nDisallow: /raid/api\nDisallow: /raid/me\nSitemap: ${origin}/sitemap.xml\n`, { headers: { 'content-type': 'text/plain' } });
     if (path === '/sitemap.xml') return sitemap(origin);
     if (path === '/rss.xml') return rssFeed(origin);
     if (path === '/og.svg') return new Response(ogImage(), { headers: { 'content-type': 'image/svg+xml; charset=utf-8', 'cache-control': 'public, max-age=86400' } });
     if (path === '/admin') return admin(request, env, url, origin);
+    if (path === '/raid' || path.startsWith('/raid/')) {
+      const r = await handleRaid(request, env, url, path);
+      if (r) return r;
+      return notFound(origin);
+    }
     if (path === '/guildy/pridat') {
       if (request.method === 'POST') return submitGuildName(request, env, origin);
       return html(guildNameForm(origin, { ok: url.searchParams.get('ok') === '1' }), 200, { 'cache-control': 'no-store' });

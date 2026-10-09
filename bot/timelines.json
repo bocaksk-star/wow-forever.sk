@@ -1,0 +1,64 @@
+{
+  "_help": "Časy v sekundách od pullu. first = prvý cast, every = opakovanie (0 = len raz), warn = koľko sekúnd vopred varovať. Officeri to doladia po reálnych pulloch.",
+  "lucifron": {
+    "events": [{"first": 20, "every": 20, "warn": 3, "text": "Curse ide, decurse pripraviť!"}]
+  },
+  "magmadar": {
+    "events": [{"first": 30, "every": 30, "warn": 5, "text": "Panic, fear! Fear Ward, Tremor, Berserker Rage!"}],
+    "notes": "Frenzy je náhodný, hunteri sledujú a hneď Tranq Shot."
+  },
+  "gehennas": {
+    "events": [{"first": 15, "every": 30, "warn": 3, "text": "Curse mínus healing, decurse tankov ako prvých!"}]
+  },
+  "shazzrah": {
+    "events": [
+      {"first": 45, "every": 45, "warn": 5, "text": "Blink! Tanky pripravené, držte sa spolu!"},
+      {"first": 10, "every": 20, "warn": 0, "text": "Curse, decurse!"}
+    ]
+  },
+  "baron-geddon": {
+    "events": [{"first": 45, "every": 45, "warn": 5, "text": "Inferno! Melee von!"}],
+    "notes": "Living Bomb je náhodná. Ak ju máš, utekaj na bomb spot."
+  },
+  "majordomo-executus": {
+    "events": [{"first": 30, "every": 30, "warn": 3, "text": "Štíty hore! Nebite addy so štítom!"}]
+  },
+  "ragnaros": {
+    "events": [
+      {"first": 25, "every": 25, "warn": 5, "text": "Wrath! Melee dozadu, off-tank pripravený!"},
+      {"first": 180, "every": 0, "warn": 15, "text": "Submerge! Sons of Flame, všetci na Sonov!"},
+      {"first": 270, "every": 0, "warn": 10, "text": "Ragnaros sa vracia, tanky ho chyťte!"}
+    ]
+  },
+  "onyxia": {
+    "events": [],
+    "phases": {
+      "2": "Fáza dva, letí! Ranged a heal na ňu, melee na whelpy. Deep Breath, choďte na boky!",
+      "3": "Fáza tri, pristála! Tank ju chytí, Fear Ward a Tremor na Bellowing Roar, AoE whelpy."
+    }
+  },
+  "razorgore": {
+    "events": [],
+    "phases": {"2": "Fáza dva, vajcia sú preč, Razorgore je hostile! Tank do rohu."}
+  },
+  "vaelastrasz": {
+    "events": [
+      {"first": 15, "every": 15, "warn": 0, "text": "Burning Adrenaline na náhodného! Ak si to ty, utekaj von!"},
+      {"first": 45, "every": 45, "warn": 5, "text": "Adrenaline na tanka, ďalší tank pripraviť!"}
+    ]
+  },
+  "firemaw": {
+    "events": [{"first": 30, "every": 30, "warn": 3, "text": "Wing Buffet, tank stratí threat, off-tank pripravený! Sledujte Flame Buffet stacky!"}]
+  },
+  "chromaggus": {
+    "events": [{"first": 30, "every": 30, "warn": 5, "text": "Breath! Schovajte sa za bránu!"}],
+    "phases": {"2": "Dvadsať percent, enrage, bite naplno!"}
+  },
+  "nefarian": {
+    "events": [{"first": 30, "every": 30, "warn": 3, "text": "Class call! Počúvajte svoju triedu!"}],
+    "phases": {
+      "2": "Fáza dva, Nefarian pristál! Otočiť od raidu, Onyxia plášte, fear ochrana!",
+      "3": "Fáza tri, kostlivci vstávajú, AoE a dorazte ho!"
+    }
+  }
+}

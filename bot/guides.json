@@ -1,0 +1,23 @@
+{
+  "mc": {
+    "title": "Molten Core – sprievodca",
+    "text": "10 bossov od Lucifrona po Ragnarosa.\n• **Pred raidom:** attunement *Attunement to the Core* (quest cez Lothos Riftwaker v Blackrock Depths – presný postup si over v hre alebo na Wowhead).\n• **Fire resistance** hlavne tanky a healeri kvôli Ragnarosovi.\n• **Fear Ward / Tremor Totem** na Magmadara.\n• **Hunteri** nech vedia Tranquilizing Shot (Frenzy).\n• **Decursery** na Lucifrona, Gehennasa a Shazzraha.\n• Strategiu bossa ukáže `/strat boss:`."
+  },
+  "ony": {
+    "title": "Onyxia – sprievodca",
+    "text": "Jeden boss, tri fázy.\n• **Pred raidom:** attunement cez *Drakefire Amulet* (quest reťaz – postup si over v hre alebo na Wowhead).\n• **Fire resistance** pomáha healerom proti Fireballom.\n• **Fear Ward / Tremor Totem** na Bellowing Roar.\n• Vo fáze 2 letí: ranged a healeri na ňu, melee na whelpy, pri Deep Breath choďte na boky.\n• Detaily: `/strat boss:onyxia`."
+  },
+  "bwl": {
+    "title": "Blackwing Lair – sprievodca",
+    "text": "8 bossov od Razorgora po Nefariana.\n• **Pred raidom:** attunement *Blackhand's Command* (postup si over v hre alebo na Wowhead).\n• **Onyxia Scale Cloak** na Firemaw, Ebonroc, Flamegor a Nefarian (Shadow Flame).\n• **Hourglass Sand** na Chromaggusa (Bronze afflikcia).\n• **Tranq Shot** na Flamegora.\n• Na Nefariana sa počúva class call, reaguj na svoju triedu.\n• Strategiu bossa ukáže `/strat boss:`."
+  },
+  "newbie": {
+    "title": "Začiatočník – ako začať",
+    "text": "1. `/profile` – nastav postavu (meno, trieda, rola, spec).\n2. `/attune` – označ splnené attunementy.\n3. Klikni **Tank / Healer / DPS** na sign-up karte raidu.\n4. `/sr item:` – rezervuj si item, `/wishlist add` – ulož si zoznam želaní.\n5. `/ask` – spýtaj sa na čokoľvek o taktikách, `/strat boss:` ukáže plán bossa.\n6. `/me` – tvoj profil, DKP a odznaky, `/calendar` – raidy v tvojom kalendári.\n7. Nemôžeš prísť? `/absent reason:` – účasť sa ti nezníži.\n8. Prvý raid? Pozri `/guide raid:mc`."
+  },
+  "consumes": {
+    "Molten Core": ["Fire Protection Potion", "Flask alebo elixíry podľa role", "Jedlo (well fed)", "Major Healing a Mana potiony", "Fire resistance gear (Ragnaros)", "Opravený gear"],
+    "Onyxia": ["Fire Protection Potion", "Flask alebo elixíry podľa role", "Jedlo (well fed)", "Fear Ward alebo Tremor Totem na fear", "Opravený gear"],
+    "Blackwing Lair": ["Onyxia Scale Cloak", "Hourglass Sand (Chromaggus)", "Flask alebo elixíry podľa role", "Jedlo (well fed)", "Major Healing a Mana potiony", "Opravený gear"]
+  }
+}

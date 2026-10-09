@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="sk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Guild – Raidy a DKP | WoW Forever</title>
+<meta name="description" content="Raidy, guild progress, DKP rebríček a loot našej guildy na WoW Forever.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0F1528;--panel:#18203A;--panel2:#1F2948;--line:#2D3860;--gold:#E2AE4C;--gold2:#F0CB82;--text:#E8E2D3;--muted:#A1A9C2;--ok:#5fbf6a;
+--Warrior:#c69b6d;--Paladin:#f48cba;--Hunter:#aad372;--Rogue:#fff468;--Priest:#ffffff;--Shaman:#0070dd;--Mage:#3fc7eb;--Warlock:#8788ee;--Druid:#ff7c0a}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(1400px 700px at 50% -250px,#1b2a55 0%,var(--bg) 62%);color:var(--text);font:15px/1.55 Inter,system-ui,sans-serif}
+h1,h2{font-family:Cinzel,serif;color:var(--gold2);margin:0}
+.wrap{max-width:1100px;margin:0 auto;padding:16px}
+.hero{text-align:center;padding:42px 0 26px}
+.hero h1{font-size:clamp(30px,6vw,52px);font-weight:900;letter-spacing:1px;text-shadow:0 2px 24px rgba(217,164,65,.35)}
+.hero p{color:var(--muted);margin:8px 0 0}
+.grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr))}
+.card{background:linear-gradient(180deg,var(--panel2),var(--panel));border:1px solid var(--line);border-radius:14px;padding:18px}
+.card h2{font-size:18px;margin-bottom:14px}
+.raid{border-left:3px solid var(--gold);padding:8px 12px;margin-bottom:10px;background:#131a33;border-radius:0 8px 8px 0}
+.raid b{font-family:Cinzel,serif;color:var(--gold2);font-size:16px}
+.muted{color:var(--muted);font-size:13px}
+.bar{height:8px;background:#0c1022;border-radius:4px;overflow:hidden;margin:4px 0 10px}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,#b9852a,var(--gold2))}
+.bosses{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:14px}
+.boss{font-size:12px;padding:2px 8px;border-radius:99px;border:1px solid var(--line);color:var(--muted)}
+.boss.k{color:#0F1528;background:var(--gold);border-color:var(--gold);font-weight:600}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{text-align:left;color:var(--muted);font-weight:500;font-size:12px;text-transform:uppercase;padding:6px;border-bottom:1px solid var(--line)}
+td{padding:7px 6px;border-bottom:1px solid #2D3860}
+.rank{color:var(--gold);font-family:Cinzel,serif;font-weight:700}
+.empty{color:var(--muted);font-style:italic}
+footer{text-align:center;color:var(--muted);font-size:12px;padding:30px 0}
+</style>
+</head>
+<body>
+<div class="wrap"><p style="margin:0 0 4px"><a href="/raidy" style="color:var(--muted);text-decoration:none;font-size:13px">← wow-forever.sk / Raidy</a></p>
+  <div class="hero">
+    <h1>⚔️ Guild Raidy</h1>
+    <p>Molten Core · Onyxia · Blackwing Lair — progress, rebríček a loot</p>
+    <p><a style="color:var(--gold)" href="/raid/me">👤 Môj profil</a> &nbsp;·&nbsp; <a style="color:var(--gold)" href="/raid/cal.ics">📅 Kalendár raidov</a></p>
+  </div>
+  <div class="grid">
+    <div class="card"><h2>📅 Najbližšie raidy</h2><div id="raids"><div class="empty">Načítavam…</div></div></div>
+    <div class="card"><h2>🏆 Guild progress</h2><div id="progress"></div></div>
+    <div class="card" style="grid-column:1/-1"><h2>💰 DKP rebríček</h2>
+      <div style="overflow-x:auto"><table><thead><tr><th>#</th><th>Hráč</th><th>Trieda</th><th>DKP</th><th>Účasť</th><th>Odznaky</th></tr></thead><tbody id="dkp"></tbody></table></div></div>
+    <div class="card" style="grid-column:1/-1"><h2>🎁 Posledný loot</h2>
+      <div style="overflow-x:auto"><table><thead><tr><th>Item</th><th>Hráč</th><th>DKP</th><th>Kedy</th></tr></thead><tbody id="loot"></tbody></table></div></div>
+  </div>
+  <footer id="foot">wow-forever.sk</footer>
+</div>
+<script>
+const esc=(s)=>String(s??"").replace(/[&<>"']/g,(c)=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const pretty=(s)=>s.split("-").map(w=>w[0].toUpperCase()+w.slice(1)).join(" ");
+const day=(t)=>new Date(t*1000).toLocaleDateString("sk-SK",{day:"numeric",month:"numeric"});
+fetch("/raid/api/public").then(r=>r.json()).then(d=>{
+  const now=Date.now()/1000;
+  const up=d.raids.filter(r=>!r.closed && (!r.ts || r.ts>now-6*3600)).sort((a,b)=>(a.ts||9e12)-(b.ts||9e12));
+  document.getElementById("raids").innerHTML = up.map(r=>{
+    const c=(k)=>r.signups.filter(s=>s.role===k).length;
+    return `<div class="raid"><b>${esc(r.name)}</b><div>${esc(r.time)}</div><div class="muted">🛡️ ${c("tank")} · 💚 ${c("healer")} · ⚔️ ${c("dps")}${r.note?" · "+esc(r.note):""}</div></div>`;
+  }).join("") || `<div class="empty">Žiadny naplánovaný raid. Sledujte Discord!</div>`;
+  document.getElementById("progress").innerHTML = d.progress.map(p=>{
+    const k=p.bosses.filter(b=>b.killed).length;
+    return `<div style="display:flex;justify-content:space-between"><b>${esc(p.raid)}</b><span>${k}/${p.total}</span></div>
+      <div class="bar"><i style="width:${Math.round(100*k/p.total)}%"></i></div>
+      <div class="bosses">${p.bosses.map(b=>`<span class="boss ${b.killed?"k":""}" title="${b.count}× zabitý">${esc(pretty(b.boss))}</span>`).join("")}</div>`;
+  }).join("") || `<div class="empty">Zatiaľ žiadne dáta</div>`;
+  document.getElementById("dkp").innerHTML = d.dkp.map((p,i)=>`<tr><td class="rank">${i+1}</td><td>${esc(p.name)}</td>
+    <td style="color:var(--${esc(p.cls)},var(--muted))">${esc(p.cls||"—")}</td><td><b>${p.points}</b></td><td>${p.attendance==null?"—":p.attendance+" %"}</td><td>${(p.badges||[]).map(b=>`<span title="${esc(b.name)}">${b.icon}</span>`).join(" ")||"—"}</td></tr>`).join("")
+    || `<tr><td colspan="6" class="empty">Zatiaľ nikto</td></tr>`;
+  document.getElementById("loot").innerHTML = d.loot.map(l=>`<tr><td>${esc(l.item)}</td><td>${esc(l.name)}</td><td>${l.amount}</td><td class="muted">${day(l.t)}</td></tr>`).join("")
+    || `<tr><td colspan="4" class="empty">Zatiaľ nič</td></tr>`;
+  if (d.updated) document.getElementById("foot").textContent = "wow-forever.sk · aktualizované "+new Date(d.updated).toLocaleString("sk-SK");
+}).catch(()=>{ document.getElementById("raids").innerHTML=`<div class="empty">Dáta sa nepodarilo načítať.</div>`; });
+</script>
+</body>
+</html>

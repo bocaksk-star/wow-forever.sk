@@ -2,3 +2,20 @@ node_modules/
 .wrangler/
 .dev.vars
 dist/
+
+# RaidLead bot (bot/) — tajomstvá a runtime dáta ostávajú len lokálne
+bot/.env
+bot/__pycache__/
+bot/.venv/
+bot/dkp.json
+bot/raids.json
+bot/attendance.json
+bot/profiles.json
+bot/ledger.json
+bot/settings.json
+bot/players.json
+bot/achievements.json
+bot/kills.json
+# zvukové klipy (nelicencované, len pre guildu) — repo je verejné
+bot/sounds/**/*.mp3
+bot/sounds/*.mp3

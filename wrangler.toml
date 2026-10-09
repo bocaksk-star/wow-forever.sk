@@ -15,3 +15,20 @@ database_name = "wow-forever-sk"
 database_id = "8449d190-5795-4b48-8bef-ed7fa48992e0"
 
 # Admin kľúč (schvaľovanie guild na /admin?key=...): npx wrangler secret put ADMIN_KEY
+
+# ---- RaidLead dashboard (zlúčený do tohto workera, cesta /raid) ----
+# HTML stránky dashboardu sa importujú ako text
+[[rules]]
+type = "Text"
+globs = ["**/*.html"]
+fallthrough = true
+
+[vars]
+# Discord prihlásenie hráčov (/raid/me): Client ID z discord.com/developers → OAuth2 (verejná hodnota)
+DISCORD_CLIENT_ID = ""
+
+# Secrets pre /raid (Cloudflare → Workers → wow-forever-sk → Settings → Variables and Secrets,
+# alebo: npx wrangler secret put <NÁZOV>):
+#   ADMIN_PASSWORD        – heslo officerov do dashboardu /raid
+#   BOT_KEY               – dlhý náhodný reťazec; ten istý dať botovi do bot/.env ako DASHBOARD_KEY
+#   DISCORD_CLIENT_SECRET – Client Secret Discord aplikácie (pre /raid/me)

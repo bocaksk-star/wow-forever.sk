@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="sk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Môj profil | WoW Forever</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0F1528;--panel:#18203A;--panel2:#1F2948;--line:#2D3860;--gold:#E2AE4C;--gold2:#F0CB82;--text:#E8E2D3;--muted:#A1A9C2;--ok:#5fbf6a;--bad:#d9574a;
+--Warrior:#c69b6d;--Paladin:#f48cba;--Hunter:#aad372;--Rogue:#fff468;--Priest:#ffffff;--Shaman:#0070dd;--Mage:#3fc7eb;--Warlock:#8788ee;--Druid:#ff7c0a}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(1400px 700px at 50% -250px,#1b2a55 0%,var(--bg) 62%);color:var(--text);font:15px/1.55 Inter,system-ui,sans-serif;min-height:100vh}
+h1,h2{font-family:Cinzel,serif;color:var(--gold2);margin:0}
+a{color:var(--gold)}
+.wrap{max-width:1100px;margin:0 auto;padding:16px}
+.top{display:flex;align-items:center;gap:12px;padding:8px 0 18px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.top img{width:44px;height:44px;border-radius:50%;border:2px solid var(--gold)}
+.top .sp{flex:1}
+.btn{display:inline-block;background:linear-gradient(180deg,#e2b04f,#b9852a);color:#1a1206;border:0;border-radius:8px;padding:10px 18px;font:700 14px Inter;cursor:pointer;text-decoration:none}
+.btn.ghost{background:transparent;color:var(--gold);border:1px solid var(--line)}
+.btn.discord{background:#5865f2;color:#fff;font-size:16px;padding:13px 22px}
+.grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(min(100%,330px),1fr));margin-top:16px}
+.card{background:linear-gradient(180deg,var(--panel2),var(--panel));border:1px solid var(--line);border-radius:14px;padding:18px}
+.card h2{font-size:17px;margin-bottom:12px}
+.big{font:900 46px Cinzel,serif;color:var(--gold2);line-height:1}
+.muted{color:var(--muted);font-size:13px}
+.bar{height:8px;background:#0c1022;border-radius:4px;overflow:hidden;margin:6px 0}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,#b9852a,var(--gold2))}
+table{width:100%;border-collapse:collapse;font-size:14px}
+td{padding:6px 4px;border-bottom:1px solid #2D3860}
+.pos{color:var(--ok)} .neg{color:var(--bad)}
+.raid{border-left:3px solid var(--gold);padding:8px 12px;margin-bottom:10px;background:#131a33;border-radius:0 8px 8px 0}
+.pill{display:inline-block;font-size:12px;padding:1px 9px;border-radius:99px;border:1px solid var(--line);margin-right:4px}
+.pill.ok{color:var(--ok);border-color:var(--ok)} .pill.no{color:var(--bad);border-color:var(--bad)}
+.badges{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}
+.badge{border:1px solid var(--line);border-radius:10px;padding:8px;text-align:center;font-size:13px;background:#131a33}
+.badge .i{font-size:26px;display:block}
+.badge.off{opacity:.3;filter:grayscale(1)}
+.badge.on{border-color:var(--gold)}
+.empty{color:var(--muted);font-style:italic}
+.center{max-width:420px;margin:14vh auto;text-align:center}
+.hidden{display:none!important}
+</style>
+</head>
+<body>
+<div id="login" class="center card hidden">
+  <h1 style="font-size:28px;margin-bottom:8px">⚔️ Môj profil</h1>
+  <p class="muted">Prihlás sa cez Discord a uvidíš svoje DKP, účasť, loot, odznaky a raidy. Nič nepublikujeme, bot z Discordu číta len tvoje meno.</p>
+  <p><a class="btn discord" href="/raid/login">Prihlásiť cez Discord</a></p>
+  <p class="muted"><a href="/raid/guild">Verejná stránka guildy</a></p>
+</div>
+
+<div id="app" class="wrap hidden">
+  <div class="top">
+    <img id="avatar" alt="">
+    <div><h1 id="uname" style="font-size:22px"></h1><div class="muted" id="subtitle"></div></div>
+    <span class="sp"></span>
+    <a class="btn ghost" href="/raid/guild">Guild</a>
+    <button class="btn ghost" id="logout">Odhlásiť</button>
+  </div>
+  <div id="unknown" class="card hidden" style="margin-top:16px"><b>Bot ťa zatiaľ nepozná.</b> Na Discorde napíš <code>/profile</code> (nastav postavu) a prihlás sa na raid. Potom sa tu objavia tvoje dáta.</div>
+  <div class="grid">
+    <div class="card"><h2>💰 DKP</h2><div class="big" id="dkp">0</div><div class="muted" id="rank"></div>
+      <table style="margin-top:10px"><tbody id="hist"></tbody></table></div>
+    <div class="card"><h2>📊 Účasť</h2><div class="big" id="pct">–</div><div class="bar"><i id="pctbar" style="width:0"></i></div>
+      <div class="muted" id="att"></div>
+      <h2 style="margin-top:16px">🔑 Attunementy</h2><div id="attune"></div></div>
+    <div class="card"><h2>📅 Najbližšie raidy</h2><div id="raids"></div>
+      <p class="muted">📆 <a href="/raid/cal.ics">Predplatiť kalendár</a> (Google / Apple / Outlook)</p></div>
+    <div class="card"><h2>🎁 Môj loot</h2><table><tbody id="loot"></tbody></table></div>
+    <div class="card"><h2>🎯 Wishlist</h2><div id="wish"></div><p class="muted">Pridať: <code>/wishlist add</code> na Discorde.</p></div>
+    <div class="card"><h2>🧠 Ostatné</h2><div id="misc"></div></div>
+    <div class="card" style="grid-column:1/-1"><h2>🏅 Odznaky <span class="muted" id="achcount"></span></h2><div class="badges" id="badges"></div></div>
+  </div>
+</div>
+
+<script>
+const $=(s)=>document.querySelector(s);
+const esc=(s)=>String(s??"").replace(/[&<>"']/g,(c)=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const ROLE={tank:"🛡️ Tank",healer:"💚 Healer",dps:"⚔️ DPS",absent:"❌ Neprídem"};
+const ATT={mc:"Molten Core",ony:"Onyxia",bwl:"Blackwing Lair"};
+const when=(t)=>new Date(t*1000).toLocaleDateString("sk-SK",{day:"numeric",month:"numeric"});
+$("#logout").onclick=async()=>{await fetch("/raid/api/pl-logout",{method:"POST"});location.reload();};
+fetch("/raid/api/me").then(async r=>{
+  if(r.status===401){$("#login").classList.remove("hidden");return;}
+  const d=await r.json(); $("#app").classList.remove("hidden");
+  const u=d.user; $("#uname").textContent=d.profile?.character||u.name;
+  $("#avatar").src=u.avatar?`https://cdn.discordapp.com/avatars/${u.id}/${u.avatar}.png?size=96`:"https://cdn.discordapp.com/embed/avatars/0.png";
+  const p=d.profile||{};
+  $("#subtitle").innerHTML=p.cls?`<span style="color:var(--${esc(p.cls)})">${esc([p.spec,p.cls].filter(Boolean).join(" "))}</span> · ${esc(ROLE[p.role]||"")} · ${esc(u.name)}`:esc(u.name);
+  if(!d.known) $("#unknown").classList.remove("hidden");
+  $("#dkp").textContent=d.dkp.points;
+  $("#rank").textContent=d.rank?`#${d.rank.pos} z ${d.rank.of} hráčov`:"";
+  $("#hist").innerHTML=d.dkp.history.map(h=>`<tr><td class="${h.amount>=0?"pos":"neg"}">${h.amount>0?"+":""}${h.amount}</td><td>${esc(h.reason)}</td><td class="muted">${when(h.t)}</td></tr>`).join("")||`<tr><td class="empty">Zatiaľ žiadne zmeny</td></tr>`;
+  const s=d.stats;
+  $("#pct").textContent=s&&s.total?s.pct+" %":"–"; $("#pctbar").style.width=(s?.pct||0)+"%";
+  $("#att").textContent=s&&s.total?`${s.attended} z ${s.total} raidov (ospravedlnené sa nepočítajú)`:"Zatiaľ žiadne uzavreté raidy";
+  $("#attune").innerHTML=Object.entries(ATT).map(([k,n])=>`<div>${p.attunes?.[k]?"✅":"⬜"} ${n}</div>`).join("")+`<div class="muted" style="margin-top:6px">Nastavíš cez <code>/attune</code></div>`;
+  $("#raids").innerHTML=d.raids.map(r=>`<div class="raid"><b style="font-family:Cinzel,serif;color:var(--gold2)">${esc(r.name)}</b><div>${esc(r.time)} <span class="muted">· ${r.going} prihlásených</span></div>
+    <div style="margin-top:4px">${r.mine?(r.mine.role==="absent"?`<span class="pill no">Neprídem${r.mine.reason?": "+esc(r.mine.reason):""}</span>`:`<span class="pill ok">${esc(ROLE[r.mine.role])} · ${esc(r.mine.cls)}</span>`):`<span class="pill">Neprihlásený, klikni v Discorde</span>`}
+    ${r.sr.map(i=>`<span class="pill">📌 ${esc(i)}</span>`).join("")}</div></div>`).join("")||`<div class="empty">Žiadny naplánovaný raid</div>`;
+  $("#loot").innerHTML=d.loot.map(l=>`<tr><td>${esc(l.item)}${l.from?` <span class="muted">(od ${esc(l.from)})</span>`:""}</td><td>${l.amount||0} DKP</td><td class="muted">${when(l.t)}</td></tr>`).join("")||`<tr><td class="empty">Zatiaľ žiadny loot</td></tr>`;
+  $("#wish").innerHTML=d.wishlist.map(i=>`<div>🎯 ${esc(i)}</div>`).join("")||`<div class="empty">Prázdny</div>`;
+  $("#misc").innerHTML=`<div>⭐ MVP raidu: <b>${d.mvp}×</b></div><div>🧠 Správne trivia: <b>${d.trivia}</b></div>`;
+  const defs=d.ach_defs, got=new Set(d.ach);
+  $("#achcount").textContent=`(${got.size}/${Object.keys(defs).length})`;
+  $("#badges").innerHTML=Object.entries(defs).map(([k,a])=>`<div class="badge ${got.has(k)?"on":"off"}" title="${esc(a.desc)}"><span class="i">${a.icon}</span><b>${esc(a.name)}</b><div class="muted">${esc(a.desc)}</div></div>`).join("");
+}).catch(()=>{$("#login").classList.remove("hidden");});
+</script>
+</body>
+</html>

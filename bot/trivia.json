@@ -1,0 +1,19 @@
+[
+  {"q": "Čo sa stane, keď zabiješ Firesworn addy pri Garrovi vedľa raidu?", "options": ["Explodujú a zraňujú okolie", "Respawnú sa", "Vyhealujú Garra", "Nič sa nestane"], "answer": 0, "explain": "Firesworn pri smrti vybuchnú, preto sa zabíjajú ďaleko od raidu alebo sa banishujú."},
+  {"q": "Dostal si Living Bomb od Barona Geddona. Čo urobíš?", "options": ["Utečiem preč od raidu", "Stojím na mieste", "Skočím na tanka", "Použijem bandáž"], "answer": 0, "explain": "Bomba vybuchne a zraní všetkých okolo, takže bežíš na bomb spot ďaleko od raidu."},
+  {"q": "Čo je potrebné proti Magmadarovmu Panic (fear)?", "options": ["Fear Ward alebo Tremor Totem", "Frost Resist", "Hourglass Sand", "Nič, je to len damage"], "answer": 0, "explain": "Panic je AoE fear, tank by mal mať Fear Ward alebo shaman Tremor Totem."},
+  {"q": "Koľko Sons of Flame sa objaví, keď sa Ragnaros ponorí?", "options": ["8", "4", "12", "2"], "answer": 0, "explain": "Osem Sons of Flame, všetci ich bijú čo najrýchlejšie."},
+  {"q": "Koľko addov má Majordomo Executus?", "options": ["8 (4 healeri a 4 elite)", "2", "5", "10"], "answer": 0, "explain": "4 Flamewaker Healers a 4 Flamewaker Elites. Healerov bijeme prvých."},
+  {"q": "Koľko vajec treba zničiť pri Razorgorovi v 1. fáze?", "options": ["30", "10", "20", "50"], "answer": 0, "explain": "Hráč s Orb of Command ovláda Razorgora a ničí vajcia."},
+  {"q": "Čo ti hrozí pri Burning Adrenaline u Vaelastrasza?", "options": ["Po zhruba 20 s zomrieš a vybuchneš", "Stratíš manu", "Si na 5 s stunnutý", "Získaš viac damage"], "answer": 0, "explain": "Ak ho dostaneš, utekaj preč od raidu, výbuch zraňuje okolie."},
+  {"q": "Kto je v 1. fáze Nefariana v Blackwing Lair?", "options": ["Lord Victor Nefarius", "Onyxia", "Chromaggus", "Ragnaros"], "answer": 0, "explain": "Victor Nefarius volá drakonidov, potom pristane samotný Nefarian."},
+  {"q": "Čo robí Onyxia v 2. fáze?", "options": ["Lietá a robí Deep Breath", "Spí", "Ostane pri tanku", "Zmizne z miestnosti"], "answer": 0, "explain": "Počas Deep Breath choďte na boky, nie do línie jej pohľadu."},
+  {"q": "Čo odstráni Brood Affliction: Bronze od Chromaggusa?", "options": ["Hourglass Sand", "Fear Ward", "Fire Protection Potion", "Tranquilizing Shot"], "answer": 0, "explain": "Hourglass Sand cureuje Bronze afflikciu."},
+  {"q": "Ako zhodíš stacky Flame Buffet pri Firemawovi?", "options": ["Schováš sa mimo line of sight", "Použiješ Fear Ward", "Zomrieš", "Nijako"], "answer": 0, "explain": "Ranged a healeri sa schovajú za roh alebo pilier, stacky zmiznú, potom sa vrátia."},
+  {"q": "Čo robí Shazzrah, čo vymaže threat?", "options": ["Blink na náhodného hráča", "Fear", "Knock Away", "Teleport tanka"], "answer": 0, "explain": "Preto sa raid drží blízko, aby tanky rýchlo prebrali bossa."},
+  {"q": "Čo spôsobuje Lucifron's Curse?", "options": ["Zdvojnásobí cenu many", "Zníži healing o 75 %", "Spomalí hráča", "Zmenšuje health"], "answer": 0, "explain": "Preto sa curse hneď decursuje, hlavne pri casteroch."},
+  {"q": "O koľko Gehennas' Curse znižuje healing?", "options": ["75 %", "25 %", "50 %", "10 %"], "answer": 0, "explain": "Decurse tankov ako prvých."},
+  {"q": "Čo robíš ako hunter pri Frenzy na Magmadarovi alebo Flamegorovi?", "options": ["Tranquilizing Shot", "Feign Death", "Aspect of the Hawk", "Nič"], "answer": 0, "explain": "Tranq Shot odstráni Frenzy, ideálne v rotácii dvoch hunterov."},
+  {"q": "Koho zabíjaš prvého pri Sulfuron Harbingerovi?", "options": ["Flamewaker Priests (healerov)", "Sulfurona", "Ragnarosa", "Nikoho"], "answer": 0, "explain": "Priestov bijeme prví a prerušujeme ich heal."},
+  {"q": "Čo robíš s Core Ragermi pri Golemaggovi?", "options": ["Off-tank ich drží, ignorujú sa", "Zabijem ich prvé", "Banishujem ich", "Fearujem ich"], "answer": 0, "explain": "Core Ragery nemôžu zomrieť, kým žije Golemagg."}
+]

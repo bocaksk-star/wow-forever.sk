@@ -1,0 +1,439 @@
+<!doctype html>
+<html lang="sk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>RaidLead Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0d0b09; --panel:#17130f; --panel2:#1f1a14; --line:#3a2f22;
+  --gold:#d9a441; --gold2:#f3cf7a; --text:#eee3cf; --muted:#a8987f;
+  --ok:#5fbf6a; --bad:#d9574a; --warn:#e0a03a; --blue:#5aa2d6;
+  --tank:#c69b6d; --heal:#5fbf6a; --dps:#d9574a;
+}
+*{box-sizing:border-box}
+input[type=checkbox]{accent-color:var(--gold)}
+body{margin:0;background:radial-gradient(1200px 600px at 50% -200px,#2a1d0e 0%,var(--bg) 60%);color:var(--text);font:15px/1.5 Inter,system-ui,sans-serif;min-height:100vh}
+h1,h2,h3{font-family:Cinzel,serif;color:var(--gold2);letter-spacing:.5px;margin:0}
+a{color:var(--gold)}
+.wrap{max-width:1150px;margin:0 auto;padding:16px}
+header{display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding:6px 0 14px;border-bottom:1px solid var(--line)}
+header h1{font-size:24px}
+.pill{display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:99px;font-size:13px;background:var(--panel2);border:1px solid var(--line)}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--bad)}
+.dot.on{background:var(--ok);box-shadow:0 0 8px var(--ok)}
+.spacer{flex:1}
+nav{display:flex;gap:4px;flex-wrap:wrap;margin:14px 0}
+nav button{background:transparent;border:1px solid transparent;color:var(--muted);padding:8px 14px;border-radius:8px;cursor:pointer;font:600 14px Inter}
+nav button.active{color:var(--gold2);border-color:var(--line);background:var(--panel)}
+nav .badge{background:var(--bad);color:#fff;border-radius:99px;padding:0 7px;font-size:12px;margin-left:4px}
+.grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.card{background:linear-gradient(180deg,var(--panel2),var(--panel));border:1px solid var(--line);border-radius:12px;padding:16px}
+.card h2{font-size:17px;margin-bottom:12px}
+.stat{font:700 30px Cinzel,serif;color:var(--gold2)}
+.muted{color:var(--muted);font-size:13px}
+label{display:block;font-size:13px;color:var(--muted);margin:10px 0 4px}
+input,select,textarea{width:100%;background:#0f0c09;border:1px solid var(--line);color:var(--text);border-radius:8px;padding:9px 10px;font:14px Inter}
+textarea{min-height:90px;resize:vertical}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--gold)}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:end}
+.row>*{flex:1;min-width:120px}
+.btn{background:linear-gradient(180deg,#e2b04f,#b9852a);color:#1a1206;border:0;border-radius:8px;padding:9px 16px;font:700 14px Inter;cursor:pointer;margin-top:12px}
+.btn.ghost{background:transparent;color:var(--gold);border:1px solid var(--line)}
+.btn.ok{background:var(--ok);color:#06140a}
+.btn.bad{background:var(--bad);color:#fff}
+.btn.sm{padding:5px 10px;font-size:13px;margin:0}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{text-align:left;color:var(--muted);font-weight:500;font-size:12px;text-transform:uppercase;letter-spacing:.5px;padding:6px 8px;border-bottom:1px solid var(--line)}
+td{padding:8px;border-bottom:1px solid #2a2219}
+.tw{overflow-x:auto}
+.role-tank{color:var(--tank)} .role-healer{color:var(--heal)} .role-dps{color:var(--dps)} .role-absent{color:var(--muted)}
+.switch{display:flex;background:#0f0c09;border:1px solid var(--line);border-radius:10px;padding:4px;gap:4px}
+.switch button{flex:1;border:0;background:transparent;color:var(--muted);padding:10px;border-radius:7px;font:600 14px Inter;cursor:pointer}
+.switch button.on{background:var(--gold);color:#1a1206}
+.toggle{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid #2a2219}
+.toggle input{width:auto;transform:scale(1.3)}
+.status-queued{color:var(--warn)} .status-done{color:var(--ok)} .status-failed{color:var(--bad)}
+#toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:var(--panel2);border:1px solid var(--gold);padding:10px 18px;border-radius:10px;display:none;z-index:9;max-width:90vw}
+#login{max-width:360px;margin:12vh auto}
+.hidden{display:none!important}
+.raid-head{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:10px}
+.cols h3{font:600 13px Inter;color:var(--muted);margin-bottom:4px}
+.chip{display:flex;justify-content:space-between;align-items:center;font-size:13px;padding:3px 0}
+.x{background:none;border:0;color:var(--muted);cursor:pointer;font-size:15px}
+.x:hover{color:var(--bad)}
+.empty{color:var(--muted);font-style:italic;padding:8px 0}
+.bar{height:6px;background:#0f0c09;border-radius:3px;overflow:hidden;margin-top:3px;min-width:70px}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,#b9852a,var(--gold2))}
+.sr{margin-top:10px;font-size:13px;border-top:1px solid #2a2219;padding-top:8px}
+</style>
+</head>
+<body>
+
+<div id="login" class="card">
+  <h1 style="font-size:22px;margin-bottom:6px">RaidLead</h1>
+  <p class="muted">Dashboard pre officerov guildy.</p>
+  <label>Heslo</label>
+  <input id="pw" type="password" autocomplete="current-password">
+  <button class="btn" id="loginBtn">Prihlásiť</button>
+  <p id="loginErr" style="color:var(--bad)"></p>
+</div>
+
+<div id="app" class="wrap hidden">
+  <header>
+    <h1>⚔️ RaidLead</h1>
+    <span class="pill"><span id="dot" class="dot"></span><span id="botStatus">offline</span></span>
+    <span class="pill" id="voicePill">🔇 nie vo voice</span>
+    <span class="spacer"></span>
+    <span class="muted" id="updated"></span>
+    <button class="btn ghost sm" id="logout">Odhlásiť</button>
+  </header>
+
+  <nav id="tabs">
+    <button data-tab="overview" class="active">Prehľad</button>
+    <button data-tab="raids">Raidy</button>
+    <button data-tab="approve">Schvaľovanie <span id="pendBadge" class="badge hidden"></span></button>
+    <button data-tab="dkp">DKP</button>
+    <button data-tab="loot">Loot</button>
+    <button data-tab="stats">Štatistiky</button>
+    <button data-tab="announce">Oznámenia</button>
+    <button data-tab="settings">Nastavenia</button>
+    <button data-tab="log">História</button>
+  </nav>
+
+  <!-- PREHĽAD -->
+  <section data-panel="overview" class="grid">
+    <div class="card"><h2>Najbližší raid</h2><div id="ovRaid" class="empty">Žiadny</div></div>
+    <div class="card"><h2>Čaká na schválenie</h2><div class="stat" id="ovPending">0</div><div class="muted">DKP zmeny a loot</div></div>
+    <div class="card"><h2>DKP top 5</h2><div id="ovTop"></div></div>
+    <div class="card"><h2>Guild progress</h2><div id="ovProg"></div></div>
+    <div class="card"><h2>Rýchla správa</h2>
+      <textarea id="quickText" placeholder="Napr. Dnes MC o 20:00, flasky so sebou!"></textarea>
+      <div class="row"><button class="btn" data-quick="announce">Poslať do Discordu</button><button class="btn ghost" data-quick="say">Povedať vo voice</button><button class="btn ghost" id="triviaBtn">🧠 Trivia</button></div>
+    </div>
+  </section>
+
+  <!-- RAIDY -->
+  <section data-panel="raids" class="hidden">
+    <div class="card" style="margin-bottom:14px">
+      <h2>Nový raid</h2>
+      <div class="row">
+        <div><label>Raid</label><select id="rName"><option>Molten Core</option><option>Blackwing Lair</option><option>Onyxia</option></select></div>
+        <div><label>Dátum a čas</label><input id="rTime" type="datetime-local"></div>
+        <div><label>Kanál</label><select id="rChan" class="chanSel"></select></div>
+      </div>
+      <label>Poznámka</label><input id="rNote" placeholder="Fire resist gear, flasky…">
+      <button class="btn" id="rCreate">Vytvoriť a poslať sign-up</button>
+    </div>
+    <div id="raidList"></div>
+  </section>
+
+  <!-- SCHVAĽOVANIE -->
+  <section data-panel="approve" class="hidden">
+    <div class="card">
+      <div class="raid-head"><h2>Čaká na schválenie</h2><button class="btn ok sm" id="approveAll">Schváliť všetko</button></div>
+      <div class="tw"><table><thead><tr><th>Hráč</th><th>Zmena</th><th>Dôvod</th><th>Kedy</th><th></th></tr></thead><tbody id="pendRows"></tbody></table></div>
+    </div>
+  </section>
+
+  <!-- DKP -->
+  <section data-panel="dkp" class="hidden grid">
+    <div class="card">
+      <h2>Pridať / ubrať body</h2>
+      <label>Komu</label>
+      <select id="aWho"></select>
+      <div class="row">
+        <div><label>Body (mínus = ubrať)</label><input id="aAmt" type="number" value="10"></div>
+        <div><label>Dôvod</label><input id="aWhy" placeholder="MC full clear"></div>
+      </div>
+      <button class="btn" id="aSend">Pripísať</button>
+      <p class="muted">Z dashboardu sa body pripisujú hneď (už je to schválené tebou).</p>
+    </div>
+    <div class="card">
+      <h2>Rebríček</h2>
+      <input id="dkpFilter" placeholder="Hľadať hráča…">
+      <div class="tw"><table><thead><tr><th>#</th><th>Hráč</th><th>DKP</th></tr></thead><tbody id="dkpRows"></tbody></table></div>
+    </div>
+  </section>
+
+  <!-- LOOT -->
+  <section data-panel="loot" class="hidden grid">
+    <div class="card">
+      <h2>Otvoriť bidovanie</h2>
+      <label>Item</label><input id="lItem" placeholder="Onyxia Head">
+      <div class="row">
+        <div><label>Minimálny bid</label><input id="lMin" type="number" value="0"></div>
+        <div><label>Kanál</label><select id="lChan" class="chanSel"></select></div>
+      </div>
+      <button class="btn" id="lOpen">Spustiť bidovanie</button>
+      <div id="auction" class="muted" style="margin-top:12px"></div>
+    </div>
+    <div class="card">
+      <h2>História lootu</h2>
+      <div class="tw"><table><thead><tr><th>Item</th><th>Hráč</th><th>DKP</th><th>Stav</th></tr></thead><tbody id="lootRows"></tbody></table></div>
+    </div>
+  </section>
+
+  <!-- OZNÁMENIA -->
+  <section data-panel="announce" class="hidden">
+    <div class="card">
+      <h2>Oznámenie</h2>
+      <div class="row">
+        <div><label>Kanál</label><select id="nChan" class="chanSel"></select></div>
+        <div><label>Ping</label><select id="nPing"><option value="">bez pingu</option><option value="here">@here</option><option value="role">raid rola</option></select></div>
+      </div>
+      <label>Text</label><textarea id="nText" placeholder="Zajtra BWL o 20:00. Onyxia plášte povinné!"></textarea>
+      <div class="toggle"><span>Povedať aj nahlas vo voice</span><input type="checkbox" id="nSpeak"></div>
+      <button class="btn" id="nSend">Odoslať</button>
+    </div>
+  </section>
+
+  <!-- ŠTATISTIKY -->
+  <section data-panel="stats" class="hidden">
+    <div class="card">
+      <div class="raid-head"><h2>Hráči – účasť, loot, attunementy</h2><a href="/raid/guild" target="_blank" class="btn ghost sm">Verejná stránka ↗</a></div>
+      <div class="tw"><table><thead><tr><th>Hráč</th><th>Postava</th><th>Účasť</th><th>DKP</th><th>Loot</th><th>MC</th><th>Ony</th><th>BWL</th><th>Odznaky</th></tr></thead><tbody id="statRows"></tbody></table></div>
+      <p class="muted">Účasť = posledných 20 uzavretých raidov. Attunementy si hráči nastavujú cez /attune, postavu cez /profile.</p>
+    </div>
+  </section>
+
+  <!-- NASTAVENIA -->
+  <section data-panel="settings" class="hidden grid">
+    <div class="card">
+      <h2>Hlas raid leadera</h2>
+      <div class="switch" id="voiceSwitch">
+        <button data-voice="male">🧔 Mužský (Lukáš)</button>
+        <button data-voice="female">👩 Ženský (Viktória)</button>
+      </div>
+      <button class="btn ghost" id="voiceTest">Test hlasu</button>
+    </div>
+    <div class="card">
+      <h2>Pravidlá</h2>
+      <div class="toggle"><span>DKP a loot z Discordu treba schváliť</span><input type="checkbox" data-setting="dkp_approval"></div>
+      <div class="toggle"><span>Pripomienky raidov (60 a 15 min)</span><input type="checkbox" data-setting="reminders"></div>
+      <div class="toggle"><span>Meliško zvuky pri pull/wipe/kill</span><input type="checkbox" data-setting="event_sounds"></div>
+      <div class="toggle"><span>DM pripomienky hráčom (60 a 15 min)</span><input type="checkbox" data-setting="dm_reminders"></div>
+      <div class="toggle"><span>Automatická rola Raider po sign-upe</span><input type="checkbox" data-setting="auto_role"></div>
+      <div class="toggle"><span>Meme hlášky pri pull/wipe/kill</span><input type="checkbox" data-setting="meme_mode"></div>
+      <label>DKP za účasť pri uzavretí raidu</label>
+      <div class="row"><input id="sAtt" type="number" min="0" max="1000"><button class="btn sm" data-save="attendance_dkp|sAtt" style="flex:0">Uložiť</button></div>
+      <label>Soft reservov na hráča (0 = vypnuté)</label>
+      <div class="row"><input id="sSr" type="number" min="0" max="5"><button class="btn sm" data-save="sr_limit|sSr" style="flex:0">Uložiť</button></div>
+      <label>MVP hlasovanie po raide (minúty, 0 = vypnuté)</label>
+      <div class="row"><input id="sMvpMin" type="number" min="0" max="120"><button class="btn sm" data-save="mvp_minutes|sMvpMin" style="flex:0">Uložiť</button></div>
+      <label>Bonus DKP pre MVP</label>
+      <div class="row"><input id="sMvpDkp" type="number" min="0" max="1000"><button class="btn sm" data-save="mvp_dkp|sMvpDkp" style="flex:0">Uložiť</button></div>
+      <label>DKP za správnu trivia odpoveď</label>
+      <div class="row"><input id="sTrDkp" type="number" min="0" max="100"><button class="btn sm" data-save="trivia_dkp|sTrDkp" style="flex:0">Uložiť</button></div>
+      <label>Dĺžka bidovania (sekundy)</label>
+      <div class="row"><input id="sBid" type="number" min="10" max="600"><button class="btn sm" id="sBidSave" style="flex:0">Uložiť</button></div>
+      <label>Kanál pre oznámenia</label>
+      <div class="row"><select id="sChan" class="chanSel"></select><button class="btn sm" id="sChanSave" style="flex:0">Uložiť</button></div>
+    </div>
+  </section>
+
+  <!-- HISTÓRIA -->
+  <section data-panel="log" class="hidden">
+    <div class="card"><h2>Príkazy z dashboardu</h2>
+      <div class="tw"><table><thead><tr><th>Kedy</th><th>Akcia</th><th>Stav</th><th>Výsledok</th></tr></thead><tbody id="logRows"></tbody></table></div>
+    </div>
+  </section>
+</div>
+
+<div id="toast"></div>
+
+<script>
+const $ = (s) => document.querySelector(s);
+const $$ = (s) => [...document.querySelectorAll(s)];
+const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const ROLE = {tank:"🛡️ Tank", healer:"💚 Healer", dps:"⚔️ DPS", absent:"❌ Absent"};
+let S = null;
+
+function toast(msg){ const t=$("#toast"); t.textContent=msg; t.style.display="block"; clearTimeout(t._h); t._h=setTimeout(()=>t.style.display="none",3500); }
+const ago = (ms) => { const s=Math.round((Date.now()-ms)/1000); return s<60?`pred ${s}s`:s<3600?`pred ${Math.round(s/60)} min`:new Date(ms).toLocaleString("sk-SK"); };
+const fmtTs = (t) => t ? new Date(t*1000).toLocaleString("sk-SK",{weekday:"short",day:"numeric",month:"numeric",hour:"2-digit",minute:"2-digit"}) : "";
+
+async function api(path, body){
+  const r = await fetch("/raid/api/"+path, body ? {method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify(body)} : {});
+  if (r.status===401 && path!=="login"){ showLogin(); throw new Error("login"); }
+  return r.json();
+}
+async function act(a, msg){
+  const r = await api("action", a);
+  toast(r.ok ? (msg||"Odoslané botovi – vykoná do pár sekúnd") : (r.error||"Chyba"));
+  setTimeout(load, 4000);
+}
+
+function showLogin(){ $("#app").classList.add("hidden"); $("#login").classList.remove("hidden"); }
+$("#loginBtn").onclick = async () => {
+  const r = await api("login",{password:$("#pw").value});
+  if (r.ok){ $("#login").classList.add("hidden"); $("#app").classList.remove("hidden"); load(); }
+  else $("#loginErr").textContent = r.error;
+};
+$("#pw").onkeydown = (e) => e.key==="Enter" && $("#loginBtn").click();
+$("#logout").onclick = async () => { await api("logout",{}); showLogin(); };
+
+$$("#tabs button").forEach(b => b.onclick = () => {
+  $$("#tabs button").forEach(x=>x.classList.toggle("active",x===b));
+  $$("[data-panel]").forEach(p=>p.classList.toggle("hidden",p.dataset.panel!==b.dataset.tab));
+});
+
+function render(){
+  const st = S.state || {};
+  const raids = st.raids || {}, dkp = st.dkp || {}, pending = st.pending || [], set = st.settings || {};
+  $("#dot").classList.toggle("on", S.online);
+  $("#botStatus").textContent = S.online ? `online${st.bot?.name ? " · "+st.bot.name : ""}` : "bot offline";
+  $("#voicePill").textContent = st.bot?.voice_channel ? `🔊 ${st.bot.voice_channel}` : "🔇 nie vo voice";
+  $("#updated").textContent = S.updated ? "sync "+ago(S.updated) : "";
+
+  // channels
+  const chans = st.channels || [];
+  $$(".chanSel").forEach(sel => {
+    const cur = sel.value || String(set.announce_channel || "");
+    sel.innerHTML = chans.length ? chans.map(c=>`<option value="${esc(c.id)}">#${esc(c.name)}</option>`).join("") : `<option value="">(predvolený kanál)</option>`;
+    if (cur) sel.value = cur;
+  });
+
+  // pending
+  $("#pendBadge").textContent = pending.length; $("#pendBadge").classList.toggle("hidden",!pending.length);
+  $("#ovPending").textContent = pending.length;
+  $("#pendRows").innerHTML = pending.map(p=>`<tr>
+    <td>${esc(p.name)}${p.count>1?` <span class="muted">+${p.count-1} ďalších</span>`:""}</td>
+    <td style="color:${p.amount<0?"var(--bad)":"var(--ok)"}">${p.amount>0?"+":""}${p.amount}</td>
+    <td>${esc(p.reason)}</td><td class="muted">${p.t?ago(p.t*1000):""}</td>
+    <td style="white-space:nowrap"><button class="btn ok sm" data-ap="${esc(p.id)}">✓</button> <button class="btn bad sm" data-rj="${esc(p.id)}">✕</button></td></tr>`).join("")
+    || `<tr><td colspan="5" class="empty">Nič nečaká ✨</td></tr>`;
+
+  // raids
+  const list = Object.entries(raids).reverse();
+  const upcoming = list.filter(([,r])=>!r.closed && (!r.ts || r.ts*1000>Date.now()-6*3600e3));
+  const next = upcoming.sort((a,b)=>(a[1].ts||9e12)-(b[1].ts||9e12))[0];
+  $("#ovRaid").innerHTML = next ? raidSummary(next[1]) : `<div class="empty">Žiadny naplánovaný raid</div>`;
+  $("#raidList").innerHTML = list.map(([id,r])=>raidCard(id,r)).join("") || `<div class="card empty">Zatiaľ žiadne raidy</div>`;
+
+  // dkp
+  const players = Object.entries(dkp).map(([uid,p])=>({uid,...p})).sort((a,b)=>b.points-a.points);
+  $("#ovTop").innerHTML = players.slice(0,5).map((p,i)=>`<div class="chip"><span>${i+1}. ${esc(p.name)}</span><b>${p.points}</b></div>`).join("") || `<div class="empty">Zatiaľ nikto</div>`;
+  const f = $("#dkpFilter").value.toLowerCase();
+  $("#dkpRows").innerHTML = players.filter(p=>p.name.toLowerCase().includes(f)).map((p,i)=>`<tr><td>${i+1}</td><td>${esc(p.name)}</td><td><b>${p.points}</b></td></tr>`).join("");
+  const who = $("#aWho").value;
+  $("#aWho").innerHTML = `<option value="__raid">Celý prihlásený raid (posledný)</option>` + players.map(p=>`<option value="${esc(p.uid)}">${esc(p.name)} (${p.points})</option>`).join("");
+  if (who) $("#aWho").value = who;
+
+  // loot
+  const au = st.auction;
+  $("#auction").innerHTML = au ? `⏳ Beží bidovanie: <b>${esc(au.item)}</b> · bidov: ${au.bids} · koniec ${ago(au.ends*1000).replace("pred","o")}` : "";
+  $("#lootRows").innerHTML = (st.loot_history||[]).slice().reverse().map(l=>`<tr><td>${esc(l.item)}</td><td>${esc(l.name)}</td><td>${l.amount}</td><td class="status-${["approved","traded"].includes(l.status)?"done":l.status==="rejected"?"failed":"queued"}">${{approved:"schválené",rejected:"zamietnuté",pending:"čaká",traded:"presunuté"}[l.status]||esc(l.status)}</td></tr>`).join("") || `<tr><td colspan="4" class="empty">Zatiaľ nič</td></tr>`;
+
+  // settings
+  $$("#voiceSwitch button").forEach(b=>b.classList.toggle("on", b.dataset.voice===(set.voice||"male")));
+  $$("[data-setting]").forEach(c=>c.checked = !!set[c.dataset.setting]);
+  if (document.activeElement!==$("#sBid")) $("#sBid").value = set.bid_seconds || 60;
+
+  // progress
+  const kills = st.kills || {}, rb = st.raid_bosses || {};
+  $("#ovProg").innerHTML = Object.entries(rb).map(([r,b])=>{ const d=b.filter(x=>kills[x]).length;
+    return `<div style="margin-bottom:8px"><div class="chip"><span>${esc(r)}</span><b>${d}/${b.length}</b></div><div class="bar"><i style="width:${Math.round(100*d/b.length)}%"></i></div></div>`; }).join("") || `<div class="empty">Zatiaľ žiadne killy</div>`;
+
+  // stats
+  const stats = st.stats || {}, profs = st.profiles || {};
+  const uids = [...new Set([...Object.keys(stats), ...Object.keys(profs), ...Object.keys(dkp)])];
+  const yes = (v)=> v ? "✅" : "⬜";
+  const badgesOf = (u)=> (st.players?.[u]?.ach||[]).map(k=>`<span title="${esc(st.ach_defs?.[k]?.name||k)}">${st.ach_defs?.[k]?.icon||""}</span>`).join(" ") || "—";
+  $("#statRows").innerHTML = uids.map(u=>({u, s:stats[u]||{}, p:profs[u]||{}, d:dkp[u]||{}}))
+    .sort((a,b)=>(b.s.pct||0)-(a.s.pct||0))
+    .map(({u,s,p,d})=>`<tr><td>${esc(s.name||p.discord||d.name||"?")}</td>
+      <td>${esc(p.character||"—")} <span class="muted">${esc([p.spec,p.cls].filter(Boolean).join(" "))}</span></td>
+      <td>${s.total?`${s.attended}/${s.total} (${s.pct} %)<div class="bar"><i style="width:${s.pct}%"></i></div>`:"—"}</td>
+      <td>${d.points??0}</td><td class="muted">${esc((s.loot||[]).slice(-3).join(", ")||"—")}</td>
+      <td>${yes(p.attunes?.mc)}</td><td>${yes(p.attunes?.ony)}</td><td>${yes(p.attunes?.bwl)}</td><td>${badgesOf(u)}</td></tr>`).join("")
+    || `<tr><td colspan="9" class="empty">Zatiaľ žiadne dáta</td></tr>`;
+  if (document.activeElement!==$("#sAtt")) $("#sAtt").value = set.attendance_dkp ?? 10;
+  if (document.activeElement!==$("#sSr")) $("#sSr").value = set.sr_limit ?? 1;
+  if (document.activeElement!==$("#sMvpMin")) $("#sMvpMin").value = set.mvp_minutes ?? 10;
+  if (document.activeElement!==$("#sMvpDkp")) $("#sMvpDkp").value = set.mvp_dkp ?? 5;
+  if (document.activeElement!==$("#sTrDkp")) $("#sTrDkp").value = set.trivia_dkp ?? 0;
+
+  // log
+  $("#logRows").innerHTML = (S.log||[]).map(l=>`<tr><td class="muted">${ago(l.created)}</td><td>${esc(describe(l.action))}</td><td class="status-${l.status}">${{queued:"čaká",done:"hotovo",failed:"chyba"}[l.status]}</td><td class="muted">${esc(l.result||"")}</td></tr>`).join("");
+}
+
+function raidSummary(r){
+  const s = Object.values(r.signups||{}); const c = (k)=>s.filter(p=>p.role===k).length;
+  return `<div style="font:600 18px Cinzel,serif">${esc(r.name)}</div><div class="muted">${esc(r.time)}</div>
+  <div style="margin-top:8px">🛡️ ${c("tank")} · 💚 ${c("healer")} · ⚔️ ${c("dps")} · ❌ ${c("absent")}</div>`;
+}
+function raidCard(id,r){
+  const s = Object.entries(r.signups||{});
+  const col = (k)=>`<div><h3 class="role-${k}">${ROLE[k]} (${s.filter(([,p])=>p.role===k).length})</h3>${
+    s.filter(([,p])=>p.role===k).map(([uid,p])=>`<div class="chip"><span>${esc(p.name)} <span class="muted">${esc(k==="absent"?(p.reason||""):p.cls)}</span></span><button class="x" title="Odstrániť" data-rm="${esc(id)}|${esc(uid)}">✕</button></div>`).join("") || `<div class="empty">—</div>`}</div>`;
+  return `<div class="card" style="margin-bottom:12px;${r.closed?"opacity:.55":""}">
+    <div class="raid-head"><div><h2 style="margin:0">${esc(r.name)}</h2><span class="muted">${esc(r.time)}${r.note?" · "+esc(r.note):""}${r.closed?" · uzavretý":""}</span></div>
+    <div class="row" style="flex:0;flex-wrap:nowrap">${r.closed?"":`<button class="btn sm ghost" data-award-raid="${esc(id)}">+ DKP raidu</button> <button class="btn sm bad" data-close="${esc(id)}">Uzavrieť</button>`}</div></div>
+    <div class="cols">${["tank","healer","dps","absent"].map(col).join("")}</div>${srBlock(r)}</div>`;
+}
+function srBlock(r){
+  const by={}; Object.values(r.sr||{}).forEach(v=>v.items.forEach(i=>(by[i]=by[i]||[]).push(v.name)));
+  const e=Object.entries(by); if(!e.length) return "";
+  return `<div class="sr"><b>📌 Soft reserve</b><br>${e.map(([i,n])=>`${esc(i)} – <span class="muted">${n.map(esc).join(", ")}</span>${n.length>1?" ⚔️":""}`).join("<br>")}</div>`;
+}
+function describe(a){
+  switch(a.type){
+    case "announce": return `Oznámenie: ${a.text}`;
+    case "say": return `Povedať: ${a.text}`;
+    case "approve": return `Schválené #${a.pid}`;
+    case "reject": return `Zamietnuté #${a.pid}`;
+    case "award": return `${a.amount>0?"+":""}${a.amount} DKP ${a.uid?"hráčovi":a.raid?"raidu":"celému raidu"} (${a.reason})`;
+    case "setting": return `Nastavenie ${a.key} = ${a.value}`;
+    case "raid_create": return `Nový raid ${a.name} ${a.time}`;
+    case "raid_close": return `Uzavretý raid (dochádzka + DKP za účasť)`;
+    case "signup_remove": return `Odstránený zo sign-upu`;
+    case "loot_open": return `Bidovanie: ${a.item}`;
+    case "trivia": return `Trivia otázka`;
+    default: return a.type;
+  }
+}
+
+// ---- actions ----
+document.addEventListener("click", (e) => {
+  const t = e.target.closest("button"); if (!t) return;
+  if (t.dataset.ap) act({type:"approve",pid:t.dataset.ap},"Schválené");
+  if (t.dataset.rj) act({type:"reject",pid:t.dataset.rj},"Zamietnuté");
+  if (t.dataset.close && confirm("Uzavrieť raid? Zapíše sa dochádzka, prítomní dostanú DKP za účasť a sign-up sa zamkne.")) act({type:"raid_close",rid:t.dataset.close});
+  if (t.dataset.rm){ const [rid,uid]=t.dataset.rm.split("|"); if (confirm("Odstrániť hráča zo sign-upu?")) act({type:"signup_remove",rid,uid}); }
+  if (t.dataset.awardRaid){ const n=prompt("Koľko DKP pre všetkých prihlásených?","10"); if (n){ const why=prompt("Dôvod?","Raid")||"Raid"; act({type:"award",raid:t.dataset.awardRaid,amount:parseInt(n,10),reason:why}); } }
+  if (t.dataset.save){ const [key,id]=t.dataset.save.split("|"); act({type:"setting",key,value:parseInt($("#"+id).value,10)||0},"Uložené"); }
+  if (t.dataset.voice) act({type:"setting",key:"voice",value:t.dataset.voice},"Hlas prepnutý");
+  if (t.dataset.quick){ const text=$("#quickText").value.trim(); if(!text) return; act({type:t.dataset.quick,text}); $("#quickText").value=""; }
+});
+$("#approveAll").onclick = () => { const p=(S.state?.pending)||[]; if(p.length && confirm(`Schváliť ${p.length} položiek?`)) p.forEach(x=>act({type:"approve",pid:x.id},"Všetko schválené")); };
+$("#rCreate").onclick = () => {
+  const v=$("#rTime").value; if(!v) return toast("Vyber dátum a čas");
+  const d=new Date(v); const time=`${d.getDate()}.${d.getMonth()+1}.${d.getFullYear()} ${String(d.getHours()).padStart(2,"0")}:${String(d.getMinutes()).padStart(2,"0")}`;
+  act({type:"raid_create",name:$("#rName").value,time,note:$("#rNote").value,channel:$("#rChan").value},"Raid vytvorený – bot pošle sign-up kartu");
+};
+$("#aSend").onclick = () => {
+  const amount=parseInt($("#aAmt").value,10); if(!amount) return toast("Zadaj body");
+  const who=$("#aWho").value, reason=$("#aWhy").value||"Dashboard";
+  act(who==="__raid" ? {type:"award",amount,reason} : {type:"award",uid:who,amount,reason});
+};
+$("#lOpen").onclick = () => { const item=$("#lItem").value.trim(); if(!item) return toast("Zadaj item"); act({type:"loot_open",item,min:parseInt($("#lMin").value,10)||0,channel:$("#lChan").value},"Bidovanie spustené"); };
+$("#nSend").onclick = () => { const text=$("#nText").value.trim(); if(!text) return; act({type:"announce",text,channel:$("#nChan").value,ping:$("#nPing").value,speak:$("#nSpeak").checked},"Oznámenie odoslané"); $("#nText").value=""; };
+$("#triviaBtn").onclick = () => act({type:"trivia",channel:$("#nChan").value||""},"Trivia otázka poslaná");
+$("#voiceTest").onclick = () => act({type:"say",text:"Ahoj raid, tu je váš raid leader. Pripravte sa na pull!"},"Bot hovorí vo voice");
+$$("[data-setting]").forEach(c => c.onchange = () => act({type:"setting",key:c.dataset.setting,value:c.checked},"Uložené"));
+$("#sBidSave").onclick = () => act({type:"setting",key:"bid_seconds",value:parseInt($("#sBid").value,10)||60},"Uložené");
+$("#sChanSave").onclick = () => act({type:"setting",key:"announce_channel",value:$("#sChan").value},"Uložené");
+$("#dkpFilter").oninput = render;
+
+async function load(){
+  try { S = await api("state"); $("#login").classList.add("hidden"); $("#app").classList.remove("hidden"); render(); } catch(e){}
+}
+load(); setInterval(()=>{ if(!$("#app").classList.contains("hidden")) load(); }, 10000);
+</script>
+</body>
+</html>
