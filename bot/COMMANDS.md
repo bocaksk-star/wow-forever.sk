@@ -84,7 +84,8 @@ Keď je bot vo voice (`/join`), callouty z `/pull` a `/phase` hovorí nahlas slo
 | `/dkp bid amount:` | everyone | Tajný bid na aktuálny item |
 
 ## Web dashboard – wow-forever.sk/raid
-Heslom chránená stránka pre officerov (worker `raidlead-dashboard`, D1 `wow-forever-sk`):
+**Od 9. 10. 2026 je dashboard súčasťou webu** (repo `bocaksk-star/wow-forever.sk`, priečinok `src/raid/`), nie samostatný worker. Nasadí sa s každým pushom na `main`. Bot je v tom istom repe v `bot/`.
+Heslom chránená stránka pre officerov (D1 `wow-forever-sk`, tabuľky `rl_state`, `rl_outbox`):
 - **Prehľad** – najbližší raid, čakajúce schválenia, DKP top 5, rýchla správa / povedať vo voice
 - **Raidy** – vytvoriť raid (bot pošle sign-up), vidieť prihlásených, odstrániť hráča, uzavrieť raid, DKP celému raidu
 - **Schvaľovanie** – DKP a loot z Discordu sa pripíšu až po ✓ (dá sa vypnúť)
@@ -97,9 +98,9 @@ Heslom chránená stránka pre officerov (worker `raidlead-dashboard`, D1 `wow-f
 - Nastavenia navyše: DKP za účasť, počet soft reservov, DM pripomienky, auto Raider rola, meme mód, MVP minúty + bonus, trivia DKP
 - Tlačidlo **Trivia** spustí kvíz v kanáli
 
-Verejná stránka guildy: **wow-forever.sk/raid/guild** (raidy, progress, DKP + účasť, loot). Dáta: `/raid/api/public`.
+Verejná stránka guildy: **wow-forever.sk/raid/guild** (raidy, progress, DKP + účasť, loot) – v menu webu pod Raidy. Dáta: `/raid/api/public`.
 Osobná stránka hráča (Discord prihlásenie): **wow-forever.sk/raid/me** – DKP + história, účasť, attunementy, raidy so svojím sign-upom a SR, loot, wishlist, odznaky. Kalendár: **wow-forever.sk/raid/cal.ics**.
-Nasadenie: pozri `raidlead-dashboard/README.md`.
+Stratégie k bossom sú verejne aj na webe: **wow-forever.sk/raidy** (MC, Onyxia, BWL), info o bote: **wow-forever.sk/raidy/raidlead**.
 
 ## Hráčske extra
 | Command | Who | What it does |
@@ -142,11 +143,10 @@ Automaticky:
 - `players.json`, `achievements.json`, `trivia.json`, `quips.json`, `guides.json`, `timelines.json` – hráčske extra a obsah (trivia, hlášky, sprievodcovia, consumables)
 
 ## To do later
-0. Klipy: Meliško (`sounds/melisko_*.mp3` už sú) + Balls of Steel (`sounds/balls_of_steel/`) – pridať a premenovať na `pull_/wipe_/kill_/join_…`.
-1. Warcraft Logs setup: warcraftlogs.com → API Clients → create client (redirect URL `http://localhost`) → put ID/secret into `.env` → set `WCL_HOST` if your realm's logs are on another WCL site (e.g. classic.warcraftlogs.com).
-2. Test evening with a few guildies; tune `timelines.json`; `/teach` your own calls.
-3. Host 24/7 on a cheap VPS.
-4. Nasadiť dashboard (`npx wrangler deploy`, secrets ADMIN_PASSWORD + BOT_KEY) a dať DASHBOARD_KEY botovi.
-5. Nalinkovať verejnú stránku wow-forever.sk/raid/guild z menu webu.
-6. Discord OAuth pre `/raid/me`: discord.com/developers → aplikácia → OAuth2 → Redirects: `https://wow-forever.sk/raid/auth/callback`; Client ID do `wrangler.toml` (`DISCORD_CLIENT_ID`), `npx wrangler secret put DISCORD_CLIENT_SECRET`, `npx wrangler deploy`.
-7. Pozvať bota s právom Manage Roles (auto Raider rola).
+0. Klipy: Meliško (`sounds/melisko_*.mp3` už sú) + Balls of Steel (`sounds/balls_of_steel/`) – pridať a premenovať na `pull_/wipe_/kill_/join_…`. (Klipy sa necommitujú, ostávajú lokálne.)
+1. **Secrets pre /raid** v Cloudflare → Workers & Pages → `wow-forever-sk` → Settings → Variables and Secrets: `ADMIN_PASSWORD` (heslo do dashboardu) a `BOT_KEY` (dlhý náhodný reťazec). Ten istý `BOT_KEY` dať do `bot/.env` ako `DASHBOARD_KEY`, `DASHBOARD_URL=https://wow-forever.sk/raid`. Reštart bota → dashboard ukáže „online“ a na /raid/guild sa objavia dáta.
+2. Discord OAuth pre `/raid/me`: discord.com/developers → aplikácia → OAuth2 → Redirects: `https://wow-forever.sk/raid/auth/callback`; Client ID do `wrangler.toml` (`DISCORD_CLIENT_ID`), Client Secret ako secret `DISCORD_CLIENT_SECRET`.
+3. Warcraft Logs setup: warcraftlogs.com → API Clients → create client (redirect URL `http://localhost`) → put ID/secret into `.env` → set `WCL_HOST` if your realm's logs are on another WCL site (e.g. classic.warcraftlogs.com).
+4. Test evening with a few guildies; tune `timelines.json`; `/teach` your own calls.
+5. Host 24/7 on a cheap VPS (bot beží z `bot/` v repe).
+6. Pozvať bota s právom Manage Roles (auto Raider rola).
