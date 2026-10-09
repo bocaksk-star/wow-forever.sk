@@ -438,6 +438,7 @@ function page({ title, desc, path, body, origin, noindex, jsonLd, noAds, cz, alt
 <meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="${esc(full)}"><meta name="twitter:description" content="${esc(d)}"><meta name="twitter:image" content="${ogImg}">
 ${noindex ? '<meta name="robots" content="noindex">' : ''}
 <link rel="icon" href="${FAVICON}"><meta name="theme-color" content="#0F1528">
+<meta name="monetag" content="f760d8b55872fef93ca853c2ec7c53a7">
 <link rel="alternate" type="application/rss+xml" title="WoW Forever SK — Novinky" href="${origin}/rss.xml">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Alegreya+Sans:ital,wght@0,400;0,500;0,700;1,400&family=Cinzel:wght@400;500;600;700;800&family=Cinzel+Decorative:wght@700;900&display=swap&subset=latin-ext" rel="stylesheet">
