@@ -40,8 +40,8 @@ img{max-width:100%}
 .brand:hover{color:var(--gold-soft)}
 .brand svg{flex:none;width:40px;height:40px}
 .brand span{color:var(--gold)}
-.navtoggle{display:none;margin-left:auto;background:none;border:1px solid var(--line);border-radius:6px;color:var(--text);padding:9px;cursor:pointer}
-.navtoggle:hover{border-color:var(--gold)}
+.navtoggle{display:none;margin-left:auto;background:var(--surface);border:1px solid var(--line);border-radius:8px;color:var(--gold-soft);padding:9px;cursor:pointer;transition:border-color .15s,background .15s}
+.navtoggle:hover,.navtoggle[aria-expanded="true"]{border-color:var(--gold);background:var(--surface-2)}
 .navtoggle svg{width:24px;height:24px}
 .nav{display:flex;align-items:center;gap:4px 8px;flex-wrap:wrap;margin-left:auto}
 .nav>a,.navgroup-trigger{color:var(--muted);text-decoration:none;font-family:var(--display);font-size:1.12rem;letter-spacing:.01em;padding:12px 15px;border-radius:7px;display:inline-flex;align-items:center;gap:9px;transition:color .15s,background .15s;position:relative;background:none;border:none;font-weight:500;cursor:pointer}
@@ -68,6 +68,7 @@ img{max-width:100%}
 .lang span{color:var(--line)}
 @media (max-width:860px){
   .top{position:static}
+  .top .wrap{min-height:76px;gap:16px}
   .navtoggle{display:inline-flex}
   .nav{margin-left:0;width:100%;max-height:0;overflow:hidden;flex-direction:column;align-items:stretch;gap:2px;transition:max-height .3s ease}
   .nav.open{max-height:900px;padding-bottom:10px}
@@ -115,11 +116,13 @@ main{padding:40px 0 80px}
     linear-gradient(100deg, rgba(8,11,22,.88) 0%, rgba(8,11,22,.6) 32%, rgba(8,11,22,.18) 58%, rgba(8,11,22,.1) 100%)}
 .hero-grid{position:relative;z-index:2;max-width:1400px;margin:0 auto;padding:0 32px;display:grid;grid-template-columns:1.15fr .85fr;gap:64px;align-items:center}
 @media (max-width:900px){.hero{padding:48px 0}.hero-grid{grid-template-columns:1fr;gap:28px;padding:0 18px}}
+@media (max-width:640px){.hero{padding:30px 0}}
 .hero .lead{margin-bottom:1.2em;font-size:1.35rem;max-width:42ch}
 
 /* Centrálne logo/znak webu v hero sekcii */
 .hero-emblem{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;text-align:center;gap:10px;max-width:1400px;margin:0 auto 40px;padding:0 32px}
 @media (max-width:900px){.hero-emblem{padding:0 18px;margin-bottom:28px}}
+@media (max-width:640px){.hero-emblem{margin-bottom:18px;gap:6px}.crest-badge svg{width:116px;height:116px}}
 .crest-badge{filter:drop-shadow(0 8px 20px rgba(0,0,0,.5));animation:crestIn 1.1s cubic-bezier(.22,1,.36,1) both}
 .hero-emblem h1{display:flex;align-items:flex-end;justify-content:center;gap:16px;margin:4px 0 0;font-family:var(--display);font-weight:400;
   font-size:clamp(1.9rem,4.4vw,3.1rem);letter-spacing:.02em;color:var(--text);text-shadow:0 2px 24px rgba(0,0,0,.5)}
