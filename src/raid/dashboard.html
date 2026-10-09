@@ -102,6 +102,7 @@ td{padding:8px;border-bottom:1px solid #2a2219}
     <button data-tab="stats">Štatistiky</button>
     <button data-tab="announce">Oznámenia</button>
     <button data-tab="settings">Nastavenia</button>
+    <button data-tab="accounts">Web účty</button>
     <button data-tab="log">História</button>
   </nav>
 
@@ -237,6 +238,15 @@ td{padding:8px;border-bottom:1px solid #2a2219}
   </section>
 
   <!-- HISTÓRIA -->
+  <!-- WEB ÚČTY -->
+  <section data-panel="accounts" class="hidden">
+    <div class="card">
+      <div class="raid-head"><h2>Webové účty hráčov (wow-forever.sk/raid/me)</h2><span class="muted" id="authInfo"></span></div>
+      <p class="muted">Hráči sa prihlásia cez Google alebo Discord a prepoja si Discord (kód z <code>/link</code>). Neprepojený účet nemôže robiť sign-upy. Tu vieš prepojenie opraviť ručne (Discord ID hráča).</p>
+      <div class="tw"><table><thead><tr><th>Účet</th><th>Meno</th><th>E-mail</th><th>Discord ID</th><th>Vytvorené</th><th></th></tr></thead><tbody id="acctRows"></tbody></table></div>
+    </div>
+  </section>
+
   <section data-panel="log" class="hidden">
     <div class="card"><h2>Príkazy z dashboardu</h2>
       <div class="tw"><table><thead><tr><th>Kedy</th><th>Akcia</th><th>Stav</th><th>Výsledok</th></tr></thead><tbody id="logRows"></tbody></table></div>
@@ -339,6 +349,15 @@ function render(){
   $("#ovProg").innerHTML = Object.entries(rb).map(([r,b])=>{ const d=b.filter(x=>kills[x]).length;
     return `<div style="margin-bottom:8px"><div class="chip"><span>${esc(r)}</span><b>${d}/${b.length}</b></div><div class="bar"><i style="width:${Math.round(100*d/b.length)}%"></i></div></div>`; }).join("") || `<div class="empty">Zatiaľ žiadne killy</div>`;
 
+  // web accounts
+  const accts = S.accounts || [];
+  $("#authInfo").textContent = `Google: ${S.auth?.google?"✓":"nenastavené"} · Discord: ${S.auth?.discord?"✓":"nenastavené"}`;
+  $("#acctRows").innerHTML = accts.map(a=>`<tr><td>${esc(a.provider)}</td><td>${esc(a.name)}</td><td class="muted">${esc(a.email||"")}</td>
+    <td>${a.discord_uid?`<code>${esc(a.discord_uid)}</code> ${(st.profiles||{})[a.discord_uid]?`<span class="muted">(${esc(st.profiles[a.discord_uid].character||"")})</span>`:""}`:`<input data-acct-link="${esc(a.acct)}" placeholder="Discord ID" style="width:170px">`}</td>
+    <td class="muted">${a.created?ago(a.created):""}</td>
+    <td style="white-space:nowrap">${a.discord_uid?`<button class="btn sm ghost" data-acct-unlink="${esc(a.acct)}">Odpojiť</button>`:`<button class="btn sm ok" data-acct-dolink="${esc(a.acct)}">Prepojiť</button>`} <button class="btn sm bad" data-acct-del="${esc(a.acct)}">✕</button></td></tr>`).join("")
+    || `<tr><td colspan="6" class="empty">Zatiaľ sa nikto neprihlásil</td></tr>`;
+
   // stats
   const stats = st.stats || {}, profs = st.profiles || {};
   const uids = [...new Set([...Object.keys(stats), ...Object.keys(profs), ...Object.keys(dkp)])];
@@ -374,7 +393,8 @@ function raidCard(id,r){
   return `<div class="card" style="margin-bottom:12px;${r.closed?"opacity:.55":""}">
     <div class="raid-head"><div><h2 style="margin:0">${esc(r.name)}</h2><span class="muted">${esc(r.time)}${r.note?" · "+esc(r.note):""}${r.closed?" · uzavretý":""}</span></div>
     <div class="row" style="flex:0;flex-wrap:nowrap">${r.closed?"":`<button class="btn sm ghost" data-award-raid="${esc(id)}">+ DKP raidu</button> <button class="btn sm bad" data-close="${esc(id)}">Uzavrieť</button>`}</div></div>
-    <div class="cols">${["tank","healer","dps","absent"].map(col).join("")}</div>${srBlock(r)}</div>`;
+    <div class="cols">${["tank","healer","dps","absent"].map(col).join("")}</div>${srBlock(r)}
+    ${r.closed?"":`<div class="row" style="margin-top:10px;align-items:end"><div><label>Prihlásiť hráča</label><select data-su-who="${esc(id)}"><option value="">— vyber —</option>${Object.entries(S.state?.profiles||{}).map(([u,p])=>`<option value="${esc(u)}">${esc(p.character||p.discord||u)}</option>`).join("")}</select></div><div><label>Rola</label><select data-su-role="${esc(id)}"><option value="tank">Tank</option><option value="healer">Healer</option><option value="dps">DPS</option><option value="absent">Absent</option></select></div><div><button class="btn sm ghost" data-su="${esc(id)}">Prihlásiť</button></div></div>`}</div>`;
 }
 function srBlock(r){
   const by={}; Object.values(r.sr||{}).forEach(v=>v.items.forEach(i=>(by[i]=by[i]||[]).push(v.name)));
@@ -390,6 +410,12 @@ function describe(a){
     case "award": return `${a.amount>0?"+":""}${a.amount} DKP ${a.uid?"hráčovi":a.raid?"raidu":"celému raidu"} (${a.reason})`;
     case "setting": return `Nastavenie ${a.key} = ${a.value}`;
     case "raid_create": return `Nový raid ${a.name} ${a.time}`;
+    case "signup": return `Sign-up ${a.name||a.uid}: ${a.role}${a.cls?" – "+a.cls:""}`;
+    case "profile_set": return `Profil ${a.character||a.uid}`;
+    case "attune_set": return `Attunement ${a.key} = ${a.done}`;
+    case "sr_set": return `Soft reserve: ${(a.items||[]).join(", ")||"zrušené"}`;
+    case "wishlist_set": return `Wishlist (${(a.items||[]).length})`;
+    case "link_done": return `Prepojenie účtu (kód ${a.code})`;
     case "raid_close": return `Uzavretý raid (dochádzka + DKP za účasť)`;
     case "signup_remove": return `Odstránený zo sign-upu`;
     case "loot_open": return `Bidovanie: ${a.item}`;
@@ -409,6 +435,13 @@ document.addEventListener("click", (e) => {
   if (t.dataset.save){ const [key,id]=t.dataset.save.split("|"); act({type:"setting",key,value:parseInt($("#"+id).value,10)||0},"Uložené"); }
   if (t.dataset.voice) act({type:"setting",key:"voice",value:t.dataset.voice},"Hlas prepnutý");
   if (t.dataset.quick){ const text=$("#quickText").value.trim(); if(!text) return; act({type:t.dataset.quick,text}); $("#quickText").value=""; }
+});
+document.addEventListener("click", async e => {
+  const su = e.target.closest("[data-su]"); if (su) { const id=su.dataset.su; const uid=$(`[data-su-who="${id}"]`).value; if(!uid) return toast("Vyber hráča");
+    const prof=(S.state?.profiles||{})[uid]||{}; return act({type:"signup",rid:id,uid,name:prof.character||prof.discord||uid,role:$(`[data-su-role="${id}"]`).value,cls:prof.cls||null},"Hráč prihlásený"); }
+  const ul = e.target.closest("[data-acct-unlink]"); if (ul && confirm("Odpojiť Discord od tohto účtu?")) { await api("account",{acct:ul.dataset.acctUnlink,op:"unlink"}); return load(); }
+  const dl = e.target.closest("[data-acct-dolink]"); if (dl) { const v=$(`[data-acct-link="${dl.dataset.acctDolink}"]`).value.trim(); if(!/^\d{5,25}$/.test(v)) return toast("Zadaj Discord ID (číslo)"); await api("account",{acct:dl.dataset.acctDolink,op:"link",discord_uid:v}); return load(); }
+  const del = e.target.closest("[data-acct-del]"); if (del && confirm("Zmazať tento webový účet? (hráč sa môže znova prihlásiť)")) { await api("account",{acct:del.dataset.acctDel,op:"delete"}); return load(); }
 });
 $("#approveAll").onclick = () => { const p=(S.state?.pending)||[]; if(p.length && confirm(`Schváliť ${p.length} položiek?`)) p.forEach(x=>act({type:"approve",pid:x.id},"Všetko schválené")); };
 $("#rCreate").onclick = () => {

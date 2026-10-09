@@ -1,5 +1,6 @@
 import os
 import pathlib
+import secrets
 import discord
 from discord import app_commands
 from dotenv import load_dotenv
@@ -1710,6 +1711,119 @@ def players_state() -> dict:
 DASHBOARD_URL = os.getenv("DASHBOARD_URL", "https://wow-forever.sk/raid").rstrip("/")
 DASHBOARD_KEY = os.getenv("DASHBOARD_KEY")
 
+# ---------------- WEB ÚČTY (wow-forever.sk/raid/me) ----------------
+# Hráč sa na webe prihlási cez Google/Discord; Google účet sa prepojí s Discordom cez /link kód.
+LINK_FILE = pathlib.Path(__file__).parent / "link_codes.json"
+LINK_TTL = 15 * 60
+
+
+def load_link_codes() -> dict:
+    now = _time.time()
+    codes = {c: v for c, v in load_json(LINK_FILE, {}).items() if v.get("exp", 0) > now}
+    return codes
+
+
+@tree.command(name="link", description="Kód na prepojenie webového účtu (wow-forever.sk/raid/me) s Discordom")
+async def link_cmd(inter: discord.Interaction):
+    codes = load_link_codes()
+    uid = str(inter.user.id)
+    codes = {c: v for c, v in codes.items() if v.get("uid") != uid}
+    alphabet = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"
+    code = "".join(secrets.choice(alphabet) for _ in range(6))
+    codes[code] = {"uid": uid, "name": inter.user.display_name, "exp": _time.time() + LINK_TTL}
+    save_json(LINK_FILE, codes)
+    _dirty["v"] = True
+    await inter.response.send_message(
+        f"🔗 Tvoj kód na prepojenie: **{code}** (platí 15 minút)\n"
+        f"Na webe: {DASHBOARD_URL}/me → Prihlásiť → zadaj kód. Potom sa budeš prihlasovať na raidy aj z webu.",
+        ephemeral=True)
+
+
+async def web_signup(a: dict) -> str:
+    raids = load_raids()
+    raid = raids.get(a["rid"])
+    if not raid:
+        raise ValueError("raid neexistuje")
+    if raid.get("closed"):
+        raise ValueError("raid je uzavretý")
+    uid, role = str(a["uid"]), a.get("role")
+    if role not in ROLES:
+        raise ValueError("neznáma rola")
+    prof = load_profiles().get(uid, {})
+    name = prof.get("character") or a.get("name") or uid
+    if role == "absent":
+        raid["signups"][uid] = {"name": name, "role": "absent", "cls": "-", "reason": str(a.get("reason") or "")[:80]}
+    else:
+        cls = a.get("cls") or prof.get("cls")
+        if cls not in CLASSES:
+            raise ValueError("vyber triedu (profil alebo pri prihlásení)")
+        raid["signups"][uid] = {"name": name, "role": role, "cls": cls}
+    save_raids(raids)
+    await refresh_card(raid)
+    g = main_guild()
+    member = g.get_member(int(uid)) if g else None
+    if member and role != "absent":
+        await grant_raider_role(member)
+    return f"{name}: {ROLES[role]}"
+
+
+def web_profile(a: dict) -> str:
+    uid = str(a["uid"])
+    profs = load_profiles()
+    p = profs.setdefault(uid, {"attunes": {}})
+    if a.get("cls") and a["cls"] not in CLASSES:
+        raise ValueError("neznáma trieda")
+    if a.get("role") and (a["role"] not in ROLES or a["role"] == "absent"):
+        raise ValueError("neznáma rola")
+    for k in ("character", "cls", "role", "spec", "discord"):
+        if a.get(k) is not None:
+            p[k] = str(a[k])[:40]
+    save_json(PROFILES_FILE, profs)
+    return f"profil {p.get('character') or uid} uložený"
+
+
+def web_attune(a: dict) -> str:
+    if a["key"] not in ATTUNES:
+        raise ValueError("neznámy attunement")
+    profs = load_profiles()
+    p = profs.setdefault(str(a["uid"]), {"attunes": {}})
+    p.setdefault("attunes", {})[a["key"]] = bool(a.get("done"))
+    save_json(PROFILES_FILE, profs)
+    return f"attunement {a['key']} = {bool(a.get('done'))}"
+
+
+def web_sr(a: dict) -> str:
+    raids = load_raids()
+    raid = raids.get(a["rid"])
+    if not raid or raid.get("closed"):
+        raise ValueError("raid nie je otvorený")
+    limit = get_settings()["sr_limit"]
+    uid = str(a["uid"])
+    items = [str(i)[:60] for i in (a.get("items") or []) if str(i).strip()][:max(limit, 0)]
+    if not items:
+        raid.get("sr", {}).pop(uid, None)
+    else:
+        prof = load_profiles().get(uid, {})
+        raid.setdefault("sr", {})[uid] = {"name": prof.get("character") or a.get("name") or uid, "items": items}
+    save_raids(raids)
+    return f"SR: {', '.join(items) or 'zrušené'}"
+
+
+def web_wishlist(a: dict) -> str:
+    players = load_players()
+    p = players.setdefault(str(a["uid"]), {})
+    p["wishlist"] = [str(i)[:60] for i in (a.get("items") or []) if str(i).strip()][:10]
+    save_json(PLAYERS_FILE, players)
+    return f"wishlist: {len(p['wishlist'])} položiek"
+
+
+def web_link_done(a: dict) -> str:
+    codes = load_link_codes()
+    codes.pop(str(a.get("code", "")).upper(), None)
+    save_json(LINK_FILE, codes)
+    return "kód použitý"
+
+
 
 def main_guild() -> discord.Guild | None:
     if GUILD_ID:
@@ -1755,6 +1869,7 @@ def build_state() -> dict:
         "stats": player_stats(), "kills": load_json(KILLS_FILE, {}), "profiles": load_profiles(),
         "raid_bosses": RAID_BOSSES,
         "players": players_state(),
+        "link_codes": load_link_codes(),
         "ach_defs": {k: {"icon": v[0], "name": v[1], "desc": v[2]} for k, v in ACH_DEFS.items()},
     }
 
@@ -1829,6 +1944,19 @@ async def execute_action(a: dict) -> str:
         if not ch or not await post_trivia(ch):
             raise RuntimeError("chýba kanál alebo trivia.json")
         return "otázka poslaná"
+    # akcie z webu (wow-forever.sk/raid/me) – hráč ich robí pod svojím prepojeným účtom
+    if t == "signup":
+        return await web_signup(a)
+    if t == "profile_set":
+        return web_profile(a)
+    if t == "attune_set":
+        return web_attune(a)
+    if t == "sr_set":
+        return web_sr(a)
+    if t == "wishlist_set":
+        return web_wishlist(a)
+    if t == "link_done":
+        return web_link_done(a)
     raise ValueError(f"neznáma akcia {t}")
 
 

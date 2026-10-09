@@ -58,3 +58,14 @@ CREATE INDEX IF NOT EXISTS idx_guild_name_votes_name ON guild_name_votes (name_i
 -- RaidLead dashboard (/raid): stav bota + fronta akcií z dashboardu pre bota
 CREATE TABLE IF NOT EXISTS rl_state (k TEXT PRIMARY KEY, v TEXT NOT NULL, t INTEGER NOT NULL);
 CREATE TABLE IF NOT EXISTS rl_outbox (id INTEGER PRIMARY KEY AUTOINCREMENT, action TEXT NOT NULL, status TEXT NOT NULL DEFAULT 'queued', result TEXT, created INTEGER NOT NULL, done INTEGER);
+-- Webové účty hráčov (Google / Discord) → Discord ID hráča v bote
+CREATE TABLE IF NOT EXISTS rl_accounts (
+  acct TEXT PRIMARY KEY,            -- 'google:<sub>' alebo 'discord:<id>'
+  discord_uid TEXT,                 -- prepojený Discord používateľ (NULL = ešte neprepojené)
+  name TEXT NOT NULL,
+  email TEXT,
+  avatar TEXT,
+  created INTEGER NOT NULL,
+  linked INTEGER
+);
+CREATE INDEX IF NOT EXISTS idx_rl_accounts_uid ON rl_accounts (discord_uid);

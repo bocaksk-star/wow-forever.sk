@@ -3,111 +3,239 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Môj profil – raidy a DKP | WoW Forever</title>
 <meta name="robots" content="noindex">
-<title>Môj profil | WoW Forever</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=Alegreya+Sans:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#0F1528;--panel:#18203A;--panel2:#1F2948;--line:#2D3860;--gold:#E2AE4C;--gold2:#F0CB82;--text:#E8E2D3;--muted:#A1A9C2;--ok:#5fbf6a;--bad:#d9574a;
 --Warrior:#c69b6d;--Paladin:#f48cba;--Hunter:#aad372;--Rogue:#fff468;--Priest:#ffffff;--Shaman:#0070dd;--Mage:#3fc7eb;--Warlock:#8788ee;--Druid:#ff7c0a}
 *{box-sizing:border-box}
-body{margin:0;background:radial-gradient(1400px 700px at 50% -250px,#1b2a55 0%,var(--bg) 62%);color:var(--text);font:15px/1.55 Inter,system-ui,sans-serif;min-height:100vh}
-h1,h2{font-family:Cinzel,serif;color:var(--gold2);margin:0}
-a{color:var(--gold)}
+body{margin:0;background:radial-gradient(1400px 700px at 50% -250px,#1b2a55 0%,var(--bg) 62%);color:var(--text);font:16px/1.55 'Alegreya Sans',system-ui,sans-serif}
+h1,h2,h3{font-family:Cinzel,serif;color:var(--gold2);margin:0;font-weight:700}
+a{color:var(--gold2)}
 .wrap{max-width:1100px;margin:0 auto;padding:16px}
-.top{display:flex;align-items:center;gap:12px;padding:8px 0 18px;border-bottom:1px solid var(--line);flex-wrap:wrap}
-.top img{width:44px;height:44px;border-radius:50%;border:2px solid var(--gold)}
-.top .sp{flex:1}
-.btn{display:inline-block;background:linear-gradient(180deg,#e2b04f,#b9852a);color:#1a1206;border:0;border-radius:8px;padding:10px 18px;font:700 14px Inter;cursor:pointer;text-decoration:none}
-.btn.ghost{background:transparent;color:var(--gold);border:1px solid var(--line)}
-.btn.discord{background:#5865f2;color:#fff;font-size:16px;padding:13px 22px}
-.grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(min(100%,330px),1fr));margin-top:16px}
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:6px 0 18px}
+.top a.back{color:var(--muted);text-decoration:none;font-size:14px}
+.me{display:flex;align-items:center;gap:10px}
+.me img{width:36px;height:36px;border-radius:50%;border:1px solid var(--line)}
+.grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(min(100%,400px),1fr))}
 .card{background:linear-gradient(180deg,var(--panel2),var(--panel));border:1px solid var(--line);border-radius:14px;padding:18px}
-.card h2{font-size:17px;margin-bottom:12px}
-.big{font:900 46px Cinzel,serif;color:var(--gold2);line-height:1}
-.muted{color:var(--muted);font-size:13px}
-.bar{height:8px;background:#0c1022;border-radius:4px;overflow:hidden;margin:6px 0}
-.bar i{display:block;height:100%;background:linear-gradient(90deg,#b9852a,var(--gold2))}
+.card h2{font-size:17px;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.card.wide{grid-column:1/-1}
+.muted{color:var(--muted);font-size:14px}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border-radius:8px;border:1px solid var(--gold);background:var(--gold);color:#0F1528;font-weight:700;cursor:pointer;text-decoration:none;font:inherit;font-weight:700}
+.btn:hover{background:var(--gold2)}
+.btn.ghost{background:transparent;color:var(--gold2)}
+.btn.ghost:hover{background:rgba(226,174,76,.12)}
+.btn.sm{padding:6px 11px;font-size:14px}
+.btn.google{background:#fff;border-color:#fff;color:#222}
+.btn.discord{background:#5865F2;border-color:#5865F2;color:#fff}
+.btn.bad{background:transparent;border-color:var(--bad);color:var(--bad)}
+.btn:disabled{opacity:.5;cursor:default}
+.hero{text-align:center;padding:36px 0 22px}
+.hero h1{font-size:clamp(28px,5vw,44px);font-weight:900;text-shadow:0 2px 24px rgba(226,174,76,.35)}
+.login{max-width:520px;margin:0 auto;text-align:center}
+.login .btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin:18px 0}
+input,select{width:100%;padding:9px 11px;border-radius:8px;border:1px solid var(--line);background:#0c1022;color:var(--text);font:inherit}
+label{display:block;font-size:13px;color:var(--muted);margin:10px 0 4px}
+.row{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(140px,1fr))}
+.raid{border-left:3px solid var(--gold);padding:12px 14px;margin-bottom:12px;background:#131a33;border-radius:0 10px 10px 0}
+.raid b{font-family:Cinzel,serif;color:var(--gold2);font-size:17px}
+.roles{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0 6px}
+.roles button{padding:7px 12px;border-radius:8px;border:1px solid var(--line);background:#0c1022;color:var(--text);cursor:pointer;font:inherit}
+.roles button.on{border-color:var(--gold);background:rgba(226,174,76,.18);color:var(--gold2);font-weight:700}
+.counts{display:flex;gap:10px;flex-wrap:wrap;font-size:13px;color:var(--muted)}
+.counts span b{color:var(--text)}
+.pill{display:inline-block;font-size:12px;padding:2px 9px;border-radius:99px;border:1px solid var(--line);color:var(--muted);margin:2px 2px 2px 0}
+.pill.k{background:var(--gold);border-color:var(--gold);color:#0F1528;font-weight:700}
+.stat{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--line)}
+.stat:last-child{border-bottom:none}
+.stat b{color:var(--gold2);font-family:Cinzel,serif}
+.big{font-family:Cinzel,serif;font-size:42px;color:var(--gold2);line-height:1}
+.note{background:rgba(226,174,76,.1);border:1px solid rgba(226,174,76,.35);border-radius:10px;padding:10px 14px;font-size:14px;margin-bottom:14px}
+.note.warn{background:rgba(217,87,74,.1);border-color:rgba(217,87,74,.4)}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--gold);color:#0F1528;padding:10px 18px;border-radius:10px;font-weight:700;opacity:0;transition:opacity .2s;pointer-events:none;z-index:9}
+.toast.on{opacity:1}
+.hidden{display:none}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{display:inline-flex;align-items:center;gap:6px;background:#0c1022;border:1px solid var(--line);border-radius:99px;padding:3px 6px 3px 11px;font-size:14px}
+.chip button{border:none;background:none;color:var(--muted);cursor:pointer;font-size:14px}
+.code{font-family:ui-monospace,monospace;letter-spacing:.2em;text-transform:uppercase;text-align:center;font-size:20px}
 table{width:100%;border-collapse:collapse;font-size:14px}
-td{padding:6px 4px;border-bottom:1px solid #2D3860}
-.pos{color:var(--ok)} .neg{color:var(--bad)}
-.raid{border-left:3px solid var(--gold);padding:8px 12px;margin-bottom:10px;background:#131a33;border-radius:0 8px 8px 0}
-.pill{display:inline-block;font-size:12px;padding:1px 9px;border-radius:99px;border:1px solid var(--line);margin-right:4px}
-.pill.ok{color:var(--ok);border-color:var(--ok)} .pill.no{color:var(--bad);border-color:var(--bad)}
-.badges{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}
-.badge{border:1px solid var(--line);border-radius:10px;padding:8px;text-align:center;font-size:13px;background:#131a33}
-.badge .i{font-size:26px;display:block}
-.badge.off{opacity:.3;filter:grayscale(1)}
-.badge.on{border-color:var(--gold)}
-.empty{color:var(--muted);font-style:italic}
-.center{max-width:420px;margin:14vh auto;text-align:center}
-.hidden{display:none!important}
+th{text-align:left;color:var(--muted);font-weight:500;font-size:12px;text-transform:uppercase;padding:6px;border-bottom:1px solid var(--line)}
+td{padding:6px;border-bottom:1px solid #2D3860}
+footer{text-align:center;color:var(--muted);font-size:12px;padding:30px 0}
 </style>
 </head>
 <body>
-<div id="login" class="center card hidden">
-  <h1 style="font-size:28px;margin-bottom:8px">⚔️ Môj profil</h1>
-  <p class="muted">Prihlás sa cez Discord a uvidíš svoje DKP, účasť, loot, odznaky a raidy. Nič nepublikujeme, bot z Discordu číta len tvoje meno.</p>
-  <p><a class="btn discord" href="/raid/login">Prihlásiť cez Discord</a></p>
-  <p class="muted"><a href="/raid/guild">Verejná stránka guildy</a></p>
-</div>
-
-<div id="app" class="wrap hidden">
+<div class="wrap">
   <div class="top">
-    <img id="avatar" alt="">
-    <div><h1 id="uname" style="font-size:22px"></h1><div class="muted" id="subtitle"></div></div>
-    <span class="sp"></span>
-    <a class="btn ghost" href="/raid/guild">Guild</a>
-    <button class="btn ghost" id="logout">Odhlásiť</button>
+    <a class="back" href="/raidy">← wow-forever.sk / Raidy</a>
+    <div id="meBox" class="me hidden"><img id="meAvatar" alt=""><span id="meName"></span><button class="btn ghost sm" id="logout">Odhlásiť</button></div>
   </div>
-  <div id="unknown" class="card hidden" style="margin-top:16px"><b>Bot ťa zatiaľ nepozná.</b> Na Discorde napíš <code>/profile</code> (nastav postavu) a prihlás sa na raid. Potom sa tu objavia tvoje dáta.</div>
-  <div class="grid">
-    <div class="card"><h2>💰 DKP</h2><div class="big" id="dkp">0</div><div class="muted" id="rank"></div>
-      <table style="margin-top:10px"><tbody id="hist"></tbody></table></div>
-    <div class="card"><h2>📊 Účasť</h2><div class="big" id="pct">–</div><div class="bar"><i id="pctbar" style="width:0"></i></div>
-      <div class="muted" id="att"></div>
-      <h2 style="margin-top:16px">🔑 Attunementy</h2><div id="attune"></div></div>
-    <div class="card"><h2>📅 Najbližšie raidy</h2><div id="raids"></div>
-      <p class="muted">📆 <a href="/raid/cal.ics">Predplatiť kalendár</a> (Google / Apple / Outlook)</p></div>
-    <div class="card"><h2>🎁 Môj loot</h2><table><tbody id="loot"></tbody></table></div>
-    <div class="card"><h2>🎯 Wishlist</h2><div id="wish"></div><p class="muted">Pridať: <code>/wishlist add</code> na Discorde.</p></div>
-    <div class="card"><h2>🧠 Ostatné</h2><div id="misc"></div></div>
-    <div class="card" style="grid-column:1/-1"><h2>🏅 Odznaky <span class="muted" id="achcount"></span></h2><div class="badges" id="badges"></div></div>
-  </div>
-</div>
 
+  <!-- LOGIN -->
+  <section id="login" class="hidden">
+    <div class="hero"><h1>Môj profil</h1><p class="muted">Prihlás sa a prihlasuj sa na raidy, sleduj DKP, loot a attunementy — všetko na jednom mieste.</p></div>
+    <div class="login card">
+      <div class="btns">
+        <a class="btn google" id="btnGoogle" href="/raid/login/google">Prihlásiť cez Google</a>
+        <a class="btn discord" id="btnDiscord" href="/raid/login">Prihlásiť cez Discord</a>
+      </div>
+      <p class="muted">Pri Google prihlásení si potom raz prepojíš Discord (kódom z <code>/link</code> alebo tlačidlom). Čítame len meno, e-mail a avatar — nič neposielame.</p>
+      <p class="muted"><a href="/raid/guild">Verejná stránka guildy</a> · <a href="/raidy">Stratégie k bossom</a></p>
+    </div>
+  </section>
+
+  <!-- LINK DISCORD -->
+  <section id="link" class="hidden">
+    <div class="hero"><h1>Prepoj Discord</h1><p class="muted">Raidy, DKP a loot vedie náš bot na Discorde. Aby ťa spoznal, prepoj si raz svoj Discord účet.</p></div>
+    <div class="grid">
+      <div class="card">
+        <h2>🔗 Kódom z Discordu</h2>
+        <p class="muted">V našom Discorde napíš <code>/link</code> — bot ti pošle 6-znakový kód (platí 15 minút).</p>
+        <label>Kód</label><input id="linkCode" class="code" maxlength="6" placeholder="ABC123" autocomplete="off">
+        <p><button class="btn" id="linkBtn">Prepojiť</button></p>
+        <p class="muted" id="linkMsg"></p>
+      </div>
+      <div class="card" id="linkDiscordCard">
+        <h2>💬 Tlačidlom cez Discord</h2>
+        <p class="muted">Prihlás sa cez Discord — prepojíme to automaticky k tvojmu Google účtu.</p>
+        <p><a class="btn discord" href="/raid/login">Prepojiť cez Discord</a></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- APP -->
+  <section id="app" class="hidden">
+    <div class="hero"><h1 id="appTitle">Môj profil</h1><p class="muted" id="appSub"></p></div>
+    <div id="botNote" class="note warn hidden">Bot je práve offline — tvoje zmeny sa uložia a vykonajú, keď nabehne.</div>
+
+    <div class="grid">
+      <div class="card wide">
+        <h2>📅 Raidy — prihlás sa</h2>
+        <div id="raidList"></div>
+        <p class="muted">📆 <a href="/raid/cal.ics">Predplatiť kalendár raidov</a> (Google / Apple / Outlook)</p>
+      </div>
+
+      <div class="card">
+        <h2>💰 DKP</h2>
+        <div class="big" id="dkpPts">0</div>
+        <div class="muted" id="dkpRank"></div>
+        <div id="dkpHist" style="margin-top:10px"></div>
+      </div>
+
+      <div class="card">
+        <h2>🧙 Postava</h2>
+        <div class="row">
+          <div><label>Meno postavy</label><input id="pChar" maxlength="40"></div>
+          <div><label>Trieda</label><select id="pCls"></select></div>
+          <div><label>Rola</label><select id="pRole"><option value="tank">🛡️ Tank</option><option value="healer">💚 Healer</option><option value="dps">⚔️ DPS</option></select></div>
+          <div><label>Spec</label><input id="pSpec" maxlength="40" placeholder="napr. Fury"></div>
+        </div>
+        <p><button class="btn sm" id="pSave">Uložiť postavu</button></p>
+        <h3 style="font-size:14px;margin:12px 0 6px">🔑 Attunementy</h3>
+        <div id="attunes"></div>
+      </div>
+
+      <div class="card">
+        <h2>📊 Účasť a odznaky</h2>
+        <div id="statsBox"></div>
+        <div id="badges" class="chips" style="margin-top:10px"></div>
+      </div>
+
+      <div class="card">
+        <h2>⭐ Wishlist</h2>
+        <p class="muted">Keď ide tvoj item do bidovania, bot ťa označí.</p>
+        <div id="wishChips" class="chips"></div>
+        <div class="row" style="margin-top:8px"><input id="wishNew" placeholder="názov itemu" maxlength="60"><button class="btn sm ghost" id="wishAdd">Pridať</button></div>
+      </div>
+
+      <div class="card wide">
+        <h2>🎁 Môj loot</h2>
+        <table><thead><tr><th>Item</th><th>DKP</th><th>Kedy</th></tr></thead><tbody id="lootRows"></tbody></table>
+      </div>
+    </div>
+  </section>
+</div>
+<div class="toast" id="toast"></div>
+<footer>wow-forever.sk · RaidLead</footer>
 <script>
-const $=(s)=>document.querySelector(s);
-const esc=(s)=>String(s??"").replace(/[&<>"']/g,(c)=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-const ROLE={tank:"🛡️ Tank",healer:"💚 Healer",dps:"⚔️ DPS",absent:"❌ Neprídem"};
-const ATT={mc:"Molten Core",ony:"Onyxia",bwl:"Blackwing Lair"};
-const when=(t)=>new Date(t*1000).toLocaleDateString("sk-SK",{day:"numeric",month:"numeric"});
-$("#logout").onclick=async()=>{await fetch("/raid/api/pl-logout",{method:"POST"});location.reload();};
-fetch("/raid/api/me").then(async r=>{
-  if(r.status===401){$("#login").classList.remove("hidden");return;}
-  const d=await r.json(); $("#app").classList.remove("hidden");
-  const u=d.user; $("#uname").textContent=d.profile?.character||u.name;
-  $("#avatar").src=u.avatar?`https://cdn.discordapp.com/avatars/${u.id}/${u.avatar}.png?size=96`:"https://cdn.discordapp.com/embed/avatars/0.png";
-  const p=d.profile||{};
-  $("#subtitle").innerHTML=p.cls?`<span style="color:var(--${esc(p.cls)})">${esc([p.spec,p.cls].filter(Boolean).join(" "))}</span> · ${esc(ROLE[p.role]||"")} · ${esc(u.name)}`:esc(u.name);
-  if(!d.known) $("#unknown").classList.remove("hidden");
-  $("#dkp").textContent=d.dkp.points;
-  $("#rank").textContent=d.rank?`#${d.rank.pos} z ${d.rank.of} hráčov`:"";
-  $("#hist").innerHTML=d.dkp.history.map(h=>`<tr><td class="${h.amount>=0?"pos":"neg"}">${h.amount>0?"+":""}${h.amount}</td><td>${esc(h.reason)}</td><td class="muted">${when(h.t)}</td></tr>`).join("")||`<tr><td class="empty">Zatiaľ žiadne zmeny</td></tr>`;
-  const s=d.stats;
-  $("#pct").textContent=s&&s.total?s.pct+" %":"–"; $("#pctbar").style.width=(s?.pct||0)+"%";
-  $("#att").textContent=s&&s.total?`${s.attended} z ${s.total} raidov (ospravedlnené sa nepočítajú)`:"Zatiaľ žiadne uzavreté raidy";
-  $("#attune").innerHTML=Object.entries(ATT).map(([k,n])=>`<div>${p.attunes?.[k]?"✅":"⬜"} ${n}</div>`).join("")+`<div class="muted" style="margin-top:6px">Nastavíš cez <code>/attune</code></div>`;
-  $("#raids").innerHTML=d.raids.map(r=>`<div class="raid"><b style="font-family:Cinzel,serif;color:var(--gold2)">${esc(r.name)}</b><div>${esc(r.time)} <span class="muted">· ${r.going} prihlásených</span></div>
-    <div style="margin-top:4px">${r.mine?(r.mine.role==="absent"?`<span class="pill no">Neprídem${r.mine.reason?": "+esc(r.mine.reason):""}</span>`:`<span class="pill ok">${esc(ROLE[r.mine.role])} · ${esc(r.mine.cls)}</span>`):`<span class="pill">Neprihlásený, klikni v Discorde</span>`}
-    ${r.sr.map(i=>`<span class="pill">📌 ${esc(i)}</span>`).join("")}</div></div>`).join("")||`<div class="empty">Žiadny naplánovaný raid</div>`;
-  $("#loot").innerHTML=d.loot.map(l=>`<tr><td>${esc(l.item)}${l.from?` <span class="muted">(od ${esc(l.from)})</span>`:""}</td><td>${l.amount||0} DKP</td><td class="muted">${when(l.t)}</td></tr>`).join("")||`<tr><td class="empty">Zatiaľ žiadny loot</td></tr>`;
-  $("#wish").innerHTML=d.wishlist.map(i=>`<div>🎯 ${esc(i)}</div>`).join("")||`<div class="empty">Prázdny</div>`;
-  $("#misc").innerHTML=`<div>⭐ MVP raidu: <b>${d.mvp}×</b></div><div>🧠 Správne trivia: <b>${d.trivia}</b></div>`;
-  const defs=d.ach_defs, got=new Set(d.ach);
-  $("#achcount").textContent=`(${got.size}/${Object.keys(defs).length})`;
-  $("#badges").innerHTML=Object.entries(defs).map(([k,a])=>`<div class="badge ${got.has(k)?"on":"off"}" title="${esc(a.desc)}"><span class="i">${a.icon}</span><b>${esc(a.name)}</b><div class="muted">${esc(a.desc)}</div></div>`).join("");
-}).catch(()=>{$("#login").classList.remove("hidden");});
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const ROLE={tank:"🛡️ Tank",healer:"💚 Healer",dps:"⚔️ DPS",absent:"❌ Nemôžem"};
+let D=null, pending=new Set();
+function toast(m){const t=$("#toast");t.textContent=m;t.classList.add("on");setTimeout(()=>t.classList.remove("on"),2600);}
+function ago(ms){const s=Math.max(0,(Date.now()-ms)/1000);return s<60?"pred chvíľou":s<3600?`pred ${Math.round(s/60)} min`:s<86400?`pred ${Math.round(s/3600)} h`:`pred ${Math.round(s/86400)} d`;}
+function show(id){["login","link","app"].forEach(x=>$("#"+x).classList.toggle("hidden",x!==id));}
+async function post(path,body){const r=await fetch("/raid/api/"+path,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify(body||{})});return r.json().catch(()=>({}));}
+async function my(path,body,msg){
+  const r=await post("my/"+path,body);
+  if(!r.ok){toast(r.error||"Chyba");return false;}
+  toast(r.online?(msg||"Odoslané — prejaví sa o pár sekúnd"):"Uložené, bot je offline — vykoná sa, keď nabehne");
+  let n=0; const iv=setInterval(()=>{load(); if(++n>=6) clearInterval(iv);},4000);
+  return true;
+}
+$("#logout").onclick=async()=>{await post("pl-logout");location.reload();};
+$("#linkBtn").onclick=async()=>{
+  const code=$("#linkCode").value.trim(); if(code.length<6) return toast("Zadaj 6-znakový kód");
+  const r=await post("link",{code}); $("#linkMsg").textContent=r.ok?`Prepojené s ${r.name} ✓`:(r.error||"Chyba");
+  if(r.ok) setTimeout(load,600);
+};
+$("#pSave").onclick=()=>my("profile",{character:$("#pChar").value,cls:$("#pCls").value,role:$("#pRole").value,spec:$("#pSpec").value},"Postava uložená");
+$("#wishAdd").onclick=()=>{const v=$("#wishNew").value.trim(); if(!v) return; const items=[...(D.wishlist||[]),v]; $("#wishNew").value=""; my("wishlist",{items},"Wishlist uložený");};
+document.addEventListener("click",async e=>{
+  const b=e.target.closest("[data-role]"); if(b){ const rid=b.dataset.rid, role=b.dataset.role;
+    if(role==="absent"){ const reason=prompt("Dôvod (nepovinné):")||""; return my("signup",{rid,role,reason},"Ospravedlnený"); }
+    const r=D.raids.find(x=>x.id===rid); const sel=$(`[data-clssel="${rid}"]`); const cls=sel?sel.value:"";
+    if(!cls && !(D.profile&&D.profile.cls)) return toast("Najprv si nastav triedu v Postave");
+    return my("signup",{rid,role,cls},"Prihlásený ✓"); }
+  const rm=e.target.closest("[data-unsign]"); if(rm) return my("signup-remove",{rid:rm.dataset.unsign},"Odhlásený");
+  const sr=e.target.closest("[data-sr]"); if(sr){ const rid=sr.dataset.sr; const inp=$(`[data-srin="${rid}"]`); const items=inp.value.split(",").map(s=>s.trim()).filter(Boolean); return my("sr",{rid,items},"Soft reserve uložený"); }
+  const wr=e.target.closest("[data-wishrm]"); if(wr){ const items=(D.wishlist||[]).filter((_,i)=>i!==+wr.dataset.wishrm); return my("wishlist",{items},"Odstránené"); }
+  const at=e.target.closest("[data-att]"); if(at){ return my("attune",{key:at.dataset.att,done:at.checked},"Attunement uložený"); }
+});
+function raidCard(r){
+  const mine=r.mine, cls=D.profile?.cls||"";
+  const clsSel=`<select data-clssel="${esc(r.id)}" style="width:auto;display:inline-block;margin-left:6px">${D.classes.map(c=>`<option ${c===(mine?.cls||cls)?"selected":""}>${c}</option>`).join("")}</select>`;
+  const when=r.ts?new Date(r.ts*1000).toLocaleString("sk-SK",{weekday:"short",day:"numeric",month:"numeric",hour:"2-digit",minute:"2-digit"}):esc(r.time);
+  return `<div class="raid">
+    <div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:baseline"><b>${esc(r.name)}</b><span class="muted">${when}${r.note?" · "+esc(r.note):""}</span></div>
+    <div class="counts"><span>🛡️ <b>${r.counts.tank}</b></span><span>💚 <b>${r.counts.healer}</b></span><span>⚔️ <b>${r.counts.dps}</b></span><span class="muted">❌ ${r.counts.absent}</span></div>
+    <div class="roles">${["tank","healer","dps","absent"].map(k=>`<button data-rid="${esc(r.id)}" data-role="${k}" class="${mine?.role===k?"on":""}">${ROLE[k]}</button>`).join("")}${clsSel}${mine?`<button class="btn sm bad" data-unsign="${esc(r.id)}">Odhlásiť</button>`:""}</div>
+    ${mine?`<div class="muted">Si prihlásený: <b style="color:var(--text)">${ROLE[mine.role]}${mine.role!=="absent"?" – "+esc(mine.cls):mine.reason?" ("+esc(mine.reason)+")":""}</b></div>`:""}
+    ${D.sr_limit>0?`<div style="margin-top:8px"><label style="margin:0 0 4px">📌 Soft reserve (max ${D.sr_limit}${D.sr_limit>1?", oddeľ čiarkou":""})</label><div class="row"><input data-srin="${esc(r.id)}" value="${esc((r.sr||[]).join(", "))}" placeholder="názov itemu"><button class="btn sm ghost" data-sr="${esc(r.id)}">Uložiť SR</button></div></div>`:""}
+    ${r.roster.length?`<div style="margin-top:8px">${r.roster.map(p=>`<span class="pill" style="color:var(--${esc(p.cls)},var(--muted))">${esc(p.name)}</span>`).join("")}</div>`:""}
+  </div>`;
+}
+function render(){
+  $("#meBox").classList.remove("hidden"); $("#meName").textContent=D.user.name; $("#meAvatar").classList.toggle("hidden",!D.user.avatar); if(D.user.avatar) $("#meAvatar").src=D.user.avatar;
+  if(!D.linked){ show("link"); $("#linkDiscordCard").classList.toggle("hidden",!D.discord); return; }
+  show("app");
+  $("#appSub").textContent=D.known?`Prihlásený ako ${D.profile?.character||D.user.name}${D.profile?.cls?" · "+[D.profile.spec,D.profile.cls].filter(Boolean).join(" "):""}`:"Bot ťa zatiaľ nepozná — nastav si postavu a prihlás sa na raid.";
+  $("#botNote").classList.toggle("hidden",D.online);
+  $("#raidList").innerHTML=(D.raids||[]).map(raidCard).join("")||`<p class="muted">Žiadny otvorený raid. Officeri ho vytvoria v dashboarde alebo cez /raid v Discorde.</p>`;
+  $("#dkpPts").textContent=D.dkp?.points??0;
+  $("#dkpRank").textContent=D.rank?`${D.rank.pos}. z ${D.rank.of} v rebríčku`:"zatiaľ bez DKP";
+  $("#dkpHist").innerHTML=(D.dkp?.history||[]).map(h=>`<div class="stat"><span>${esc(h.reason||h.r||"")}<span class="muted"> ${h.t?ago(h.t*1000):""}</span></span><b style="color:${(h.amount??h.a)<0?"var(--bad)":"var(--ok)"}">${(h.amount??h.a)>0?"+":""}${h.amount??h.a}</b></div>`).join("");
+  if(document.activeElement!==$("#pChar")) $("#pChar").value=D.profile?.character||"";
+  $("#pCls").innerHTML=`<option value="">—</option>`+D.classes.map(c=>`<option ${c===D.profile?.cls?"selected":""}>${c}</option>`).join("");
+  if(D.profile?.role) $("#pRole").value=D.profile.role;
+  if(document.activeElement!==$("#pSpec")) $("#pSpec").value=D.profile?.spec||"";
+  $("#attunes").innerHTML=Object.entries(D.attunes).map(([k,v])=>`<label style="display:flex;align-items:center;gap:8px;margin:4px 0;font-size:15px;color:var(--text)"><input type="checkbox" data-att="${k}" style="width:auto" ${D.profile?.attunes?.[k]?"checked":""}>${esc(v)}</label>`).join("");
+  const s=D.stats; $("#statsBox").innerHTML=s?`<div class="stat"><span>Účasť</span><b>${s.attended}/${s.total} (${s.pct} %)</b></div><div class="stat"><span>MVP</span><b>${D.mvp||0}×</b></div><div class="stat"><span>Trivia body</span><b>${D.trivia||0}</b></div>`:`<p class="muted">Zatiaľ žiadny raid.</p>`;
+  $("#badges").innerHTML=(D.ach||[]).map(k=>{const d=D.ach_defs[k]||{};return `<span class="pill k" title="${esc(d.desc||"")}">${esc(d.icon||"")} ${esc(d.name||k)}</span>`;}).join("")||`<span class="muted">Zatiaľ žiadne odznaky.</span>`;
+  $("#wishChips").innerHTML=(D.wishlist||[]).map((w,i)=>`<span class="chip">${esc(w)}<button data-wishrm="${i}" title="Odstrániť">✕</button></span>`).join("")||`<span class="muted">Prázdny.</span>`;
+  $("#lootRows").innerHTML=(D.loot||[]).map(l=>`<tr><td>${esc(l.item)}${l.from?` <span class="muted">(od ${esc(l.from)})</span>`:""}</td><td>${l.amount}</td><td class="muted">${l.t?ago(l.t*1000):""}</td></tr>`).join("")||`<tr><td colspan="3" class="muted">Zatiaľ nič.</td></tr>`;
+}
+async function load(){
+  const r=await fetch("/raid/api/me"); const d=await r.json().catch(()=>({}));
+  if(r.status===401){ show("login"); $("#btnGoogle").classList.toggle("hidden",!d.google); $("#btnDiscord").classList.toggle("hidden",!d.discord);
+    if(!d.google&&!d.discord) $(".login .btns").insertAdjacentHTML("afterend",`<p class="note">Prihlásenie ešte nie je nastavené (Google/Discord OAuth).</p>`); return; }
+  D=d; render();
+}
+load(); setInterval(load,30000);
 </script>
 </body>
 </html>

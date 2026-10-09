@@ -102,6 +102,17 @@ Verejná stránka guildy: **wow-forever.sk/raid/guild** (raidy, progress, DKP + 
 Osobná stránka hráča (Discord prihlásenie): **wow-forever.sk/raid/me** – DKP + história, účasť, attunementy, raidy so svojím sign-upom a SR, loot, wishlist, odznaky. Kalendár: **wow-forever.sk/raid/cal.ics**.
 Stratégie k bossom sú verejne aj na webe: **wow-forever.sk/raidy** (MC, Onyxia, BWL), info o bote: **wow-forever.sk/raidy/raidlead**.
 
+## Webový účet hráča – wow-forever.sk/raid/me
+Hráč sa prihlási cez **Google** alebo **Discord** a všetko robí na webe: sign-up na raid (tank/healer/DPS/absent + trieda), soft reserve, postava a spec, attunementy, wishlist; vidí DKP + históriu, poradie, účasť, odznaky a loot. Discord ostáva na živé vedenie raidu (hlášky, pully, body).
+- Google účet treba raz prepojiť s Discordom: v Discorde `/link` → 6-znakový kód → zadať na webe (alebo tlačidlo „Prepojiť cez Discord“, ak je Discord OAuth nastavený). Bez prepojenia sa nedá prihlásiť na raid.
+- Akcie z webu idú cez `rl_outbox` do bota (`signup`, `signup_remove`, `profile_set`, `attune_set`, `sr_set`, `wishlist_set`, `link_done`); bot ich vykoná do ~8 s a prekreslí Discord kartu raidu. Ak je bot offline, čakajú vo fronte.
+- Admin dashboard má záložku **Web účty** (prepojiť/odpojiť Discord ID, zmazať účet) a v karte raidu vie officer **prihlásiť hráča** ručne.
+- Webové účty: D1 tabuľka `rl_accounts` (acct `google:<sub>` / `discord:<id>` → `discord_uid`).
+
+| Command | Who | What it does |
+|---|---|---|
+| `/link` | everyone | Kód na prepojenie webového účtu s Discordom (platí 15 min) |
+
 ## Hráčske extra
 | Command | Who | What it does |
 |---|---|---|
@@ -142,11 +153,23 @@ Automaticky:
 - `raids.json` – sign-ups (created automatically)
 - `players.json`, `achievements.json`, `trivia.json`, `quips.json`, `guides.json`, `timelines.json` – hráčske extra a obsah (trivia, hlášky, sprievodcovia, consumables)
 
-## To do later
-0. Klipy: Meliško (`sounds/melisko_*.mp3` už sú) + Balls of Steel (`sounds/balls_of_steel/`) – pridať a premenovať na `pull_/wipe_/kill_/join_…`. (Klipy sa necommitujú, ostávajú lokálne.)
-1. **Secrets pre /raid** v Cloudflare → Workers & Pages → `wow-forever-sk` → Settings → Variables and Secrets: `ADMIN_PASSWORD` (heslo do dashboardu) a `BOT_KEY` (dlhý náhodný reťazec). Ten istý `BOT_KEY` dať do `bot/.env` ako `DASHBOARD_KEY`, `DASHBOARD_URL=https://wow-forever.sk/raid`. Reštart bota → dashboard ukáže „online“ a na /raid/guild sa objavia dáta.
-2. Discord OAuth pre `/raid/me`: discord.com/developers → aplikácia → OAuth2 → Redirects: `https://wow-forever.sk/raid/auth/callback`; Client ID do `wrangler.toml` (`DISCORD_CLIENT_ID`), Client Secret ako secret `DISCORD_CLIENT_SECRET`.
-3. Warcraft Logs setup: warcraftlogs.com → API Clients → create client (redirect URL `http://localhost`) → put ID/secret into `.env` → set `WCL_HOST` if your realm's logs are on another WCL site (e.g. classic.warcraftlogs.com).
-4. Test evening with a few guildies; tune `timelines.json`; `/teach` your own calls.
-5. Host 24/7 on a cheap VPS (bot beží z `bot/` v repe).
-6. Pozvať bota s právom Manage Roles (auto Raider rola).
+## To do later (roadmapa)
+**Nasadenie (iba Marian):**
+1. Cloudflare → Workers & Pages → `wow-forever-sk` → Settings → Variables and Secrets:
+   `ADMIN_PASSWORD`, `BOT_KEY` (ten istý do `bot/.env` ako `DASHBOARD_KEY`, `DASHBOARD_URL=https://wow-forever.sk/raid`).
+2. **Google login**: console.cloud.google.com → APIs & Services → Credentials → Create OAuth client ID (Web application) → Authorized redirect URI `https://wow-forever.sk/raid/auth/google` → Client ID do `wrangler.toml` (`GOOGLE_CLIENT_ID`), Client Secret ako secret `GOOGLE_CLIENT_SECRET`. (OAuth consent screen: External, scope email/profile/openid.)
+3. **Discord login** (voliteľné, kód `/link` funguje aj bez toho): discord.com/developers → aplikácia bota → OAuth2 → Redirects `https://wow-forever.sk/raid/auth/callback` → Client ID do `wrangler.toml` (`DISCORD_CLIENT_ID`), Client Secret ako secret `DISCORD_CLIENT_SECRET`.
+4. Warcraft Logs: warcraftlogs.com → API Clients → create client (redirect `http://localhost`) → `WCL_CLIENT_ID` / `WCL_CLIENT_SECRET` do `.env`, prípadne `WCL_HOST`.
+5. Klipy: Meliško (`sounds/melisko_*.mp3`) + Balls of Steel → premenovať na `pull_/wipe_/kill_/join_…` (ostávajú lokálne, necommitujú sa).
+6. Host bota 24/7 na VPS (beží z `bot/`), pozvať s právom Manage Roles.
+7. Testovací večer s guildou, doladiť `timelines.json`, `/teach` vlastné callouty.
+
+**Ďalší vývoj (web + bot):**
+- Verejná stránka guildy `/raid/guild` v dizajne webu (teraz samostatná stránka), prepojiť s `/raidy` stratégiami (boss → link).
+- Raid detail na webe: roster podľa rolí, kto má SR na čo, attunement check prihlásených (kto nemá attune = varovanie).
+- Notifikácie: e-mail (Google účet) pred raidom; pripomienka, že nie si prihlásený.
+- Loot: wishlist ↔ loot.json priority, história bidov na webe, „kto čo vyhral“ po raide.
+- DKP pravidlá verejne na webe (za účasť, za boss kill, decay) – stránka `/raidy/dkp`.
+- Stratégie z bota (`strategies/*.md`) a z webu (`src/raids.js`) zjednotiť do jedného zdroja.
+- Nové raidy Forever (Barrow Deeps, Hyjal Summit) do `RAID_BOSSES` + stratégie po štarte 9. 12.
+- Bot: `/raid` z webu bez Discord kanála? (vyžaduje kanál) → nastavenie predvoleného kanála v dashboarde už je.

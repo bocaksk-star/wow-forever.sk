@@ -26,9 +26,12 @@ fallthrough = true
 [vars]
 # Discord prihlásenie hráčov (/raid/me): Client ID z discord.com/developers → OAuth2 (verejná hodnota)
 DISCORD_CLIENT_ID = ""
+# Google prihlásenie hráčov (/raid/me): OAuth Client ID z console.cloud.google.com (verejná hodnota)
+GOOGLE_CLIENT_ID = ""
 
 # Secrets pre /raid (Cloudflare → Workers → wow-forever-sk → Settings → Variables and Secrets,
 # alebo: npx wrangler secret put <NÁZOV>):
 #   ADMIN_PASSWORD        – heslo officerov do dashboardu /raid
 #   BOT_KEY               – dlhý náhodný reťazec; ten istý dať botovi do bot/.env ako DASHBOARD_KEY
 #   DISCORD_CLIENT_SECRET – Client Secret Discord aplikácie (pre /raid/me)
+#   GOOGLE_CLIENT_SECRET  – Client Secret Google OAuth klienta (pre /raid/me)
