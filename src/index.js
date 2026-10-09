@@ -1,6 +1,7 @@
 import { CSS } from './style.js';
 import { news, guides, classes, races, polls, LAUNCH_UTC, RAIDS_DATE } from './content.js';
 import { czHome, czGuides } from './content.cz.js';
+import { raids, upcomingRaids, raidBySlug } from './raids.js';
 import { TALENT_TREES, greedyAllocate, BUILD_PLAN, FOREVER_CHANGES } from './talents.js';
 
 // ---------- pomocné ----------
@@ -35,6 +36,7 @@ const NAV_ICON = {
   ankety: svg(`<path d="M5 19V10M12 19V5M19 19v-7" ${S}/><path d="M3 19h18" ${S}/>`, 21),
   talenty: svg(`<path d="M12 3v18M12 3 7 8M12 3l5 5" ${S}/><circle cx="12" cy="15" r="4" ${S}/>`, 21),
   buildy: svg(`<path d="M4 19h16" ${S}/><rect x="5" y="12" width="4" height="7" ${S}/><rect x="10" y="7" width="4" height="12" ${S}/><rect x="15" y="10" width="4" height="9" ${S}/>`, 21),
+  raidy: svg(`<path d="M12 3c-2.5 3-6 5.2-6 9.5a6 6 0 0 0 12 0C18 8.2 14.5 6 12 3z" ${S}/><path d="M12 11c-1 1.3-2.4 2.3-2.4 4a2.4 2.4 0 0 0 4.8 0c0-1.7-1.4-2.7-2.4-4z" fill="currentColor" stroke="none" opacity=".8"/>`, 21),
   raidlead: svg(`<rect x="5" y="9" width="14" height="11" rx="3" ${S}/><path d="M12 9V5" ${S}/><circle cx="12" cy="3.6" r="1.4" fill="currentColor" stroke="none"/><circle cx="9" cy="14.5" r="1.3" fill="currentColor" stroke="none"/><circle cx="15" cy="14.5" r="1.3" fill="currentColor" stroke="none"/><path d="M9 18h6" ${S}/><path d="M2.5 12.5v4M21.5 12.5v4" ${S}/>`, 21),
 };
 
@@ -271,6 +273,7 @@ const BREADCRUMB_PARENTS = [
   ['/novinky/', '/novinky', 'Novinky'],
   ['/navody/', '/navody', 'Návody'],
   ['/triedy/', '/triedy', 'Class'],
+  ['/raidy/', '/raidy', 'Raidy'],
 ];
 function breadcrumbJsonLd(path, title, origin) {
   if (!title) return '';
@@ -399,7 +402,11 @@ const NAV = [
     ['/guildy', 'Názov guildy — hlasuj', 'guildy'],
     ['/guildy/pridat', 'Navrhnúť meno', 'guildy'],
     ['/guildy/adresar', 'Adresár CZ/SK', 'guildy'],
-    ['/raidlead', 'RaidLead bot', 'raidlead'],
+  ] },
+  { label: 'Raidy', ic: 'raidy', items: [
+    ['/raidy', 'Prehľad raidov', 'raidy'],
+    ...raids.map((r) => [`/raidy/${r.slug}`, r.name, 'raidy']),
+    ['/raidy/raidlead', 'RaidLead bot', 'raidlead'],
   ] },
   ['/ankety', 'Ankety', 'ankety'],
   ['/o-nas', 'O webe', 'o-nas'],
@@ -421,7 +428,8 @@ function page({ title, desc, path, body, origin, noindex, jsonLd, noAds, cz, alt
       return `<a href="${href}"${navActive(href, path) ? ' aria-current="page"' : ''}><span class="ic">${NAV_ICON[ic]}</span>${label}</a>`;
     }
     const childActive = entry.items.some(([href]) => navActive(href, path));
-    const sub = entry.items.map(([href, label, ic]) => `<a href="${href}"${navActive(href, path) ? ' aria-current="page"' : ''}><span class="ic">${NAV_ICON[ic]}</span>${label}</a>`).join('');
+    const hasExact = entry.items.some(([href]) => href === path);
+    const sub = entry.items.map(([href, label, ic]) => `<a href="${href}"${(hasExact ? href === path : navActive(href, path)) ? ' aria-current="page"' : ''}><span class="ic">${NAV_ICON[ic]}</span>${label}</a>`).join('');
     return `<div class="navgroup${childActive ? ' current' : ''}"><button type="button" class="navgroup-trigger" aria-haspopup="true"${childActive ? ' aria-current="page"' : ''}><span class="ic">${NAV_ICON[entry.ic]}</span>${entry.label}<span class="caret">▾</span></button><div class="dropdown">${sub}</div></div>`;
   };
   const nav = NAV.map(navItem).join('');
@@ -992,9 +1000,51 @@ const RL_FEATURES = [
   { ic: 'faq', title: 'Pre hráčov', text: 'Wishlist na itemy, /calendar do Google/Apple/Outlook kalendára, raid trivia s bonusovým DKP a vlastná stránka na webe s tvojou históriou — wow-forever.sk/raid/me.' },
 ];
 
+function raidsIndex(origin) {
+  const cards = raids.map((r) => `<a class="guide-card raid-card" href="/raidy/${r.slug}"><span class="ic">${NAV_ICON.raidy}</span><div><b>${esc(r.name)} <small>${r.players} hráčov · ${r.bosses.length} ${r.bosses.length === 1 ? 'boss' : r.bosses.length < 5 ? 'bossovia' : 'bossov'}</small></b><p>${esc(r.perex)}</p><span class="raid-status">${esc(r.status)}</span></div></a>`).join('')
+    + upcomingRaids.map((r) => `<div class="guide-card raid-card soon"><span class="ic">${NAV_ICON.raidy}</span><div><b>${esc(r.name)} <small>${r.players} hráčov</small></b><p>${esc(r.note)}</p><span class="raid-status">Stratégie doplníme po štarte</span></div></div>`).join('');
+  const body = `<article class="prose">
+<h1>Raidy vo WoW Forever</h1>
+<p class="lead">Stratégie k bossom po slovensky, rozdelené podľa úloh — čo má robiť tank, healer a DPS. Rovnaké taktiky, aké učíme nášho raid leadera <a href="/raidy/raidlead">RaidLead</a>.</p>
+<div class="grid">${cards}</div>
+<h2>Ako sa pripraviť na prvý raid</h2>
+<ul>
+<li><strong>Attunement</strong> — každý raid má vstupný quest, bez neho sa dnu nedostaneš. Je popísaný pri každom raide.</li>
+<li><strong>Resist gear</strong> — na MC a BWL potrebuješ Fire Resistance. Zbieraj ho už počas levelovania (tailoring/leatherworking/blacksmithing recepty, questové odmeny).</li>
+<li><strong>Consumables</strong> — lektvary, elixíry, jedlo, bandáže. Vo vanilla raide to nie je voliteľné.</li>
+<li><strong>Vedieť bossa vopred</strong> — prečítaj si stratégiu pred raidom, nie počas neho. Ušetríš všetkým 40 ľuďom čas.</li>
+</ul>
+<p>Forever otvára raidy <strong>9. decembra 2026</strong> — nové Barrow Deeps a Hyjal Summit a návrat Onyxie. Molten Core a Blackwing Lair Blizzard pre Forever zatiaľ nepotvrdil; stratégie k nim tu máme, lebo ich učíme nášho bota a väčšina z nás ich pozná z Classicu. Ak sa vrátia, budeme pripravení.</p>
+<p><a class="btn primary" href="/guilda"><span class="ic">${NAV_ICON.guilda}</span>Raiduj s nami — prihlás sa do guildy</a></p>
+</article>`;
+  return page({ title: 'Raidy — stratégie po slovensky', desc: 'Slovenské stratégie k bossom v Molten Core, Onyxii a Blackwing Lair pre World of Warcraft: Forever. Čo má robiť tank, healer a DPS, attunementy a resist gear.', path: '/raidy', body, origin });
+}
+
+function raidDetail(origin, r) {
+  const toc = r.bosses.map((b, i) => `<li><a href="#${b.slug}">${i + 1}. ${esc(b.name)}</a></li>`).join('');
+  const sections = r.bosses.map((b, i) => `<section class="boss" id="${b.slug}"><h2><span class="boss-num">${i + 1}</span>${esc(b.name)}</h2>${b.body}</section>`).join('');
+  const body = `<a class="back" href="/raidy">Späť na raidy</a><article class="prose">
+<h1>${esc(r.name)}</h1>
+<p class="lead">${esc(r.perex)}</p>
+<dl class="raid-facts">
+<div><dt>Veľkosť</dt><dd>${r.players} hráčov</dd></div>
+<div><dt>Kde</dt><dd>${esc(r.where)}</dd></div>
+<div><dt>Attunement</dt><dd>${esc(r.attune)}</dd></div>
+<div><dt>Resist</dt><dd>${esc(r.resist)}</dd></div>
+</dl>
+${r.intro}
+<nav class="boss-toc" aria-label="Bossovia"><b>Bossovia</b><ol>${toc}</ol></nav>
+${adSlot('rect300x250', 'ad-inline')}
+${sections}
+<p class="raid-note">Mechaniky vychádzajú z pôvodného vanilla WoW. Ak Forever niečo zmení, texty upravíme podľa reálnych pullov.</p>
+${shareButtons(`${origin}/raidy/${r.slug}`, `${r.name} — stratégie`)}
+</article>`;
+  return page({ title: `${r.name} — stratégie k bossom`, desc: `${r.name} po slovensky: taktiky na všetkých bossov pre tankov, healerov a DPS, attunement a resist gear. World of Warcraft: Forever.`, path: `/raidy/${r.slug}`, body, origin });
+}
+
 function raidleadPage(origin) {
   const feats = RL_FEATURES.map((f) => `<div class="guide-card" style="cursor:default"><span class="ic">${NAV_ICON[f.ic]}</span><div><b>${f.title}</b><p>${f.text}</p></div></div>`).join('');
-  const body = `<article class="prose">
+  const body = `<a class="back" href="/raidy">Späť na raidy</a><article class="prose">
 <h1><span class="ic">${NAV_ICON.raidlead}</span> RaidLead — náš AI raid leader na Discorde</h1>
 <p class="lead">Keď spustíme vlastnú guildu, raidy nebude viesť len človek. RaidLead je bot, ktorého sme si naprogramovali a učíme ho taktiky na Molten Core, Blackwing Lair a Onyxiu — aby vedel poradiť, zorganizovať sign-upy, odpočítavať pully a hlásiť callouty priamo vo voice.</p>
 <p>Je to náš vlastný projekt, nie hotová služba — stavia na Claude a žije na Discorde spolu s nami. Testujeme ho s guildou už teraz, naostro ho nasadíme, keď 4. – 5. novembra spustíme guildu.</p>
@@ -1005,7 +1055,7 @@ function raidleadPage(origin) {
 <p>Dolaďujeme callouty podľa reálnych pullov, pridávame hlasové hlášky a chystáme verejnú stránku guildy aj osobnú stránku hráča priamo na tomto webe (<code>/raid</code>). Keď spustíme nábor do guildy, dostaneš pozvánku na Discord aj k botovi automaticky.</p>
 <p><a class="btn primary" href="/guilda"><span class="ic">${NAV_ICON.guilda}</span>Prihlásiť sa do guildy</a></p>
 </article>`;
-  return page({ title: 'RaidLead — náš AI raid leader na Discorde', desc: 'RaidLead je vlastný AI bot pre Discord, ktorý povedie raidy našej guildy vo WoW Forever — stratégie k bossom, sign-upy, pully a callouty naživo, DKP aj loot.', path: '/raidlead', body, origin });
+  return page({ title: 'RaidLead — náš AI raid leader na Discorde', desc: 'RaidLead je vlastný AI bot pre Discord, ktorý povedie raidy našej guildy vo WoW Forever — stratégie k bossom, sign-upy, pully a callouty naživo, DKP aj loot.', path: '/raidy/raidlead', body, origin });
 }
 
 async function submitRecruit(request, env, origin) {
@@ -1253,7 +1303,9 @@ function sitemap(origin) {
     { p: '/guildy/adresar', prio: '0.6' },
     { p: '/guildy/adresar/pridat', prio: '0.4' },
     { p: '/guilda', prio: '0.6' },
-    { p: '/raidlead', prio: '0.6' },
+    { p: '/raidy', prio: '0.8' },
+    ...raids.map((r) => ({ p: `/raidy/${r.slug}`, prio: '0.7' })),
+    { p: '/raidy/raidlead', prio: '0.6' },
     { p: '/ankety', prio: '0.6' },
     { p: '/o-nas', prio: '0.3' },
     { p: '/cz', prio: '0.6' },
@@ -1319,7 +1371,13 @@ export default {
       const headers = { 'cache-control': 'no-store', ...(setCookie ? { 'set-cookie': setCookie } : {}) };
       return html(pollsPage(origin, pd, url.searchParams.get('edit')), 200, headers);
     }
-    if (path === '/raidlead') return html(raidleadPage(origin));
+    if (path === '/raidlead') return Response.redirect(`${origin}/raidy/raidlead`, 301);
+    if (path === '/raidy') return html(raidsIndex(origin));
+    if (path === '/raidy/raidlead') return html(raidleadPage(origin));
+    if (path.startsWith('/raidy/')) {
+      const r = raidBySlug(path.slice('/raidy/'.length));
+      if (r) return html(raidDetail(origin, r));
+    }
     if (request.method !== 'GET' && request.method !== 'HEAD') return new Response('Method not allowed', { status: 405 });
 
     if (path === '/') {

@@ -66,6 +66,15 @@ img{max-width:100%}
 .lang a:hover{color:var(--text)}
 .lang a.on{color:var(--night);background:var(--gold-soft)}
 .lang span{color:var(--line)}
+@media (max-width:1360px) and (min-width:861px){
+  .top .wrap{gap:18px;padding:0 20px}
+  .brand{font-size:1.7rem;gap:10px}
+  .brand svg{width:34px;height:34px}
+  .nav{gap:2px 2px}
+  .nav>a,.navgroup-trigger{font-size:1rem;padding:11px 10px;gap:7px}
+  .nav>a .ic svg,.navgroup-trigger .ic svg{width:22px;height:22px}
+  .lang{margin-left:8px;padding-left:10px;font-size:.92rem}
+}
 @media (max-width:860px){
   .top{position:static}
   .top .wrap{min-height:76px;gap:16px}
@@ -231,6 +240,25 @@ main{padding:40px 0 80px}
 .guide-card .ic{flex:none;margin-top:2px;color:var(--gold-soft);opacity:.9}
 .guide-card b{display:block;font-family:var(--display);font-weight:400;font-size:1.1rem}
 .guide-card p{margin:.3em 0 0;color:var(--muted);font-size:.95rem}
+
+/* Raidy */
+.raid-card b small{display:block;font-family:var(--body);font-size:.82rem;color:var(--muted);letter-spacing:.02em;margin-top:2px}
+.raid-card .raid-status{display:inline-block;margin-top:8px;font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--gold-soft);border:1px solid rgba(226,174,76,.4);border-radius:99px;padding:2px 9px}
+.raid-card.soon{opacity:.72;cursor:default}
+.raid-card.soon:hover{transform:none;box-shadow:none;background:var(--surface)}
+.raid-facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin:0 0 26px;padding:0}
+.raid-facts>div{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+.raid-facts dt{font-family:var(--display);font-size:.8rem;letter-spacing:.08em;text-transform:uppercase;color:var(--gold-soft);margin:0 0 4px}
+.raid-facts dd{margin:0;font-size:.98rem;color:var(--text)}
+.boss-toc{margin:26px 0 8px;padding:14px 18px;background:var(--surface);border:1px solid var(--line);border-radius:10px}
+.boss-toc b{font-family:var(--display);font-weight:400;font-size:1.05rem;display:block;margin-bottom:6px}
+.boss-toc ol{margin:0;padding:0;list-style:none;display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:4px 16px}
+.boss-toc a{text-decoration:none;color:var(--muted)}.boss-toc a:hover{color:var(--gold-soft)}
+.boss{margin-top:38px;padding-top:26px;border-top:1px solid var(--line);scroll-margin-top:24px}
+.boss h2{margin:0 0 .5em;display:flex;align-items:center;gap:12px}
+.boss-num{flex:none;width:34px;height:34px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:1rem;color:var(--night);background:linear-gradient(180deg,var(--gold-soft),var(--gold));font-weight:700}
+.boss ul li{margin:.45em 0}
+.raid-note{margin-top:34px;color:var(--muted);font-size:.95rem;font-style:italic}
 
 .timeline{list-style:none;margin:0;padding:0 0 0 20px;border-left:2px solid var(--line);display:grid;gap:18px}
 .timeline li{position:relative}
