@@ -545,7 +545,7 @@ function home(origin, now, nameData, recruitCount = 0, pd = { counts: {}, mine: 
   <div class="hero-grid">
   <div>
     <p class="lead">Novinky, návody a adresár slovenských a českých guild pre novú verziu WoW, ktorá ostane na leveli 60 navždy.</p>
-    <div class="btns"><a class="btn primary" href="/guildy/adresar"><span class="ic">${NAV_ICON.guildy}</span>Nájsť guildu</a><a class="btn ghost" href="/navody/ako-zacat"><span class="ic">${NAV_ICON.navody}</span>Ako začať</a></div>
+    <div class="btns"><a class="btn primary" href="/guilda"><span class="ic">${NAV_ICON.guilda}</span>Pridaj sa k našej guilde</a><a class="btn ghost" href="/guildy/adresar"><span class="ic">${NAV_ICON.guildy}</span>Nájsť guildu</a><a class="btn ghost" href="/navody/ako-zacat"><span class="ic">${NAV_ICON.navody}</span>Ako začať</a></div>
   </div>
   ${questCard(now)}
   </div>
@@ -555,7 +555,7 @@ ${adBannerResponsive()}
 <section class="section">
   <a class="guildcta" href="/guilda">
     <span class="ic">${NAV_ICON.guilda}</span>
-    <div><b>Zakladáme vlastnú guildu</b><p>Budeme ju viesť a hrať s vami od prvého dňa. Prihlás sa teraz, dáme ti vedieť, keď spustíme nábor naostro.${recruitCount > 0 ? ` <strong>${recruitCount} ${recruitCount === 1 ? 'hráč sa' : recruitCount < 5 ? 'hráči sa' : 'hráčov sa'} už prihlásilo.</strong>` : ''}</p></div>
+    <div><b>Zakladáme vlastnú guildu</b><p>Budeme ju viesť a hrať s vami od prvého dňa. Prihlás sa teraz, dáme ti vedieť, keď spustíme nábor naostro.${recruitCount > 0 ? ` <strong>${recruitCount} ${recruitCount === 1 ? 'hráč sa prihlásil' : recruitCount < 5 ? 'hráči sa prihlásili' : 'hráčov sa prihlásilo'}.</strong>` : ''}</p></div>
     <span class="go">Prihlásiť sa →</span>
   </a>
   ${nameCard}
@@ -957,7 +957,7 @@ function guildaPage(origin, count, state = {}) {
   const msg = state.ok
     ? '<div class="notice">Si v tom! Ozveme sa ti cez zadaný kontakt, keď budeme guildu spúšťať naostro.</div>'
     : state.error ? `<div class="notice err">${esc(state.error)}</div>` : '';
-  const countLine = count > 0 ? `<p class="signup-count"><span class="ic">${NAV_ICON.guilda}</span>${count} ${count === 1 ? 'hráč sa' : count < 5 ? 'hráči sa' : 'hráčov sa'} už prihlásilo</p>` : '';
+  const countLine = count > 0 ? `<p class="signup-count"><span class="ic">${NAV_ICON.guilda}</span>${count} ${count === 1 ? 'hráč sa prihlásil' : count < 5 ? 'hráči sa prihlásili' : 'hráčov sa prihlásilo'}</p>` : '';
   const body = `<article class="prose">
 <h1>Zakladáme vlastnú guildu</h1>
 <p class="lead">Keď 4. – 5. novembra štartuje WoW Forever, ideme hrať aj my a guildu povedieme sami. Prihlás sa teraz, nech si medzi prvými, komu dáme vedieť, keď spustíme nábor naostro – ešte pred štartom.</p>
