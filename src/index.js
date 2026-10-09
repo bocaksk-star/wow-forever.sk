@@ -35,6 +35,7 @@ const NAV_ICON = {
   ankety: svg(`<path d="M5 19V10M12 19V5M19 19v-7" ${S}/><path d="M3 19h18" ${S}/>`, 21),
   talenty: svg(`<path d="M12 3v18M12 3 7 8M12 3l5 5" ${S}/><circle cx="12" cy="15" r="4" ${S}/>`, 21),
   buildy: svg(`<path d="M4 19h16" ${S}/><rect x="5" y="12" width="4" height="7" ${S}/><rect x="10" y="7" width="4" height="12" ${S}/><rect x="15" y="10" width="4" height="9" ${S}/>`, 21),
+  raidlead: svg(`<rect x="5" y="9" width="14" height="11" rx="3" ${S}/><path d="M12 9V5" ${S}/><circle cx="12" cy="3.6" r="1.4" fill="currentColor" stroke="none"/><circle cx="9" cy="14.5" r="1.3" fill="currentColor" stroke="none"/><circle cx="15" cy="14.5" r="1.3" fill="currentColor" stroke="none"/><path d="M9 18h6" ${S}/><path d="M2.5 12.5v4M21.5 12.5v4" ${S}/>`, 21),
 };
 
 const GUIDE_ICON = {
@@ -398,6 +399,7 @@ const NAV = [
     ['/guildy', 'Názov guildy — hlasuj', 'guildy'],
     ['/guildy/pridat', 'Navrhnúť meno', 'guildy'],
     ['/guildy/adresar', 'Adresár CZ/SK', 'guildy'],
+    ['/raidlead', 'RaidLead bot', 'raidlead'],
   ] },
   ['/ankety', 'Ankety', 'ankety'],
   ['/o-nas', 'O webe', 'o-nas'],
@@ -980,6 +982,31 @@ ${msg}
   return page({ title: 'Naša guilda', desc: 'Zakladáme vlastnú guildu pre WoW Forever. Prihlás sa a dáme ti vedieť, keď spustíme nábor.', path: '/guilda', body, origin });
 }
 
+const RL_FEATURES = [
+  { ic: 'guildy', title: 'Stratégie k bossom', text: '/ask, /strat a /teach — bot pozná taktiky na všetkých 19 bossov z Molten Core, Blackwing Lair a Onyxie a odpovedá na otázky v reči raidu. Officeri ho priebežne učia vlastné vychytávky.' },
+  { ic: 'ankety', title: 'Sign-upy a roster', text: '/raid vypíše prihlasovaciu kartu (tank / healer / DPS), bot pripomenie raid 60 aj 15 minút vopred a /assign mu AI rozdelí posty na jednotlivých bossov podľa rosteru.' },
+  { ic: 'talenty', title: 'Pully naživo', text: 'Pri /pull spustí odpočet a počas fightu nahlas hlási callouty (aj hlasom vo voice kanáli) — fázy, enrage, kedy stackovať či rozbehnúť sa. /wipe fight zastaví a zapíše.' },
+  { ic: 'buildy', title: 'DKP a loot', text: 'Dochádzka a DKP sa počítajú automaticky, tajné bidovanie na loot cez /dkp loot a /dkp bid, soft reserve cez /sr — a kto má na čo nárok, vidno rovno pri lootovaní.' },
+  { ic: 'o-nas', title: 'Profily a progress', text: '/me ukáže tvoju postavu, DKP, účasť, loot aj attunementy. /progress sleduje, ktorí bossovia už padli, a odznaky sa vyhlasujú v kanáli automaticky.' },
+  { ic: 'faq', title: 'Pre hráčov', text: 'Wishlist na itemy, /calendar do Google/Apple/Outlook kalendára, raid trivia s bonusovým DKP a vlastná stránka na webe s tvojou históriou — wow-forever.sk/raid/me.' },
+];
+
+function raidleadPage(origin) {
+  const feats = RL_FEATURES.map((f) => `<div class="guide-card" style="cursor:default"><span class="ic">${NAV_ICON[f.ic]}</span><div><b>${f.title}</b><p>${f.text}</p></div></div>`).join('');
+  const body = `<article class="prose">
+<h1><span class="ic">${NAV_ICON.raidlead}</span> RaidLead — náš AI raid leader na Discorde</h1>
+<p class="lead">Keď spustíme vlastnú guildu, raidy nebude viesť len človek. RaidLead je bot, ktorého sme si naprogramovali a učíme ho taktiky na Molten Core, Blackwing Lair a Onyxiu — aby vedel poradiť, zorganizovať sign-upy, odpočítavať pully a hlásiť callouty priamo vo voice.</p>
+<p>Je to náš vlastný projekt, nie hotová služba — stavia na Claude a žije na Discorde spolu s nami. Testujeme ho s guildou už teraz, naostro ho nasadíme, keď 4. – 5. novembra spustíme guildu.</p>
+<div class="grid">${feats}</div>
+<h2>Prečo to robíme</h2>
+<p>Vanilla raidy stoja a padajú na organizácii — kto je prihlásený, kto má aké úlohy, kedy sa má kto postaviť kam. RaidLead to odbremení od ľudí: officeri sa môžu sústrediť na hru, nie na tabuľky, a nováčikovia dostanú jasné odpovede na taktiky hneď v Discorde namiesto hľadania po fórach.</p>
+<h2>Čo bude ďalej</h2>
+<p>Dolaďujeme callouty podľa reálnych pullov, pridávame hlasové hlášky a chystáme verejnú stránku guildy aj osobnú stránku hráča priamo na tomto webe (<code>/raid</code>). Keď spustíme nábor do guildy, dostaneš pozvánku na Discord aj k botovi automaticky.</p>
+<p><a class="btn primary" href="/guilda"><span class="ic">${NAV_ICON.guilda}</span>Prihlásiť sa do guildy</a></p>
+</article>`;
+  return page({ title: 'RaidLead — náš AI raid leader na Discorde', desc: 'RaidLead je vlastný AI bot pre Discord, ktorý povedie raidy našej guildy vo WoW Forever — stratégie k bossom, sign-upy, pully a callouty naživo, DKP aj loot.', path: '/raidlead', body, origin });
+}
+
 async function submitRecruit(request, env, origin) {
   const fd = await request.formData();
   const v = Object.fromEntries(['nick', 'faction', 'class', 'focus', 'note', 'contact', 'web', 't'].map((k) => [k, String(fd.get(k) || '').trim()]));
@@ -1225,6 +1252,7 @@ function sitemap(origin) {
     { p: '/guildy/adresar', prio: '0.6' },
     { p: '/guildy/adresar/pridat', prio: '0.4' },
     { p: '/guilda', prio: '0.6' },
+    { p: '/raidlead', prio: '0.6' },
     { p: '/ankety', prio: '0.6' },
     { p: '/o-nas', prio: '0.3' },
     { p: '/cz', prio: '0.6' },
@@ -1290,6 +1318,7 @@ export default {
       const headers = { 'cache-control': 'no-store', ...(setCookie ? { 'set-cookie': setCookie } : {}) };
       return html(pollsPage(origin, pd, url.searchParams.get('edit')), 200, headers);
     }
+    if (path === '/raidlead') return html(raidleadPage(origin));
     if (request.method !== 'GET' && request.method !== 'HEAD') return new Response('Method not allowed', { status: 405 });
 
     if (path === '/') {
