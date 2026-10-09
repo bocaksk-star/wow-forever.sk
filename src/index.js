@@ -457,6 +457,7 @@ ${structuredData}
 <footer><div class="wrap"><div class="footer-top"><span class="ic">${CREST}</span><span class="brand-sm">WoW <span>Forever</span> ${cz ? 'CZ' : 'SK'}</span></div><div>${cz ? 'WoW Forever CZ je neoficiální fanouškovský web. Není spojen se společností Blizzard Entertainment.' : 'WoW Forever SK je neoficiálny fanúšikovský web. Nie je spojený so spoločnosťou Blizzard Entertainment.'}</div><div>World of Warcraft a Blizzard Entertainment sú ochranné známky spoločnosti Blizzard Entertainment, Inc.</div></div></footer>
 <script>(()=>{const b=document.querySelector('.navtoggle'),n=document.getElementById('site-nav');if(!b||!n)return;b.addEventListener('click',()=>{const open=n.classList.toggle('open');b.setAttribute('aria-expanded',open?'true':'false');});n.addEventListener('click',e=>{if(e.target.tagName==='A')n.classList.remove('open');});})();</script>
 ${isHome ? `<script>(()=>{const f=()=>{document.body.classList.toggle('scrolled', window.scrollY>160);};f();addEventListener('scroll',f,{passive:true});})();</script>` : ''}
+${noAds ? '' : `<script>(function(s){s.dataset.zone='11992533',s.src='https://n6wxm.com/vignette.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>`}
 </body></html>`;
 }
 
