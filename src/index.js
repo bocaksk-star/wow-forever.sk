@@ -15,7 +15,7 @@ const REALMS = ['Normal', 'PvP', 'RP', 'Hardcore'];
 const FOCUS = ['PvE raidy', 'PvP', 'RP', 'Casual / social', 'Hardcore', 'Levelovanie'];
 const LANGS = ['SK', 'CZ', 'SK + CZ'];
 
-const LOGO = `<svg width="30" height="30" viewBox="0 0 32 32" aria-hidden="true"><circle cx="21" cy="10" r="6" fill="#E2AE4C"/><circle cx="23.5" cy="8.5" r="5" fill="#0F1528"/><path d="M2 28 L11 13 L16 20 L20 15 L30 28 Z" fill="#6A9BEB" opacity=".9"/><path d="M11 13 L13.5 17 L11.5 16.2 L9.6 18 Z" fill="#E8E2D3"/></svg>`;
+const LOGO = `<svg width="40" height="40" viewBox="0 0 32 32" aria-hidden="true"><circle cx="21" cy="10" r="6" fill="#E2AE4C"/><circle cx="23.5" cy="8.5" r="5" fill="#0F1528"/><path d="M2 28 L11 13 L16 20 L20 15 L30 28 Z" fill="#6A9BEB" opacity=".9"/><path d="M11 13 L13.5 17 L11.5 16.2 L9.6 18 Z" fill="#E8E2D3"/></svg>`;
 const FAVICON = 'data:image/svg+xml,' + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="6" fill="#0F1528"/><circle cx="21" cy="10" r="6" fill="#E2AE4C"/><circle cx="23.5" cy="8.5" r="5" fill="#0F1528"/><path d="M2 28 L11 13 L16 20 L20 15 L30 28 Z" fill="#6A9BEB"/></svg>`);
 
 // ---------- ikony ----------
@@ -438,7 +438,7 @@ ${noindex ? '<meta name="robots" content="noindex">' : ''}
 <link rel="icon" href="${FAVICON}"><meta name="theme-color" content="#0F1528">
 <link rel="alternate" type="application/rss+xml" title="WoW Forever SK — Novinky" href="${origin}/rss.xml">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Alegreya+Sans:ital,wght@0,400;0,500;0,700;1,400&family=Marcellus&display=swap&subset=latin-ext" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Alegreya+Sans:ital,wght@0,400;0,500;0,700;1,400&family=Cinzel:wght@400;500;600;700;800&family=Cinzel+Decorative:wght@700;900&display=swap&subset=latin-ext" rel="stylesheet">
 ${structuredData}
 <style>${CSS}</style></head><body${isHome ? ' class="home"' : ''}>
 <div class="world-bg" aria-hidden="true">${worldArt()}</div>
