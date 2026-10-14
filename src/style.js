@@ -169,13 +169,22 @@ main{padding:40px 0 80px}
 .sparkle{display:inline-block;color:var(--gold);animation:sparkle 2.4s ease-in-out infinite}
 @keyframes sparkle{0%,100%{opacity:.5;transform:scale(.85) rotate(0deg)}50%{opacity:1;transform:scale(1.15) rotate(15deg)}}
 .countdown{display:flex;align-items:center;gap:8px}
-.cd{flex:1;text-align:center;background:linear-gradient(180deg,#FFFBF0,#F1DFB4);border:2px solid #9C7A44;border-radius:12px;padding:10px 6px 9px;box-shadow:inset 0 1px 0 rgba(255,255,255,.7),0 3px 8px rgba(58,36,10,.18);transition:transform .2s}
-.cd .ic{color:#8A6A2E;opacity:.8;margin-bottom:2px}
-.cd b{display:block;font-family:var(--display);font-size:1.9rem;line-height:1;color:#2E1D08;font-variant-numeric:tabular-nums}
-.cd b.tick{animation:tickbump .4s ease}
-@keyframes tickbump{0%{transform:scale(1)}35%{transform:scale(1.22);color:#8E5A12}100%{transform:scale(1)}}
-.cd small{display:block;margin-top:3px;font-size:.68rem;letter-spacing:.07em;text-transform:uppercase;color:#6B5338}
-.sep{font-family:var(--display);font-size:1.6rem;color:#9C7A44;opacity:.6;margin-top:-16px}
+/* Rúnové kamene – flip-clock odpočet */
+.flipclock{gap:6px;align-items:flex-end;flex-wrap:wrap}
+.fc-u{display:grid;gap:7px;justify-items:center}
+.fc-tiles{display:flex;gap:4px}
+.fc-tile{position:relative;width:46px;height:66px;perspective:320px;display:block}
+.fc-face{position:absolute;inset:0;border-radius:8px;display:grid;place-items:center;font-family:var(--display);font-weight:700;font-size:2.6rem;line-height:1;font-variant-numeric:tabular-nums;
+  color:var(--gold-soft);background:linear-gradient(180deg,#3d2c15,#1f1609);border:1px solid #6b5126;box-shadow:inset 0 1px 0 rgba(255,220,150,.25),0 3px 7px rgba(0,0,0,.35);
+  text-shadow:0 0 12px rgba(240,203,130,.5);backface-visibility:hidden}
+.fc-face::after{content:"";position:absolute;left:0;right:0;top:50%;height:1px;background:rgba(0,0,0,.55)}
+.fc-tile.flip .fc-face{animation:fcflip .45s ease}
+@keyframes fcflip{0%{transform:rotateX(0)}50%{transform:rotateX(-90deg)}100%{transform:rotateX(0)}}
+.fc-u small{font-family:var(--display);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:#6B5338;font-weight:700}
+.fc-col{font-family:var(--display);font-size:2.2rem;color:#9C7A44;opacity:.7;padding-bottom:26px;line-height:1}
+@media (max-width:1100px) and (min-width:901px){.fc-tile{width:40px;height:58px}.fc-face{font-size:2.25rem}}
+@media (max-width:480px){.fc-tile{width:31px;height:46px}.fc-face{font-size:1.7rem;border-radius:6px}.fc-tiles{gap:3px}.fc-col{font-size:1.4rem;padding-bottom:22px}.flipclock{gap:3px;flex-wrap:nowrap}.fc-u{gap:5px}.fc-u small{font-size:.62rem;letter-spacing:.1em}}
+@media (prefers-reduced-motion:reduce){.fc-tile.flip .fc-face{animation:none}}
 .quest .reward{display:flex;gap:12px;align-items:center;margin-top:16px;padding-top:12px;border-top:1px solid rgba(90,58,18,.3);font-size:1rem}
 .quest .reward .slot{width:44px;height:44px;border-radius:6px;background:#2A2216;border:2px solid #A88540;display:grid;place-items:center;flex:none}
 .quest .done{font-family:var(--display);font-size:1.3rem;color:#3A240A}
