@@ -562,7 +562,7 @@ function home(origin, now, nameData, recruitCount = 0, pd = { counts: {}, mine: 
   <div class="hero-grid">
   <div>
     <p class="lead">Novinky, návody a adresár slovenských a českých guild pre novú verziu WoW, ktorá ostane na leveli 60 navždy.</p>
-    <div class="btns"><a class="btn primary" href="/guilda"><span class="ic">${NAV_ICON.guilda}</span>Pridaj sa k našej guilde</a><a class="btn ghost" href="/guildy/adresar"><span class="ic">${NAV_ICON.guildy}</span>Nájsť guildu</a><a class="btn ghost" href="/navody/ako-zacat"><span class="ic">${NAV_ICON.navody}</span>Ako začať</a></div>
+    <div class="btns"><a class="btn primary" href="/guilda"><span class="ic">${NAV_ICON.guilda}</span>Pridaj sa k našej guilde</a><a class="btn ghost" href="/guildy/adresar"><span class="ic">${NAV_ICON.guildy}</span>Nájsť guildu</a><a class="btn ghost" href="/navody/ako-zacat"><span class="ic">${NAV_ICON.navody}</span>Ako začať</a><a class="btn glow" href="/navody/talenty"><span class="ic">${NAV_ICON.talenty}</span>Talent Calculator</a></div>
   </div>
   ${questCard(now)}
   </div>

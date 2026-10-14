@@ -159,6 +159,12 @@ main{padding:40px 0 80px}
 .btn.primary:hover{background:var(--gold-soft);color:#1A1306;transform:translateY(-1px);box-shadow:0 8px 20px rgba(226,174,76,.25)}
 .btn.ghost{color:var(--gold-soft)}
 .btn.ghost:hover{background:rgba(226,174,76,.1);transform:translateY(-1px)}
+/* výrazné sekundárne tlačidlo: tmavé s plynúcim zlatým okrajom a žiarou */
+.btn.glow{position:relative;color:#fff;text-shadow:0 0 8px rgba(240,203,130,.6);background:linear-gradient(180deg,#3a2c14,#1c1409);border-color:var(--gold);box-shadow:0 0 0 1px rgba(226,174,76,.25),0 0 18px rgba(226,174,76,.35),inset 0 1px 0 rgba(255,220,150,.2);animation:btnglow 2.6s ease-in-out infinite}
+.btn.glow .ic{color:var(--gold)}
+.btn.glow:hover{color:#fff;transform:translateY(-1px);box-shadow:0 0 0 1px rgba(226,174,76,.5),0 0 26px rgba(226,174,76,.6),inset 0 1px 0 rgba(255,220,150,.25);animation:none}
+@keyframes btnglow{0%,100%{box-shadow:0 0 0 1px rgba(226,174,76,.35),0 0 16px rgba(226,174,76,.4),inset 0 1px 0 rgba(255,220,150,.2)}50%{box-shadow:0 0 0 2px rgba(240,203,130,.7),0 0 34px rgba(226,174,76,.85),inset 0 1px 0 rgba(255,220,150,.3)}}
+@media (prefers-reduced-motion:reduce){.btn.glow{animation:none}}
 
 .quest{background:var(--parchment);color:var(--ink);border-radius:4px;padding:28px 30px 24px;position:relative;
   box-shadow:0 0 0 6px #2A2216,0 0 0 7px #8E6B35,0 24px 60px rgba(0,0,0,.45);
