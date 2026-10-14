@@ -408,6 +408,7 @@ button.btn{cursor:pointer;font-family:inherit;background:none}
 .ad-slot{margin:2em auto;padding:14px 0;display:flex;flex-direction:column;align-items:center;gap:8px}
 .ad-slot-label{font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);opacity:.7}
 .ad-slot-unit{display:flex;justify-content:center;overflow:hidden;max-width:100%}
+.ad-frame{display:block;border:0;max-width:100%}
 .ad-wide{display:block}
 .ad-narrow{display:none}
 @media (max-width:720px){.ad-wide{display:none}.ad-narrow{display:block}}

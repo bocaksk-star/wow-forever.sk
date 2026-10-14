@@ -159,9 +159,13 @@ const AD_UNITS = {
   leaderboard728x90: { key: '06721eac51ce3aa12983dc769ca7ff48', w: 728, h: 90 },
 };
 // jeden reklamný formát: <ins>-like div, atOptions sa nastaví tesne pred invoke.js tak, aby si ho ten istý script prečítal
+// Reklamný skript beží v sandboxovanom iframe: nemôže presmerovať stránku, otvoriť popunder
+// bez kliknutia do reklamy ani odpočúvať kliknutia na našom webe (toto robili „autoload" popundery).
+// Banner sa zobrazí normálne a kliknutie priamo na reklamu funguje.
 function adUnit(name) {
   const u = AD_UNITS[name];
-  return `<div class="ad-slot-unit" style="width:${u.w}px;height:${u.h}px"><script type="text/javascript">atOptions={'key':'${u.key}','format':'iframe','height':${u.h},'width':${u.w},'params':{}};</script><script type="text/javascript" src="https://versatilesentiment.com/${u.key}/invoke.js"></script></div>`;
+  const doc = `<!doctype html><html><head><meta charset="utf-8"><style>html,body{margin:0;padding:0;overflow:hidden;background:transparent}</style></head><body><script type="text/javascript">atOptions={'key':'${u.key}','format':'iframe','height':${u.h},'width':${u.w},'params':{}};</script><script type="text/javascript" src="https://versatilesentiment.com/${u.key}/invoke.js"></script></body></html>`;
+  return `<div class="ad-slot-unit" style="width:${u.w}px;height:${u.h}px"><iframe class="ad-frame" title="Reklama" width="${u.w}" height="${u.h}" scrolling="no" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" sandbox="allow-scripts allow-popups allow-popups-to-escape-sandbox allow-forms" srcdoc="${doc.replace(/&/g, '&amp;').replace(/"/g, '&quot;')}"></iframe></div>`;
 }
 // zobrazí jeden formát (voliteľne s nápisom „Reklama“ pre transparentnosť)
 function adSlot(name, extraClass = '') {
